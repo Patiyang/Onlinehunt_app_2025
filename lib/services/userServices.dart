@@ -17,17 +17,56 @@ class UserServices {
     final res = await TokenService().urlGetAuthentication(url);
     return res;
   }
+  Future<UserModel> signInUser(String email, String password) async {
+    Map mapRes = {};
+    UserModel? apiUserModel;
+    String url = '${HelperClass.mainIp}auth/login';
+    try {
+      http.Response res = await TokenService().urlPostAuthentication(url, {
+        'email': email,
+        'password': password,
+      });
+      mapRes = jsonDecode(res.body);
 
-  Future<http.Response> createUser(String param, body) async {
-    String url = HelperClass().getBaseUrl(param);
-    final res = await TokenService().urlPostAuthentication(url, body);
-    return res;
+      if (res.statusCode == 200) {
+        apiUserModel = UserModel.fromJson(mapRes['user']);
+        Fluttertoast.showToast(msg: 'Login Successful');
+      } else {
+        Fluttertoast.showToast(msg:  'Login Failed');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return apiUserModel!;
   }
 
-  Future<ApiUserModel> getUserDetails() async {
+  Future<UserModel> createUser(String email, String password) async {
+    Map mapRes = {};
+    UserModel? apiUserModel;
+    String url = '${HelperClass.mainIp}auth/login';
+    try {
+      http.Response res = await TokenService().urlPostAuthentication(url, {
+        'email': email,
+        'password': password,
+      });
+      mapRes = jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        apiUserModel = UserModel.fromJson(mapRes['user']);
+        Fluttertoast.showToast(msg: 'Login Successful');
+      } else {
+        Fluttertoast.showToast(msg:  'Login Failed');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return apiUserModel!;
+  }
+
+  Future<UserModel> getUserDetails() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    List<ApiUserModel> dummyList = [];
-    ApiUserModel apiUser = ApiUserModel();
+    List<UserModel> dummyList = [];
+    UserModel apiUser = UserModel();
     List response = [];
     String? _email = sp.getString('email');
     if (sp.getString('uid')!.isEmpty) {
@@ -38,7 +77,7 @@ class UserServices {
             })
             .whenComplete(() {
               response.forEach((element) {
-                dummyList.add(ApiUserModel.fromJson(element));
+                dummyList.add(UserModel.fromJson(element));
               });
             });
         dummyList.forEach((element) {
@@ -56,9 +95,9 @@ class UserServices {
     return apiUser;
   }
 
-  Future<ApiUserModel> getUserById(String id) async {
-    List<ApiUserModel> dummyList = [];
-    ApiUserModel apiUser = ApiUserModel();
+  Future<UserModel> getUserById(String id) async {
+    List<UserModel> dummyList = [];
+    UserModel apiUser = UserModel();
     List response = [];
     try {
       await getUsers('users')
@@ -67,7 +106,7 @@ class UserServices {
           })
           .whenComplete(() {
             response.forEach((element) {
-              dummyList.add(ApiUserModel.fromJson(element));
+              dummyList.add(UserModel.fromJson(element));
             });
           });
       dummyList.forEach((element) {
@@ -88,8 +127,8 @@ class UserServices {
     return res;
   }
 
-  Future<ApiUserModel> userDetails(String id) async {
-    ApiUserModel apiUser = ApiUserModel();
+  Future<UserModel> userDetails(String id) async {
+    UserModel apiUser = UserModel();
     List response = [];
     try {
       await getUsersAlt(id, 'single_user')
@@ -97,7 +136,7 @@ class UserServices {
             response = jsonDecode(utf8.decode(value.bodyBytes));
           })
           .whenComplete(() {
-            apiUser = ApiUserModel.fromJson(response.first);
+            apiUser = UserModel.fromJson(response.first);
           });
     } catch (e) {
       print(e.toString());
@@ -124,26 +163,6 @@ class UserServices {
     return userArticles;
   }
 
-  Future<ApiUserModel> signInUser(String email, String password) async {
-    Map mapRes = {};
-    ApiUserModel? apiUserModel;
-    String url = 'https://onlinehunt.in/api/signIn.php?api_key=$apiKey&email=$email&password=$password';
-    try {
-      http.Response res = await TokenService().urlGetAuthentication(url);
-      mapRes = jsonDecode(res.body);
-      // print(url);
-      // print(mapRes['userdata']);
-      if (mapRes['status'] == true) {
-        apiUserModel = ApiUserModel.fromJson(mapRes['userdata']);
-        Fluttertoast.showToast(msg: mapRes['message']);
-      } else {
-        Fluttertoast.showToast(msg: mapRes['message']);
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-    return apiUserModel!;
-  }
 
   Future<http.Response> getFollowingUrl(int uid, String type) async {
     String url = 'https://onlinehunt.in/api/followers.php?api_key=$apiKey&uid=$uid&type=$type';

@@ -29,9 +29,9 @@ class AuthorDetails extends StatefulWidget {
 
 class _AuthorDetailsState extends State<AuthorDetails> {
   UserServices _userServices = UserServices();
-  ApiUserModel? _userDetails;
+  UserModel? _userDetails;
   List<ApiArticle> _userArticles = [];
-  List<ApiUserModel> authorFollowing = [];
+  List<UserModel> authorFollowing = [];
   bool loadingArticles = true;
   bool loadingFollowing = true;
   bool loadingUserDetails = true;

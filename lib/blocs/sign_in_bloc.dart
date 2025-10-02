@@ -8,6 +8,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/key.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
 import 'package:online_hunt_news/services/userServices.dart';
@@ -201,16 +202,27 @@ class SignInBloc extends ChangeNotifier {
 
   Future signUpwithEmailPassword(userName, userEmail, userPassword) async {
     try {
-      final User? user = (await _firebaseAuth.createUserWithEmailAndPassword(email: userEmail, password: userPassword)).user!;
-      assert(user != null);
-      await user!.getIdToken();
-      this._name = userName;
-      this._uid = user.uid;
+      UserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
+      this._name = apiUserModel.userName;
+      this._uid = apiUserModel.id;
       this._imageUrl = defaultUserImageUrl;
-      this._email = user.email;
+      this._email = apiUserModel.email;
       this._signInProvider = 'email';
-      this._idToken = null;
+      this._idToken = apiUserModel.token;
+      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
+
       this._userType = 'registered';
+
+      // final User? user = (await _firebaseAuth.createUserWithEmailAndPassword(email: userEmail, password: userPassword)).user!;
+      // assert(user != null);
+      // await user!.getIdToken();
+      // this._name = userName;
+      // this._uid = user.uid;
+      // this._imageUrl = defaultUserImageUrl;
+      // this._email = user.email;
+      // this._signInProvider = 'email';
+      // this._idToken = null;
+      // this._userType = 'registered';
       _hasError = false;
       notifyListeners();
     } catch (e) {
@@ -226,12 +238,15 @@ class SignInBloc extends ChangeNotifier {
       // assert(user != null);
       // await user!.getIdToken();
       // final User currentUser = _firebaseAuth.currentUser!;
-      ApiUserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
-      this._uid = apiUserModel.id;
-      this._email = apiUserModel.email;
+      UserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
       this._name = apiUserModel.userName;
-      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "https://onlinehunt.in/news/${apiUserModel.avatar}";
+      this._uid = apiUserModel.id;
+      this._imageUrl = defaultUserImageUrl;
+      this._email = apiUserModel.email;
       this._signInProvider = 'email';
+      this._idToken = apiUserModel.token;
+      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
+
       _hasError = false;
       notifyListeners();
     } catch (e) {
@@ -256,7 +271,7 @@ class SignInBloc extends ChangeNotifier {
     SharedPreferences sp = await SharedPreferences.getInstance();
     // String? email = sp.getString('email');
     List response = [];
-    List<ApiUserModel> dummyList = [];
+    List<UserModel> dummyList = [];
     bool userId = false;
     try {
       await _userServices
@@ -266,7 +281,7 @@ class SignInBloc extends ChangeNotifier {
           })
           .whenComplete(() {
             response.forEach((element) {
-              dummyList.add(ApiUserModel.fromJson(element));
+              dummyList.add(UserModel.fromJson(element));
             });
           });
       dummyList.forEach((element) {
@@ -331,21 +346,21 @@ class SignInBloc extends ChangeNotifier {
       "total_pageviews": "0",
       "created_at": DateTime.now().toString(),
     };
-    await _userServices.createUser('users', userData).then((value) {
-      if (value.statusCode == 200) {
-        Map mapRes = jsonDecode(value.body);
-        if (mapRes['status'] == true) {
-          success = true;
-          Fluttertoast.showToast(msg: mapRes['message']);
-        } else {
-          success = false;
-          Fluttertoast.showToast(msg: mapRes['message']);
-        }
-      } else {
-        success = false;
-        print(value);
-      }
-    });
+    // await _userServices.createUser('users', userData).then((value) {
+    //   if (value.statusCode == 200) {
+    //     Map mapRes = jsonDecode(value.body);
+    //     if (mapRes['status'] == true) {
+    //       success = true;
+    //       Fluttertoast.showToast(msg: mapRes['message']);
+    //     } else {
+    //       success = false;
+    //       Fluttertoast.showToast(msg: mapRes['message']);
+    //     }
+    //   } else {
+    //     success = false;
+    //     print(value);
+    //   }
+    // });
     return success;
   }
 
@@ -400,9 +415,9 @@ class SignInBloc extends ChangeNotifier {
 
   Future getUserFromApi(email) async {
     List response = [];
-    List<ApiUserModel> dummyList = [];
+    List<UserModel> dummyList = [];
     // String userId = '';
-    ApiUserModel? apiUserModel;
+    UserModel? apiUserModel;
     try {
       await _userServices
           .getUsers('users')
@@ -411,7 +426,7 @@ class SignInBloc extends ChangeNotifier {
           })
           .whenComplete(() {
             response.forEach((element) {
-              dummyList.add(ApiUserModel.fromJson(element));
+              dummyList.add(UserModel.fromJson(element));
             });
           });
       dummyList.forEach((element) {

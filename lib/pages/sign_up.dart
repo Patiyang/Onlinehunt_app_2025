@@ -63,20 +63,16 @@ class _SignUpPageState extends State<SignUpPage> {
               sb
                   .getTimestamp()
                   .then(
-                    (value) => sb.saveToFirebase().then((value) {
-                      if (value == true) {
-                        sb.guestSignout().then(
-                          (value) => sb.saveDataToSP().then(
-                            (value) => sb.setSignIn().then((value) {
-                              setState(() {
-                                signUpCompleted = true;
-                              });
-                              afterSignUp();
-                            }),
-                          ),
-                        );
-                      }
-                    }),
+                    (value) => sb.guestSignout().then(
+                      (value) => sb.saveDataToSP().then(
+                        (value) => sb.setSignIn().then((value) {
+                          setState(() {
+                            signUpCompleted = true;
+                          });
+                          afterSignUp();
+                        }),
+                      ),
+                    ),
                   )
                   .onError((error, stackTrace) {
                     setState(() {

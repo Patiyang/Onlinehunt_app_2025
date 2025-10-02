@@ -1,5 +1,5 @@
 
-class ApiUserModel {
+class UserModel {
   final String? id;
   final String? userName;
   final String? slug;
@@ -27,7 +27,7 @@ class ApiUserModel {
   final String? showEmail;
   final String? showRss;
 
-  ApiUserModel(
+  UserModel(
       {this.id,
       this.userName,
       this.slug,
@@ -55,8 +55,8 @@ class ApiUserModel {
       this.showEmail,
       this.showRss});
 
-  factory ApiUserModel.fromJson(_json) {
-    return ApiUserModel(
+  factory UserModel.fromJson(_json) {
+    return UserModel(
       id: _json['id'],
       userName: _json['username'],
       email: _json['email'],

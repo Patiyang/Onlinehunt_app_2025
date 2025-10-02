@@ -121,7 +121,7 @@ class _SignInPageState extends State<SignInPage> {
               Text('sign in', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)).tr(),
               Text(
                 'follow the simple steps',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Theme.of(context).secondaryHeaderColor),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Theme.of(context).textTheme.bodyMedium!.color),
               ).tr(),
               SizedBox(height: 80),
               TextFormField(

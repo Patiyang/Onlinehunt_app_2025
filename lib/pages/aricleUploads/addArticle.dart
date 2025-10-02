@@ -99,7 +99,7 @@ class _AddArticleState extends State<AddArticle> {
   String? videoFileName;
   String? videoUploadUrl;
 
-  ApiUserModel? apiUserModel;
+  UserModel? apiUserModel;
   bool loadingFutures = true;
   GeneralSettingsServices generalSettingsServices = GeneralSettingsServices();
   @override
@@ -801,7 +801,7 @@ class _AddArticleState extends State<AddArticle> {
   Future getUserId() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     List response = [];
-    List<ApiUserModel> dummyList = [];
+    List<UserModel> dummyList = [];
     try {
       await _userServices
           .getUsers('users')
@@ -810,7 +810,7 @@ class _AddArticleState extends State<AddArticle> {
           })
           .whenComplete(() {
             response.forEach((element) {
-              dummyList.add(ApiUserModel.fromJson(element));
+              dummyList.add(UserModel.fromJson(element));
             });
           });
       dummyList.forEach((element) {

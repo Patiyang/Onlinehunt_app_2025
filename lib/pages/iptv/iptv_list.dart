@@ -31,7 +31,7 @@ class _IptvListState extends State<IptvList> {
   ScrollController scrollController = ScrollController();
   UserServices _userServices = UserServices();
 
-  ApiUserModel? apiUser;
+  UserModel? apiUser;
   List<IptvModel> iptvs = [];
   bool gettingIptvs = true;
   bool _isLoadingMore = false;
@@ -221,7 +221,7 @@ class _IptvListState extends State<IptvList> {
   }
 
   Future getAuthorProfile(String userId) async {
-    ApiUserModel _userDetails = await _userServices.userDetails(userId);
+    UserModel _userDetails = await _userServices.userDetails(userId);
     print(_userDetails.email);
     return _userDetails;
   }

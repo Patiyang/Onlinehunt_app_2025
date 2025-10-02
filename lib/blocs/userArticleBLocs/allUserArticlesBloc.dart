@@ -86,7 +86,7 @@ class AllUserArticlesBloc with ChangeNotifier {
   Future getUserId() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     List response = [];
-    List<ApiUserModel> dummyList = [];
+    List<UserModel> dummyList = [];
     String userId = '';
     try {
       await _userServices
@@ -96,7 +96,7 @@ class AllUserArticlesBloc with ChangeNotifier {
           })
           .whenComplete(() {
             response.forEach((element) {
-              dummyList.add(ApiUserModel.fromJson(element));
+              dummyList.add(UserModel.fromJson(element));
             });
           });
       dummyList.forEach((element) {

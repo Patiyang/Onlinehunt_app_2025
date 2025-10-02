@@ -46,7 +46,7 @@ class IptvItemCard extends StatelessWidget {
                   future: getAuthorProfile(item!.userId!),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
-                      ApiUserModel user = snapshot.data;
+                      UserModel user = snapshot.data;
                       return Container(
                         height: 40,
                         width: 40,
@@ -74,7 +74,7 @@ class IptvItemCard extends StatelessWidget {
                       future: getAuthorProfile(item!.userId!),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.hasData) {
-                          ApiUserModel user = snapshot.data;
+                          UserModel user = snapshot.data;
                           return Text(user.userName!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
                         }
                         return Text(
@@ -161,7 +161,7 @@ class IptvItemCard extends StatelessWidget {
   }
 
   Future getAuthorProfile(String userId) async {
-    ApiUserModel _userDetails = await UserServices().userDetails(userId);
+    UserModel _userDetails = await UserServices().userDetails(userId);
     print(_userDetails.email);
     return _userDetails;
   }
