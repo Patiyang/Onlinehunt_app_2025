@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -10,16 +11,14 @@ import 'package:online_hunt_news/blocs/bottomNavBar_bloc.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
+import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
 import 'package:online_hunt_news/pages/explore.dart';
 import 'package:online_hunt_news/pages/profile.dart';
 import 'package:online_hunt_news/services/app_service.dart';
-import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/utils/snacbar.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-
-import 'aricleUploads/addArticle.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -47,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   bool loading = false;
   bool loaded = false;
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  late AppLinks _appLinks = AppLinks();
 
   checkLink() async {
     // final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink(); //GETTING THE INITIAL LINK IF THE APP WAS CLOSED
@@ -76,7 +76,40 @@ class _HomePageState extends State<HomePage> {
     //     print('deep link has error ${e.toString()}');
     //   }
     // }
+    _appLinks = AppLinks();
+    _handleInitialUri();
+    _appLinks.uriLinkStream.listen(
+      (Uri? uri) {
+        if (uri != null) {
+          _onDeepLink(uri);
+        }
+      },
+      onError: (err) {
+        print('failed to get latest link: $err');
+      },
+    );
   }
+
+  Future<void> _handleInitialUri() async {
+    final uri = await _appLinks.getInitialLink();
+    if (uri != null) {
+      _onDeepLink(uri);
+    }
+  }
+
+  void _onDeepLink(Uri uri) {
+  // Example: onlinehuntnews://post/12345
+  if (uri.scheme == 'onlinehunt' && uri.host == 'post' && uri.pathSegments.isNotEmpty) {
+    final postId = uri.pathSegments[0];
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ArticleDetails(post_id: int.parse(postId)),
+      ),
+    );
+  }
+}
+
 
   @override
   void initState() {
@@ -135,14 +168,14 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         floatingActionButton: sb.uid != null && sb.guestUser == false
-            ? Container(
+            ? SizedBox.shrink() /* Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.grey.shade300,
                   gradient: LinearGradient(colors: [Config().appColor, Colors.grey.shade600], begin: Alignment.bottomCenter, end: Alignment.topCenter),
                 ),
                 child: IconButton(onPressed: () => nextScreen(context, AddArticle()), icon: Icon(Icons.edit), color: Colors.white),
-              )
+              ) */
             : SizedBox.shrink(),
       ),
     );

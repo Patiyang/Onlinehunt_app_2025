@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
-import 'package:online_hunt_news/blocs/bookmark_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -24,7 +22,6 @@ import 'package:online_hunt_news/models/mobile_ads_model.dart';
 import 'package:online_hunt_news/models/page_view_model.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/pages/comments.dart';
-import 'package:online_hunt_news/pages/followScreen/author_details.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/services/page_view_services.dart';
 import 'package:online_hunt_news/services/post_service.dart';
@@ -43,21 +40,18 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../helpers&Widgets/key.dart';
-import '../models/admob_helper.dart';
-import '../models/apiCategoriesModel.dart';
 import '../models/followingModel.dart';
-import '../services/ad_services.dart';
 import '../services/category_services.dart';
 
 class ArticleDetails extends StatefulWidget {
   final PostModel? post;
   // final String categoryId;
   final String? tag;
-  final String? articleId;
+  final int? post_id;
 
-  const ArticleDetails({Key? key, this.post, this.tag, this.articleId, }) : super(key: key);
+  const ArticleDetails({Key? key, this.post, this.tag, required this.post_id}) : super(key: key);
 
   @override
   _ArticleDetailsState createState() => _ArticleDetailsState();
@@ -386,14 +380,15 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             _handleContentShare();
                                           },
                                         ),
-                                    /*     handlnigLike == true
+                                        /*     handlnigLike == true
                                             ? Loading()
-                                            :  */IconButton(
-                                                icon: liked == true ? LoveIcon().bold : LoveIcon().normal,
-                                                onPressed: () {
-                                                  // handleLoveClick();
-                                                },
-                                              ),
+                                            :  */
+                                        IconButton(
+                                          icon: liked == true ? LoveIcon().bold : LoveIcon().normal,
+                                          onPressed: () {
+                                            // handleLoveClick();
+                                          },
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -405,7 +400,8 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                   sc: innerScrollController,
                                   category: apiCategories,
                                   timestamp: post!.createdAt,
-                                  replace: true,post: post,
+                                  replace: true,
+                                  post: post,
                                   categoryId: post!.category!.id.toString(),
                                 ),
                               ),
@@ -466,12 +462,16 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   }
 
   _handleContentShare() async {
+    SharePlus share = SharePlus.instance;
+    String deepLink = generateDeepLink(post!.id.toString());
+
+    await share.share(ShareParams(text: deepLink));
     //     try {
-    //       await dynamicLinkService
-    //           .createDynamicLink(article.id, widget.categoryId, article.summary!.length >= 100 ? article.summary!.substring(0, 100) : article.summary!,
-    //               article.title!, article.imageUrl!)
+    //       await DynamicLinkService()
+    //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
+    //               apiArticle!.summary!.length >= 100 ? apiArticle!.summary!.substring(0, 100) : apiArticle!.summary!, apiArticle!.title!, apiArticle!.imageUrl!)
     //           .then((value) => Share.share(
-    //                 '''${article.title!.length > 70 ? article.title!.substring(0, 70) : article.title}
+    //                 '''${apiArticle!.title!.length > 70 ? apiArticle!.title!.substring(0, 70) : apiArticle!.title}
 
     // ${'click for more'.tr()}:${value.toString()}
 
@@ -483,11 +483,22 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   }
 
   _handleWhatsappShare() async {
+    // launchUrl(  Uri.parse("https://wa.me?text=${'''${postModel!.title.length > 70 ? postModel!.title.substring(0, 70) : postModel!.title}'''}"));
+    String deepLink = generateDeepLink(post!.id.toString());
+    final encodedText = Uri.encodeComponent('Check this out: $deepLink');
+    final whatsappUrl = 'https://wa.me/?text=$encodedText';
+
+    final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch WhatsApp');
+    }
     //     try {
-    //       await dynamicLinkService
-    //           .createDynamicLink(article.id, widget.categoryId, article.summary!.length >= 100 ? article.summary!.substring(0, 100) : article.summary!,
-    //               article.title!, article.imageUrl!)
-    //           .then((value) => launch("https://wa.me?text=${'''${article.title!.length > 70 ? article.title!.substring(0, 70) : article.title}
+    //       await DynamicLinkService()
+    //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
+    //               apiArticle!.summary!.length >= 100 ? apiArticle!.summary!.substring(0, 100) : apiArticle!.summary!, apiArticle!.title!, apiArticle!.imageUrl!)
+    //           .then((value) => launch("https://wa.me?text=${'''${apiArticle!.title!.length > 70 ? apiArticle!.title!.substring(0, 70) : apiArticle!.title}
 
     // ${'click for more'.tr()}:${value.toString()}
 
@@ -495,6 +506,10 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     //     } catch (e) {
     //       print(e.toString());
     //     }
+  }
+
+  String generateDeepLink(String postId) {
+    return 'https://onlinehunt.in/news/p/$postId';
   }
 
   void _handleShare() {
@@ -614,7 +629,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     //       Exception('the error is $onError');
     //     });
     try {
-      post = await getApiArticleById(widget.post!.id);
+      post = await getApiArticleById(widget.post_id!);
       apiCategories = post!.category!;
       setState(() {
         loadingArticle = false;

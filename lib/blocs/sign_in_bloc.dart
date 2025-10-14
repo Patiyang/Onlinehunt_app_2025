@@ -202,7 +202,7 @@ class SignInBloc extends ChangeNotifier {
 
   Future signUpwithEmailPassword(userName, userEmail, userPassword) async {
     try {
-      UserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
+      UserModel apiUserModel = await UserServices().signUpUser(userEmail, userPassword,userName);
       this._name = apiUserModel.userName;
       this._uid = apiUserModel.id;
       this._imageUrl = defaultUserImageUrl;

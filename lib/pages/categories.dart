@@ -83,7 +83,7 @@ class _CategoriesState extends State<Categories> with AutomaticKeepAliveClientMi
                       ],
                     )
                   : GridView.builder(
-                      controller: controller,
+                      controller: controller,physics: AlwaysScrollableScrollPhysics(),
                       padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -155,7 +155,7 @@ class _ItemList extends StatelessWidget {
         nextScreen(
           context,
           CategoryBasedArticles(
-            category: d.name,
+            category: d.name,categoryModel: d,
             categoryId: d.id.toString(),
             // categoryImage: d.thumbnailUrl,
             tag: 'category${d.id}',

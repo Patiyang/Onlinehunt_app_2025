@@ -15,10 +15,10 @@ class CategoryServices {
     return res;
   }
 
-  Future<http.Response> getCategoriesWithPosts(int category_id) async {
+  Future<http.Response> getCategoriesWithPosts(int category_id, int page) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}categories/$category_id?lang_id=$lang_id';
+    String url = '${HelperClass.mainIp}categories/$category_id?lang_id=$lang_id&page=$page';
     print(url);
     http.Response res = await TokenService().urlGetAuthentication(url);
     // print(res.body);

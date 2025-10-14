@@ -6,12 +6,12 @@ class HelperClass {
   static const baseUrl = "https://onlinehunt.in/api/";
   static const fileUpload = "https://onlinehunt.in/news/uploads/videos/";
   static const publicMainIpAddress = 'https://onlinehunt.in/news/';
-  static const publicTestIpAddress = 'http://192.168.0.105/';
+  static const publicTestIpAddress = 'http://192.168.0.105/news/';
 
   static const String testipAddress = 'http://${kIsWeb ? '127.0.0.1' : '192.168.0.105'}/news/api/';
-  static const serverpAddress = 'http://onlinehunt.in/news/api/';
-  static const mainIp = testipAddress;
-  static const avatarIp = publicTestIpAddress;
+  static const serverpAddress = 'https://onlinehunt.in/news/api/';
+  static const mainIp = serverpAddress;
+  static const avatarIp = publicMainIpAddress;
 
   static const tokenKey = 'token';
   String getBaseUrl(String param, {int currentPage = 1, count = 6, String type = 'all', String categoryid = 'all', String id = ''}) {

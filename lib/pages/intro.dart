@@ -23,34 +23,36 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
-    return IntroductionScreen(
-      pages: [
-        introPage(context, 'intro-title1', 'intro-description1', Config().introImage1),
-        introPage(context, 'intro-title2', 'intro-description2', Config().introImage2),
-        introPage(context, 'intro-title3', 'intro-description3', Config().introImage3),
-      ],
-      onDone: () {
-        afterIntroComplete();
-      },
-      onSkip: () {
-        afterIntroComplete();
-      },
-      globalBackgroundColor: Colors.white,
-      showSkipButton: true,
-      skip: const Text(
-        'skip',
-        style: TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
-      ).tr(),
-      next: const Icon(Icons.navigate_next),
-      done: const Text("done", style: TextStyle(fontWeight: FontWeight.w600)).tr(),
-
-      dotsDecorator: DotsDecorator(
-        size: const Size.square(7.0),
-        activeSize: const Size(20.0, 5.0),
-        activeColor: Theme.of(context).primaryColor,
-        color: Colors.black26,
-        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-        activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+    return SafeArea(top: false,
+      child: IntroductionScreen(
+        pages: [
+          introPage(context, 'intro-title1', 'intro-description1', Config().introImage1),
+          introPage(context, 'intro-title2', 'intro-description2', Config().introImage2),
+          introPage(context, 'intro-title3', 'intro-description3', Config().introImage3),
+        ],
+        onDone: () {
+          afterIntroComplete();
+        },
+        onSkip: () {
+          afterIntroComplete();
+        },
+        globalBackgroundColor: Colors.white,
+        showSkipButton: true,
+        skip: const Text(
+          'skip',
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
+        ).tr(),
+        next: const Icon(Icons.navigate_next),
+        done: const Text("done", style: TextStyle(fontWeight: FontWeight.w600)).tr(),
+      
+        dotsDecorator: DotsDecorator(
+          size: const Size.square(7.0),
+          activeSize: const Size(20.0, 5.0),
+          activeColor: Theme.of(context).primaryColor,
+          color: Colors.black26,
+          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+          activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        ),
       ),
     );
   }

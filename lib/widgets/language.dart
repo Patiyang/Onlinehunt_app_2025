@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
 
 import 'package:online_hunt_news/blocs/featured_bloc.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';
@@ -47,14 +48,18 @@ class _LanguagePopupState extends State<LanguagePopup> {
                   if (d == 'English') {
                     context.setLocale(Locale('en'));
                     prefs.setString('language', 'English');
+                    prefs.setInt('lang_id', 2);
                     ThemeModel().myValue = 'Manrope';
                   } else if (d == 'Kannada') {
                     context.setLocale(Locale('kn'));
                     prefs.setString('language', 'Kannada');
+                    prefs.setInt('lang_id', 1);
                     ThemeModel().myValue = 'NotoSerif';
                   } else if (d == 'Hindi') {
                     context.setLocale(Locale('hi'));
                     prefs.setString('language', 'Hindi');
+                                  prefs.setInt('lang_id', 3);
+
                     ThemeModel().myValue = 'Karma';
                   }
                 })
@@ -72,6 +77,7 @@ class _LanguagePopupState extends State<LanguagePopup> {
     context.read<FeaturedBloc>().onRefresh(mounted);
     context.read<PopularBloc>().onRefresh(mounted);
     context.read<RecentBloc>().onRefresh(mounted);
+    context.read<CategoriesBloc>().onRefresh(mounted);
     getCategories();
   }
 

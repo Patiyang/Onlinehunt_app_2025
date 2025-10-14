@@ -10,6 +10,7 @@ import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:online_hunt_news/models/apiCategoriesModel.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/like_model.dart';
+import 'package:online_hunt_news/models/metaModel.dart';
 import 'package:online_hunt_news/models/mobile_ads_model.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/services/category_services.dart';
@@ -40,12 +41,14 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
   List<DocumentSnapshot> _snap = [];
   // List<Article> _data = [];
   List<PostModel> posts = [];
+
   List<Category> ddCategoriesList = [];
   Category? selectedSubCat;
   // List<ApiArticle> articles = [];
   int _lastIndex = 0;
+  Metamodel? metaData;
   int currentPage = 1;
-
+  int totalPages = 1;
   bool? _hasData;
   QuerySnapshot? rawData;
   DocumentSnapshot? _lastVisible;
@@ -72,7 +75,12 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
   _scrollListener() {
     if (scrollController.position.pixels >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && _isLoadingMore == false) {
       print('loadingData');
-      getApiData(mounted, true);
+      if (metaData!.total == posts.length) {
+        print('no more data');
+        return;
+      } else {
+        getApiData(mounted, true);
+      }
     }
   }
 
@@ -110,7 +118,8 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
                           }
                           return Card2(
                             categoryName: selectedSubCat == null ? '--' : selectedSubCat!.name,
-                            heroTag: 'tab1$index',postModel: posts[index],
+                            heroTag: 'tab1$index',
+                            postModel: posts[index],
                             // apiArticle: adsList[index] as ApiArticle,
                             // handlnigLike: handlingLikes[index],
                             // likeId: likeId[index],
@@ -140,6 +149,24 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
                           // }
                         },
                       ),
+
+                posts.isNotEmpty
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 25,
+                          width: double.infinity,
+                          color: Theme.of(context).primaryColor.withValues(alpha: 0.6),
+                          child: Center(
+                            child: Text(
+                              '${'page'.tr()} ${metaData!.currentPage} ${'of'.tr()} ${metaData!.totalPages}',
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+
                 // Align(
                 //   alignment: Alignment.bottomLeft,
                 //   child: Padding(
@@ -187,6 +214,7 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
       setState(() {
         _isLoading = true;
         currentPage = 1;
+        totalPages = 1;
         posts = [];
         mobileAds = [];
         liked = [];
@@ -201,11 +229,10 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
     }
 
     Map<String, dynamic> response = {};
-    List<PostModel> articles = [];
 
     try {
       await categoryServices
-          .getCategoriesWithPosts(widget.apiCategory!.id)
+          .getCategoriesWithPosts(widget.apiCategory!.id, currentPage)
           .then((value) {
             response = jsonDecode(value.body);
             print(response['posts'].length);
@@ -214,6 +241,8 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
             for (int i = 0; i < response['posts'].length; i++) {
               posts.add(PostModel.fromJson(response['posts'][i]));
             }
+            metaData = Metamodel.fromJson(response['meta']);
+            totalPages = metaData!.totalPages;
             _lastIndex = _lastIndex + 4;
           });
       // articles.forEach((element) {

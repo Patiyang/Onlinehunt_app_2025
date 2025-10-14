@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
@@ -10,6 +9,8 @@ import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/widgets/video_icon.dart';
 // import 'package:share/share.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../pages/followScreen/author_details.dart';
 
 class Card2 extends StatelessWidget {
@@ -21,7 +22,7 @@ class Card2 extends StatelessWidget {
   // final bool? handlnigLike;
   final bool? liked;
   final VoidCallback? handleLoveCLick;
-  const Card2({Key? key, required this.heroTag, this.categoryName, /* this.likeId, this.handlnigLike,*/  this.liked,this.handleLoveCLick,  this.postModel})
+  const Card2({Key? key, required this.heroTag, this.categoryName, /* this.likeId, this.handlnigLike,*/ this.liked, this.handleLoveCLick, this.postModel})
     : super(key: key);
 
   @override
@@ -53,7 +54,7 @@ class Card2 extends StatelessWidget {
                   ),
                 ),
                 VideoIcon(
-                  contentType: 'Image' ,
+                  contentType: 'Image',
                   // contentType: d.contentType,
                   iconSize: 80,
                 ),
@@ -66,7 +67,7 @@ class Card2 extends StatelessWidget {
                 children: [
                   SizedBox(height: 10),
                   Text(
-                    postModel!.title ?? '',
+                    postModel!.title,
                     // d.title!,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -84,25 +85,23 @@ class Card2 extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () => nextScreen(context, AuthorDetails(apiUserModel: postModel!.author!)),
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => print("${HelperClass.avatarIp}${postModel!.author!.avatar!}"),
-                                    child: postModel!.author!.avatar!.isEmpty
-                                        ? CircleAvatar(radius: 15, backgroundColor: Colors.grey[300], child: Icon(Icons.person))
-                                        : CircleAvatar(
-                                            radius: 15,
-                                            backgroundColor: Colors.grey[300],
-                                            backgroundImage: CachedNetworkImageProvider(
-                                             '${HelperClass.avatarIp}${postModel!.author!.avatar!}'
-                                            ),
-                                          ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(' ${postModel!.author!.username}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                                ],
-                              ),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => print("${HelperClass.avatarIp}${postModel!.author!.avatar!}"),
+                              child: postModel!.author!.avatar!.isEmpty
+                                  ? CircleAvatar(radius: 15, backgroundColor: Colors.grey[300], child: Icon(Icons.person))
+                                  : CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: Colors.grey[300],
+                                      backgroundImage: CachedNetworkImageProvider('${HelperClass.avatarIp}${postModel!.author!.avatar!}'),
+                                    ),
                             ),
+                            SizedBox(width: 10),
+                            Text(' ${postModel!.author!.username}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          ],
+                        ),
+                      ),
                       // FutureBuilder(
                       //   future: UserServices().userDetails(postModel!.userId!),
                       //   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -167,6 +166,10 @@ class Card2 extends StatelessWidget {
   }
 
   _handleContentShare() async {
+    SharePlus share = SharePlus.instance;
+    String deepLink = generateDeepLink(postModel!.id.toString());
+
+    await share.share(ShareParams(text: deepLink));
     //     try {
     //       await DynamicLinkService()
     //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
@@ -184,6 +187,17 @@ class Card2 extends StatelessWidget {
   }
 
   _handleWhatsappShare() async {
+    // launchUrl(  Uri.parse("https://wa.me?text=${'''${postModel!.title.length > 70 ? postModel!.title.substring(0, 70) : postModel!.title}'''}"));
+    String deepLink = generateDeepLink(postModel!.id.toString());
+    final encodedText = Uri.encodeComponent('Check this out: $deepLink');
+    final whatsappUrl = 'https://wa.me/?text=$encodedText';
+
+    final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch WhatsApp');
+    }
     //     try {
     //       await DynamicLinkService()
     //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
@@ -196,6 +210,10 @@ class Card2 extends StatelessWidget {
     //     } catch (e) {
     //       print(e.toString());
     //     }
+  }
+
+  String generateDeepLink(String postId) {
+    return 'https://onlinehunt.in/news/p/$postId';
   }
 
   handleLoveClick() {}

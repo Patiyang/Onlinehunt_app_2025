@@ -95,7 +95,7 @@ class NotificationBloc extends ChangeNotifier {
     RemoteMessage? initialMessage = await _fcm.getInitialMessage();
     print('inittal message : $initialMessage');
     if (initialMessage != null) {
-      nextScreen(context, ArticleDetails(articleId: initialMessage.data['articleId']));
+      nextScreen(context, ArticleDetails(post_id: int.parse(initialMessage.data['articleId'])));
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -112,7 +112,7 @@ class NotificationBloc extends ChangeNotifier {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print(message.data);
-      nextScreen(context, ArticleDetails(articleId: message.data['articleId']));
+      nextScreen(context, ArticleDetails(post_id: int.parse(message.data['articleId'])));
       // navigateToDetailsScreen(context, await getArticleById(message.data['articleId']), '');
     });
     notifyListeners();
@@ -179,7 +179,7 @@ class NotificationBloc extends ChangeNotifier {
             child: Text('Open'),
             onPressed: () async {
               Navigator.of(context).pop();
-              nextScreen(context, ArticleDetails(articleId: articleId));
+              nextScreen(context, ArticleDetails(post_id: int.parse(articleId!)));
             },
           ),
         ],

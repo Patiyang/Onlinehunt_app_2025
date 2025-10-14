@@ -130,8 +130,8 @@ class SliverCard extends StatelessWidget {
           ],
         ),
       ),
-      // onTap: () => navigateToDetailsScreen(context, apiArticle!, heroTag, categoryName!),
-      onTap: ()=>print('sliver card tapped'),
+      onTap: () => navigateToDetailsScreen(context, apiArticle!, heroTag, categoryName!),
+      // onTap: ()=>print('sliver card tapped'),
     );
   }
 }

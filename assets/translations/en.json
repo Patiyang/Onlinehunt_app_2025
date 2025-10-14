@@ -218,6 +218,9 @@
     "no iptvs":"No iptv links present",
     "unable to load video":"Unable to load video",
     "pick video":"Select file",
-    "upload video":"Upload a video"
+    "upload video":"Upload a video",
+    "page": "page",
+    "of": "of",
+    "terms": "Terms and Conditions"
 
 }

@@ -4,14 +4,13 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/general_settings_model.dart';
 import 'package:online_hunt_news/pages/aricleUploads/allArticles.dart';
 import 'package:online_hunt_news/pages/bookmarks.dart';
 import 'package:online_hunt_news/pages/edit_profile.dart';
 import 'package:online_hunt_news/pages/welcome.dart';
 import 'package:online_hunt_news/services/app_service.dart';
-import 'package:online_hunt_news/services/general_settings_sservices.dart';
-import 'package:online_hunt_news/widgets/language.dart';
 import 'package:provider/provider.dart';
 // import 'package:webfeed/domain/rss_feed.dart';
 import '../blocs/sign_in_bloc.dart';
@@ -68,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
     super.build(context);
     final sb = context.watch<SignInBloc>();
     return Scaffold(
-      appBar: AppBar(title: Text('profile').tr(), centerTitle: false),
+      appBar: AppBar(title: Text('profile').tr(), centerTitle: false,automaticallyImplyLeading: false,),
       body: ListView(
         controller: controller,
         padding: EdgeInsets.fromLTRB(15, 20, 20, 50),
@@ -132,42 +131,46 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             ),
             trailing: Icon(Feather.chevron_right, size: 20),
             onTap: () async {
-              await GeneralSettingsServices().getSettings().then((val) {
-                showContactBottomSheet(val);
-              });
+              showContactBottomSheet(SettingsModel(
+                contactEmail: Config.emailSupport,
+                contactPhone: Config.phoneSupport,
+              ));
+              // await GeneralSettingsServices().getSettings().then((val) {
+                
+              // });
             },
           ),
-          Divider(height: 3),
-          ListTile(
-            title: Text('language').tr(),
-            leading: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(color: Colors.pinkAccent, borderRadius: BorderRadius.circular(5)),
-              child: Icon(Feather.globe, size: 20, color: Colors.white),
-            ),
-            trailing: Icon(Feather.chevron_right, size: 20),
-            onTap: () async {
-              var popped = await Navigator.push(context, MaterialPageRoute(builder: (context) => LanguagePopup()));
+          // Divider(height: 3),
+          // ListTile(
+          //   title: Text('language').tr(),
+          //   leading: Container(
+          //     height: 30,
+          //     width: 30,
+          //     decoration: BoxDecoration(color: Colors.pinkAccent, borderRadius: BorderRadius.circular(5)),
+          //     child: Icon(Feather.globe, size: 20, color: Colors.white),
+          //   ),
+          //   trailing: Icon(Feather.chevron_right, size: 20),
+          //   onTap: () async {
+          //     var popped = await Navigator.push(context, MaterialPageRoute(builder: (context) => LanguagePopup()));
 
-              if (popped == true) {
-                print(popped);
-                setState(() {});
-              }
-            },
-          ),
-          Divider(height: 3),
-          ListTile(
-            title: Text('rate this app').tr(),
-            leading: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(5)),
-              child: Icon(Feather.star, size: 20, color: Colors.white),
-            ),
-            trailing: Icon(Feather.chevron_right, size: 20),
-            onTap: () async => AppService().launchAppReview(context),
-          ),
+          //     if (popped == true) {
+          //       print(popped);
+          //       setState(() {});
+          //     }
+          //   },
+          // ),
+          // Divider(height: 3),
+          // ListTile(
+          //   title: Text('rate this app').tr(),
+          //   leading: Container(
+          //     height: 30,
+          //     width: 30,
+          //     decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(5)),
+          //     child: Icon(Feather.star, size: 20, color: Colors.white),
+          //   ),
+          //   trailing: Icon(Feather.chevron_right, size: 20),
+          //   onTap: () async => AppService().launchAppReview(context),
+          // ),
           Divider(height: 3),
           ListTile(
             title: Text('licence').tr(),
@@ -181,18 +184,18 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             onTap: () => openAboutDialog(),
           ),
           Divider(height: 3),
-          ListTile(
-            title: Text('privacy policy').tr(),
-            leading: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(5)),
-              child: Icon(Feather.lock, size: 20, color: Colors.white),
-            ),
-            trailing: Icon(Feather.chevron_right, size: 20),
-            onTap: () async => AppService().openLinkWithCustomTab(context, Config().privacyPolicyUrl),
-          ),
-          Divider(height: 3),
+          // ListTile(
+          //   title: Text('privacy policy').tr(),
+          //   leading: Container(
+          //     height: 30,
+          //     width: 30,
+          //     decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(5)),
+          //     child: Icon(Feather.lock, size: 20, color: Colors.white),
+          //   ),
+          //   trailing: Icon(Feather.chevron_right, size: 20),
+          //   onTap: () async => AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}'),
+          // ),
+          // Divider(height: 3),
           ListTile(
             title: Text('about us').tr(),
             leading: Container(
@@ -202,12 +205,12 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
               child: Icon(Feather.info, size: 20, color: Colors.white),
             ),
             trailing: Icon(Feather.chevron_right, size: 20),
-            onTap: () async => AppService().openLinkWithCustomTab(context, Config().ourWebsiteUrl),
+            onTap: () async => AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}'),
           ),
           SizedBox(height: 10),
           Text('visit', textAlign: TextAlign.center).tr(),
           GestureDetector(
-            onTap: () => AppService().openLinkWithCustomTab(context, 'https://onlinehunt.in/'),
+            onTap: () => AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}'),
             child: Text(
               'https://onlinehunt.in/',
               style: TextStyle(color: Config().appColor, decoration: TextDecoration.underline, fontSize: 16),

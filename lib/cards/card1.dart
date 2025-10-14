@@ -3,6 +3,8 @@ import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 
 import 'package:online_hunt_news/models/authorModel.dart';
 import 'package:online_hunt_news/models/postModel.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../pages/followScreen/author_details.dart';
 import 'package:online_hunt_news/utils/cached_image.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
@@ -40,6 +42,7 @@ class Card1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // SharePlus share = SharePlus.instance;
     return InkWell(
       child: Container(
         // padding: EdgeInsets.all(15),
@@ -65,7 +68,8 @@ class Card1 extends StatelessWidget {
                     child: CustomCacheImage(
                       imageUrl: postModel!.imageUrl,
                       radius: 5.0,
-                      contentType: 'article',circularShape: false,
+                      contentType: 'article',
+                      circularShape: false,
                       avatarUrl: "${HelperClass.avatarIp}${postModel!.author!.avatar}",
                     ),
                   ),
@@ -94,7 +98,7 @@ class Card1 extends StatelessWidget {
                     },
                     child: Text(
                       // d.title!,
-                      postModel!.title ?? ''.substring(0, 50),
+                      postModel!.title,
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                       maxLines: 7,
                       overflow: TextOverflow.ellipsis,
@@ -176,6 +180,10 @@ class Card1 extends StatelessWidget {
   }
 
   _handleContentShare() async {
+    SharePlus share = SharePlus.instance;
+    String deepLink = generateDeepLink(postModel!.id.toString());
+
+    await share.share(ShareParams(text: deepLink));
     //     try {
     //       await DynamicLinkService()
     //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
@@ -193,6 +201,17 @@ class Card1 extends StatelessWidget {
   }
 
   _handleWhatsappShare() async {
+    // launchUrl(  Uri.parse("https://wa.me?text=${'''${postModel!.title.length > 70 ? postModel!.title.substring(0, 70) : postModel!.title}'''}"));
+    String deepLink = generateDeepLink(postModel!.id.toString());
+    final encodedText = Uri.encodeComponent('Check this out: $deepLink');
+    final whatsappUrl = 'https://wa.me/?text=$encodedText';
+
+    final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch WhatsApp');
+    }
     //     try {
     //       await DynamicLinkService()
     //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
@@ -205,5 +224,9 @@ class Card1 extends StatelessWidget {
     //     } catch (e) {
     //       print(e.toString());
     //     }
+  }
+
+  String generateDeepLink(String postId) {
+    return 'https://onlinehunt.in/news/p/$postId';
   }
 }

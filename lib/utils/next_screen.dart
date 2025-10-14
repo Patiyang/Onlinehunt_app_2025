@@ -37,7 +37,7 @@ void navigateToDetailsScreen(context, PostModel article, String? heroTag, String
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ArticleDetails(post: article, tag: heroTag, articleId: article.id.toString()),
+        builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id),
       ),
     );
   // }
@@ -57,7 +57,7 @@ void navigateToDetailsScreenByReplace(context, PostModel article, String? heroTa
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ArticleDetails(post: article, tag: heroTag, articleId: article.id.toString()),
+          builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id),
         ),
       );
     // }

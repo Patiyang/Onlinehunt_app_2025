@@ -234,6 +234,8 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     await context.read<FeaturedBloc>().onRefresh(mounted);
     await context.read<PopularBloc>().onRefresh(mounted, context: context);
     await context.read<RecentBloc>().onRefresh(mounted);
+        context.read<CategoriesBloc>().onRefresh(mounted);
+
     return true;
   }
 

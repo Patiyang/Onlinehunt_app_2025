@@ -17,22 +17,21 @@ class UserServices {
     final res = await TokenService().urlGetAuthentication(url);
     return res;
   }
+
   Future<UserModel> signInUser(String email, String password) async {
     Map mapRes = {};
     UserModel? apiUserModel;
     String url = '${HelperClass.mainIp}auth/login';
     try {
-      http.Response res = await TokenService().urlPostAuthentication(url, {
-        'email': email,
-        'password': password,
-      });
+      http.Response res = await TokenService().urlPostAuthentication(url, {'email': email, 'password': password});
       mapRes = jsonDecode(res.body);
 
       if (res.statusCode == 200) {
         apiUserModel = UserModel.fromJson(mapRes['user']);
         Fluttertoast.showToast(msg: 'Login Successful');
       } else {
-        Fluttertoast.showToast(msg:  'Login Failed');
+        print('mapRes is $mapRes');
+        Fluttertoast.showToast(msg: 'Login Failed - ${mapRes['error']}');
       }
     } catch (e) {
       print(e.toString());
@@ -40,22 +39,19 @@ class UserServices {
     return apiUserModel!;
   }
 
-  Future<UserModel> createUser(String email, String password) async {
+  Future<UserModel> signUpUser(String email, String password, String username) async {
     Map mapRes = {};
     UserModel? apiUserModel;
-    String url = '${HelperClass.mainIp}auth/login';
+    String url = '${HelperClass.mainIp}auth/signup';
     try {
-      http.Response res = await TokenService().urlPostAuthentication(url, {
-        'email': email,
-        'password': password,
-      });
+      http.Response res = await TokenService().urlPostAuthentication(url, {'email': email, 'password': password, 'username': username});
       mapRes = jsonDecode(res.body);
 
       if (res.statusCode == 200) {
         apiUserModel = UserModel.fromJson(mapRes['user']);
-        Fluttertoast.showToast(msg: 'Login Successful');
+        Fluttertoast.showToast(msg: 'Sign Up Successful');
       } else {
-        Fluttertoast.showToast(msg:  'Login Failed');
+        Fluttertoast.showToast(msg: 'Sign Up Failed - ${mapRes['error']}');
       }
     } catch (e) {
       print(e.toString());
@@ -162,7 +158,6 @@ class UserServices {
     }
     return userArticles;
   }
-
 
   Future<http.Response> getFollowingUrl(int uid, String type) async {
     String url = 'https://onlinehunt.in/api/followers.php?api_key=$apiKey&uid=$uid&type=$type';

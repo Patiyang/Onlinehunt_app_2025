@@ -7,7 +7,6 @@ import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/utils/cached_image.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 
-import '../pages/followScreen/author_details.dart';
 
 class Card3 extends StatelessWidget {
   final PostModel? postModel;

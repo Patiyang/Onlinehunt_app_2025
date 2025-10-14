@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/custom_color.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/app_name.dart';
-import 'package:online_hunt_news/utils/next_screen.dart';
-import 'package:online_hunt_news/widgets/language.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -26,9 +25,9 @@ class _DrawerMenuState extends State<DrawerMenu> {
     final sb = context.watch<SignInBloc>();
     final List titles = [
       // 'bookmarks',
-      'language',
+      // 'language',
       'about us',
-      'privacy policy',
+      'terms',
       'contact us',
       'facebook page',
       // 'youtube channel',
@@ -89,25 +88,32 @@ class _DrawerMenuState extends State<DrawerMenu> {
                       //   nextScreen(context, BookmarkPage());
                       // } else
 
-                      if (index == 1) {
+                      /*     if (index == 0) {
                         Navigator.pop(context);
                         nextScreen(context, LanguagePopup());
-                      } else if (index == 2) {
-                        // AppService().openLinkWithCustomTab(context, Config().ourWebsiteUrl);
-                        await GeneralSettingsServices().getSettings().then((val) {
-                          shoAboutBtSheet(val);
-                        });
-                      } else if (index == 3) {
+                      } else */
+                      if (index == 0) {
+                        AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}');
+                        // await GeneralSettingsServices().getSettings().then((val) {
+                        //   shoAboutBtSheet(val);
+                        // });
+                      } else if (index == 1) {
+                        AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}/terms-conditions');
+
                         // Navigator.pop(context);
-                        await GeneralSettingsServices().getSettings().then((val) {
-                          AppService().openLinkWithCustomTab(context, val.privacyPolicy!);
-                        });
-                      } else if (index == 4) {
+                        // await GeneralSettingsServices().getSettings().then((val) {
+                        //   AppService().openLinkWithCustomTab(context, val.privacyPolicy!);
+                        // });
+                      } else if (index == 2) {
+                        AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}/contact');
+
                         // AppService().openEmailSupport();
-                        await GeneralSettingsServices().getSettings().then((val) {
-                          showContactBottomSheet(val);
-                        });
-                      } else if (index == 5) {
+                        // await GeneralSettingsServices().getSettings().then((val) {
+                        //   showContactBottomSheet(val);
+                        // });
+                      } else if (index == 3) {
+                        AppService().openLinkWithCustomTab(context, 'https://web.facebook.com/theonlinehunt/about');
+
                         GeneralSettingsServices().getSettings().then((value) => AppService().openLink(context, value.facebookUrl!));
                         // AppService().openLink(context, Config.facebookPageUrl);
                       }

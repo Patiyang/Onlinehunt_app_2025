@@ -25,9 +25,9 @@ class Author {
       username: json['username'] ?? '',
       slug: json['slug'] ?? '',
       email: json['email'] ?? '',
-      avatar: json['avatar'],
-      coverImage: json['cover_image'],
-      aboutMe: json['about_me'],
+      avatar: json['avatar']??'',
+      coverImage: json['cover_image']??'',
+      aboutMe: json['about_me']??'',
       lastSeen: json['last_seen'],
     );
   }

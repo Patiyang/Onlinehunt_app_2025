@@ -84,7 +84,8 @@ class _SignUpPageState extends State<SignUpPage> {
               setState(() {
                 signUpStarted = false;
               });
-              openSnacbar(_scaffoldKey, sb.errorCode);
+              ;
+              // openSnacbar(_scaffoldKey, sb.errorCode);
             }
           });
         }
@@ -96,7 +97,9 @@ class _SignUpPageState extends State<SignUpPage> {
     if (widget.tag == null) {
       nextScreenReplace(context, DonePage());
     } else {
-      Navigator.pop(context);
+      Navigator.of(context)
+        ..pop()
+        ..pop();
     }
   }
 

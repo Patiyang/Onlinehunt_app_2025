@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
+import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
 import 'package:online_hunt_news/blocs/featured_bloc.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:online_hunt_news/models/categoriesModel.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/theme_model.dart';
 import 'package:online_hunt_news/pages/home.dart';
+import 'package:online_hunt_news/pages/intro.dart';
 import 'package:online_hunt_news/pages/notifications.dart';
 import 'package:online_hunt_news/pages/search.dart';
 import 'package:online_hunt_news/services/category_services.dart';
@@ -92,99 +94,102 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
         ? Center(
             child: Loading(spinkit: SpinKitSpinningLines(color: Theme.of(context).primaryColor)),
           )
-        : Scaffold(
-            drawer: DrawerMenu(),
-            key: scaffoldKey,
-            body: NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  new SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    centerTitle: false,
-                    titleSpacing: 0,
-                    title: AppName(fontSize: 19.0),
-                    leading: IconButton(
-                      icon: Icon(Feather.menu, size: 25),
-                      onPressed: () {
-                        scaffoldKey.currentState!.openDrawer();
-                      },
-                    ),
-                    elevation: 1,
-                    actions: <Widget>[
-                      incomingList!.isEmpty
-                          ? IconButton(onPressed: () => nextScreenReplace(context, HomePage()), icon: Icon(Icons.refresh))
-                          : SizedBox.shrink(),
-                      IconButton(
-                        icon: Icon(Icons.translate, size: 22),
-                        onPressed: () async {
-                          // await AdServices().getMobileAds('1', adspace: 'main_screen_ad');
-                          var value = await getLanguageBottomSheet() ?? false;
-                          if (value == true) {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
-                          }
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(AntDesign.search1, size: 22),
+        : SafeArea(bottom: false,
+          child: Scaffold(
+              drawer: DrawerMenu(),
+              key: scaffoldKey,
+              body: NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    new SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      centerTitle: false,
+                      titleSpacing: 5,
+                      title: AppName(fontSize: 19.0),
+                      leading: IconButton(
+                        icon: Icon(Feather.menu, size: 25),
                         onPressed: () {
-                          nextScreen(context, SearchPage());
+                          scaffoldKey.currentState!.openDrawer();
                         },
                       ),
-                      badges.Badge(
-                        position: badges.BadgePosition.topEnd(top: 14, end: 15),
-                        badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
-                        badgeAnimation: badges.BadgeAnimation.fade(
-                          animationDuration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          loopAnimation: false,
-                        ),
-                        showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
-                        badgeContent: Container(),
-                        child: IconButton(
-                          icon: Icon(LineIcons.bell, size: 25),
-                          onPressed: () {
-                            context.read<NotificationBloc>().saveNlengthToSP();
-                            nextScreen(context, NotificationsPage());
+                      elevation: 1,
+                      actions: <Widget>[
+                        incomingList!.isEmpty
+                            ? IconButton(onPressed: () => nextScreenReplace(context, HomePage()), icon: Icon(Icons.refresh))
+                            : SizedBox.shrink(),
+                        IconButton(
+                          icon: Icon(Icons.translate, size: 22),
+                          onPressed: () async {
+                            nextScreen(context, IntroPage());
+                            // await AdServices().getMobileAds('1', adspace: 'main_screen_ad');
+                            // var value = await getLanguageBottomSheet() ?? false;
+                            // if (value == true) {
+                            //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+                            // }
                           },
                         ),
+                        IconButton(
+                          icon: Icon(AntDesign.search1, size: 22),
+                          onPressed: () {
+                            nextScreen(context, SearchPage());
+                          },
+                        ),
+                        badges.Badge(
+                          position: badges.BadgePosition.topEnd(top: 14, end: 15),
+                          badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
+                          badgeAnimation: badges.BadgeAnimation.fade(
+                            animationDuration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            loopAnimation: false,
+                          ),
+                          showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
+                          badgeContent: Container(),
+                          child: IconButton(
+                            icon: Icon(LineIcons.bell, size: 25),
+                            onPressed: () {
+                              context.read<NotificationBloc>().saveNlengthToSP();
+                              nextScreen(context, NotificationsPage());
+                            },
+                          ),
+                        ),
+          
+                        SizedBox(width: 5),
+                      ],
+                      pinned: true,
+                      floating: false,
+                      forceElevated: innerBoxIsScrolled,
+                      bottom: TabBar(
+                        labelStyle: TextStyle(fontFamily: ThemeModel().fontFamily, fontSize: 15, fontWeight: FontWeight.w600),
+                        controller: _tabController,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        labelColor: Theme.of(context).primaryColor,
+                        unselectedLabelColor: Color(0xff5f6368), //niceish grey
+                        isScrollable: true,
+                        indicator: MD2Indicator(
+                          //it begins here
+                          indicatorHeight: 3,
+                          indicatorColor: Theme.of(context).primaryColor,
+                          indicatorSize: MD2IndicatorSize.normal,
+                        ),
+                        tabs: tabsList,
                       ),
-
-                      SizedBox(width: 5),
-                    ],
-                    pinned: true,
-                    floating: false,
-                    forceElevated: innerBoxIsScrolled,
-                    bottom: TabBar(
-                      labelStyle: TextStyle(fontFamily: ThemeModel().fontFamily, fontSize: 15, fontWeight: FontWeight.w600),
-                      controller: _tabController,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      labelColor: Theme.of(context).primaryColor,
-                      unselectedLabelColor: Color(0xff5f6368), //niceish grey
-                      isScrollable: true,
-                      indicator: MD2Indicator(
-                        //it begins here
-                        indicatorHeight: 3,
-                        indicatorColor: Theme.of(context).primaryColor,
-                        indicatorSize: MD2IndicatorSize.normal,
-                      ),
-                      tabs: tabsList,
                     ),
-                  ),
-                ];
-              },
-              body: Builder(
-                builder: (cpntext) {
-                  return TabMediumAlt(
-                    controllers: controllers,
-                    sc: innerScrollController,
-                    tc: _tabController,
-                    presentCategories: incomingList,
-                    selectedIndex: _tabController!.index,
-                  );
+                  ];
                 },
+                body: Builder(
+                  builder: (cpntext) {
+                    return TabMediumAlt(
+                      controllers: controllers,
+                      sc: innerScrollController,
+                      tc: _tabController,
+                      presentCategories: incomingList,
+                      selectedIndex: _tabController!.index,
+                    );
+                  },
+                ),
               ),
             ),
-          );
+        );
   }
 
   @override
@@ -202,7 +207,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
             return ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.only(top: 10, bottom: 30, left: 10, right: 10),
               itemCount: Config().languages.length,
               itemBuilder: (BuildContext context, int index) {
                 return _itemList(Config().languages[index], index, context);
@@ -271,6 +276,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
     context.read<FeaturedBloc>().onRefresh(mounted);
     context.read<PopularBloc>().onRefresh(mounted, context: context);
     context.read<RecentBloc>().onRefresh(mounted);
+    context.read<CategoriesBloc>().onRefresh(mounted);
   }
 
   Future getData() async {
