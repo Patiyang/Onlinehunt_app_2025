@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:online_hunt_news/blocs/article_notification_bloc.dart';
 import 'package:online_hunt_news/blocs/custom_notification_bloc.dart';
@@ -41,7 +41,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
         elevation: 0,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Feather.rotate_cw, size: 22),
+            icon: Icon(Icons.refresh, size: 22),
             onPressed: () async {
               _tabController!.index == 0
                   ? await context.read<CustomNotificationBloc>().onRefresh(mounted)

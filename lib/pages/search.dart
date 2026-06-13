@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/search_bloc.dart';
 import 'package:online_hunt_news/cards/card4.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
@@ -96,7 +96,7 @@ class SuggestionsUI extends StatelessWidget {
     final sb = context.watch<SearchBloc>();
     return Expanded(
       child: sb.recentSearchData.isEmpty
-          ? EmptyPage(icon: Feather.search, message: 'search news'.tr(), message1: "search-description".tr())
+          ? EmptyPage(icon: Icons.search, message: 'search news'.tr(), message1: "search-description".tr())
           : ListView.separated(
               padding: EdgeInsets.all(15),
               itemCount: sb.recentSearchData.length,
@@ -141,7 +141,7 @@ class _AfterSearchUIState extends State<AfterSearchUI> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length == 0)
-              return EmptyPage(icon: Feather.clipboard, message: 'no articles found'.tr(), message1: "try again".tr());
+              return EmptyPage(icon: Icons.search, message: 'no articles found'.tr(), message1: "try again".tr());
             else
               return ListView.separated(
                 padding: EdgeInsets.all(10),

@@ -80,5 +80,6 @@ class AppService {
 
   static getYoutubeVideoIdFromUrl(String videoUrl) {
     return YoutubePlayer.convertUrlToId(videoUrl, trimWhitespaces: true);
+    // return YoutubePlayerController.fromVideoId(videoId: videoId)
   }
 }

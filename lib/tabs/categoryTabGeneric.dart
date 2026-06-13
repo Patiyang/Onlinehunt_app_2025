@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/tab_index_bloc.dart';
 import 'package:online_hunt_news/cards/card2.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
@@ -103,7 +103,7 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
                     ? ListView(
                         children: [
                           SizedBox(height: MediaQuery.of(context).size.height * 0.20),
-                          EmptyPage(icon: Feather.clipboard, message: 'no articles found'.tr(), message1: ''),
+                          EmptyPage(icon: Icons.search, message: 'no articles found'.tr(), message1: ''),
                         ],
                       )
                     : ListView.separated(

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:line_icons/line_icons.dart';
@@ -107,7 +107,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                       titleSpacing: 5,
                       title: AppName(fontSize: 19.0),
                       leading: IconButton(
-                        icon: Icon(Feather.menu, size: 25),
+                        icon: Icon(Icons.menu, size: 25),
                         onPressed: () {
                           scaffoldKey.currentState!.openDrawer();
                         },
@@ -129,7 +129,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                           },
                         ),
                         IconButton(
-                          icon: Icon(AntDesign.search1, size: 22),
+                          icon: Icon(Icons.search, size: 22),
                           onPressed: () {
                             nextScreen(context, SearchPage());
                           },

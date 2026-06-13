@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/cards/sliver_card.dart';
@@ -189,7 +189,7 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
                         : Column(
                             children: [
                               SizedBox(height: MediaQuery.of(context).size.height * 0.30),
-                              EmptyPage(icon: Feather.clipboard, message: 'no articles found'.tr(), message1: ''),
+                              EmptyPage(icon: Icons.note_add, message: 'no articles found'.tr(), message1: ''),
                             ],
                           ),
                   )

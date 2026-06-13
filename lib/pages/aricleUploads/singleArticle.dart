@@ -7,9 +7,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
@@ -412,7 +413,7 @@ class _SingleArticleState extends State<SingleArticle> {
   }
 
   Future pickVideo() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowedExtensions: ['mp4', 'webp'], type: FileType.custom);
+    FilePickerResult? result = await FilePicker.pickFiles(allowedExtensions: ['mp4', 'webp'], type: FileType.custom);
     if (result != null) {
       videoFile = File(result.files.single.path!);
       setState(() {
@@ -470,7 +471,7 @@ class _SingleArticleState extends State<SingleArticle> {
                                   border: Border.all(color: Theme.of(context).primaryColor),
                                   color: Colors.white,
                                 ),
-                                child: IconButton(icon: Icon(Feather.edit), onPressed: () => pickImage()),
+                                child: IconButton(icon: FaIcon(FontAwesomeIcons.penToSquare), onPressed: () => pickImage()),
                               ),
                             ),
                           ),

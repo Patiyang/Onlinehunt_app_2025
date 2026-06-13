@@ -5,8 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
@@ -281,14 +282,14 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                         post!.post_url == null
                                             ? Container()
                                             : IconButton(
-                                                icon: const Icon(Feather.external_link, size: 22),
+                                                icon: const FaIcon(FontAwesomeIcons.upRightFromSquare, size: 22),
                                                 onPressed: () => AppService().openLinkWithCustomTab(
                                                   context,
                                                   post!.post_url!.contains('https') ? post!.post_url! : 'https://${post!.post_url}',
                                                 ),
                                               ),
                                         IconButton(
-                                          icon: const Icon(FontAwesome.whatsapp, size: 22),
+                                          icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                                           onPressed: () async {
                                             _handleWhatsappShare();
                                           },
@@ -326,7 +327,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                         backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
                                         shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
                                       ),
-                                      icon: Icon(Feather.message_circle, color: Colors.white, size: 20),
+                                      icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
                                       label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
                                       onPressed: () {
                                         nextScreen(context, CommentsPage(articleId: post!.id.toString()));
@@ -361,7 +362,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
                                             shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
                                           ),
-                                          icon: Icon(Feather.message_circle, color: Colors.white, size: 20),
+                                          icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
                                           label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
                                           onPressed: () {
                                             nextScreen(context, CommentsPage(articleId: post!.id.toString()));
@@ -369,7 +370,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                         ),
                                         Spacer(),
                                         IconButton(
-                                          icon: const Icon(FontAwesome.whatsapp, size: 22),
+                                          icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                                           onPressed: () async {
                                             _handleWhatsappShare();
                                           },

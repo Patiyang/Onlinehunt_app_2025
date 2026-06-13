@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
@@ -63,7 +63,7 @@ class _CategoriesState extends State<Categories> with AutomaticKeepAliveClientMi
         elevation: 0,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Feather.rotate_cw, size: 22),
+            icon: Icon(Icons.refresh, size: 22),
             onPressed: () {
               context.read<CategoriesBloc>().onRefresh(mounted);
             },
@@ -79,7 +79,7 @@ class _CategoriesState extends State<Categories> with AutomaticKeepAliveClientMi
                   ? ListView(
                       children: [
                         SizedBox(height: MediaQuery.of(context).size.height * 0.35),
-                        EmptyPage(icon: Feather.clipboard, message: 'no categories found'.tr(), message1: ''),
+                        EmptyPage(icon: Icons.note_add, message: 'no categories found'.tr(), message1: ''),
                       ],
                     )
                   : GridView.builder(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -8,7 +9,7 @@ import 'package:online_hunt_news/utils/cached_image.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/widgets/video_icon.dart';
 // import 'package:share/share.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../pages/followScreen/author_details.dart';
@@ -140,13 +141,13 @@ class Card2 extends StatelessWidget {
                       // ),
                       Spacer(),
                       IconButton(
-                        icon: const Icon(FontAwesome.whatsapp, size: 22),
+                        icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                         onPressed: () async {
                           _handleWhatsappShare();
                         },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.share, size: 22),
+                        icon: const FaIcon(FontAwesomeIcons.share, size: 22),
                         onPressed: () async {
                           _handleContentShare();
                         },

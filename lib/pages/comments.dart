@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_html/shims/dart_ui_real.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/models/apiComment.dart';
@@ -77,7 +77,7 @@ class _CommentsPageState extends State<CommentsPage> {
         centerTitle: false,
         title: Text('comments').tr(),
         titleSpacing: 0,
-        actions: [IconButton(icon: Icon(Feather.rotate_cw, size: 22), onPressed: () => _getApiData(false))],
+        actions: [IconButton(icon: Icon(Icons.refresh, size: 22), onPressed: () => _getApiData(false))],
       ),
       body: Column(
         children: [

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/bookmark_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/utils/empty.dart';
@@ -26,7 +26,7 @@ class _BookmarkPageState extends State<BookmarkPage> with AutomaticKeepAliveClie
       child: Scaffold(
         appBar: AppBar(title: Text('bookmarks').tr(), centerTitle: false),
         body: sb.guestUser
-            ? EmptyPage(icon: Feather.user_plus, message: 'sign in first'.tr(), message1: "sign in to save your favourite articles here".tr())
+            ? EmptyPage(icon: Icons.person, message: 'sign in first'.tr(), message1: "sign in to save your favourite articles here".tr())
             : BookmarkedArticles(),
       ),
     );
@@ -52,7 +52,7 @@ class _BookmarkedArticlesState extends State<BookmarkedArticles> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length == 0)
-              return EmptyPage(icon: Feather.bookmark, message: 'no articles found'.tr(), message1: 'save your favourite articles here'.tr());
+              return EmptyPage(icon: Icons.bookmark, message: 'no articles found'.tr(), message1: 'save your favourite articles here'.tr());
             else
               return ListView.separated(
                 padding: EdgeInsets.all(15),

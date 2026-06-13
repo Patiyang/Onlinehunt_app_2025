@@ -4,7 +4,7 @@ description: "A new Flutter project."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 5.0.9+28
+version: 5.0.9+29
 
 environment:
   sdk: ^3.8.1
@@ -26,7 +26,7 @@ dependencies:
   flutter_web_browser: ^0.17.3
   flutter_html: ^3.0.0
   flutter_widget_from_html: ^0.17.1
-  google_fonts: ^6.3.1
+  google_fonts: ^8.1.0
   google_sign_in: ^7.1.1
   # geolocator: ^8.0.1
   # geocoder: ^0.2.1
@@ -40,19 +40,21 @@ dependencies:
   lottie: ^3.0.0
   # location: ^4.3.0
   # package_info: ^2.0.2
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.1.0
   path_provider: ^2.0.2
   provider: ^6.0.1
   permission_handler: ^12.0.1
   # share: ^2.0.4
-  share_plus: ^12.0.0
+  share_plus: ^13.1.0
   shared_preferences: ^2.0.6
   skeleton_text: ^3.0.0
   fluttertoast: ^9.0.0
   url_launcher: ^6.0.9
+  # youtube_player_flutter: ^10.0.1
   youtube_player_flutter: ^9.1.2
+
   # youtube_plyr_iframe: ^2.0.7
-  rounded_loading_button: ^2.0.5
+  rounded_loading_button: ^2.1.0
   firebase_analytics: ^12.0.1
   flutter_facebook_auth: ^7.1.2
   the_apple_sign_in: ^1.1.1
@@ -68,23 +70,26 @@ dependencies:
   uuid: ^4.5.1
   dio: ^5.9.0
   video_thumbnail: ^0.5.6
-  file_picker: 
+  # file_picker: 
+  # file_picker: ^3.0.4
+  file_picker: ^12.0.0-beta.5
   # chewie: ^1.3.5
   chewie: 
   path: ^1.8.2
   fk_user_agent: ^2.1.0
-  app_links: ^6.4.1
+  app_links: ^7.1.2
   # flutter_user_agent:
   #   git:
   #     url: https://github.com/j0j00/flutter_user_agent.git
-  flutter_icons:
-    git:
-      url: https://github.com/adarsh-technocrat/flutter-icons
+  # flutter_icons:
+  #   git:
+  #     url: https://github.com/adarsh-technocrat/flutter-icons
+  font_awesome_flutter: ^11.0.0
   md2_tab_indicator:
     git:
       url: https://github.com/westdabestdb/md2_tab_indicator
       
-  google_mobile_ads: ^6.0.0
+  google_mobile_ads: ^9.0.0
   facebook_audience_network: ^1.0.0-nullsafety.0
 
 # https://github.com/j0j00/flutter_user_agent.git

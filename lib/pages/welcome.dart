@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/pages/done.dart';
@@ -291,7 +292,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   RoundedLoadingButton(
                     child: Wrap(
                       children: [
-                        Icon(FontAwesome.google, size: 25, color: Colors.white),
+                        FaIcon(FontAwesomeIcons.google, size: 25, color: Colors.white),
                         SizedBox(width: 15),
                         Text(
                           'google sign in'.tr(),
@@ -310,7 +311,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   RoundedLoadingButton(
                     child: Wrap(
                       children: [
-                        Icon(FontAwesome.facebook, size: 25, color: Colors.white),
+                        FaIcon(FontAwesomeIcons.facebook, size: 25, color: Colors.white),
                         SizedBox(width: 15),
                         Text(
                           'facebook sign in'.tr(),
@@ -361,7 +362,7 @@ class _WelcomePageState extends State<WelcomePage> {
             : RoundedLoadingButton(
                 child: Wrap(
                   children: [
-                    Icon(FontAwesome.apple, size: 25, color: Colors.white),
+                    FaIcon(FontAwesomeIcons.apple, size: 25, color: Colors.white),
                     SizedBox(width: 15),
                     Text(
                       ' Sign In with Apple',

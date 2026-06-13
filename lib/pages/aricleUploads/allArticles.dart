@@ -1,6 +1,7 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:online_hunt_news/utils/empty.dart';
@@ -67,7 +68,7 @@ class _AllArticlesState extends State<AllArticles> {
                   ? ListView(
                       children: [
                         SizedBox(height: MediaQuery.of(context).size.height * 0.20),
-                        EmptyPage(icon: Feather.clipboard, message: 'no articles found'.tr(), message1: ''),
+                        EmptyPage(icon: Icons.note, message: 'no articles found'.tr(), message1: ''),
                       ],
                     )
                   : ListView.separated(

@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:online_hunt_news/helpers&Widgets/key.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
@@ -59,7 +60,7 @@ class _AuthorDetailsState extends State<AuthorDetails> {
             onPressed: () {
               AppService().openLinkWithCustomTab(context, 'https://onlinehunt.in/news/rss/author/${_userDetails!.slug}');
             },
-            icon: Icon(FontAwesome.feed),
+            icon: FaIcon(FontAwesomeIcons.rss),
           ),
         ],
       ),

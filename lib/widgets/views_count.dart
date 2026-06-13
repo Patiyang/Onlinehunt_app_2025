@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -50,7 +50,7 @@ class _ViewsCountState extends State<ViewsCount> {
     return Container(
       child: Row(
         children: [
-          Icon(Feather.eye, color: Colors.grey, size: 20),
+          Icon(Icons.remove_red_eye, color: Colors.grey, size: 20),
           SizedBox(width: 3),
           widget.article.pageViews == null
               ? Text(0.toString())

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:online_hunt_news/cards/card4.dart';
 import 'package:online_hunt_news/cards/card5.dart';
@@ -75,7 +75,7 @@ class _VideoTabGenericState extends State<VideoTabGeneric> {
                 ? ListView(
                     children: [
                       SizedBox(height: MediaQuery.of(context).size.height * 0.35),
-                      EmptyPage(icon: Feather.clipboard, message: 'no articles found'.tr(), message1: ''),
+                      EmptyPage(icon: Icons.search, message: 'no articles found'.tr(), message1: ''),
                     ],
                   )
                 : ListView.separated(

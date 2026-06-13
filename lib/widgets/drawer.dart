@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -35,12 +35,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
     ];
 
     final List icons = [
-      // Feather.bookmark,
-      Feather.globe,
-      Feather.info,
-      Feather.lock,
-      Feather.mail,
-      Feather.facebook,
+      // Icons.bookmark,
+      Icons.public,
+      Icons.info,
+      Icons.lock,
+      Icons.mail,
+      Icons.facebook,
       // Feather.youtube,
       // Feather.twitter
     ];

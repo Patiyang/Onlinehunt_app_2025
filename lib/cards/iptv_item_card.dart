@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/models/iptv_like_model.dart';
 import 'package:online_hunt_news/models/iptv_model.dart';
 import 'package:online_hunt_news/utils/icons.dart';
@@ -96,7 +97,7 @@ class IptvItemCard extends StatelessWidget {
                 ),
                 Spacer(),
                 IconButton(
-                  icon: const Icon(FontAwesome.whatsapp, size: 22),
+                  icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                   onPressed: () async {
                     _handleWhatsappShare();
                   },

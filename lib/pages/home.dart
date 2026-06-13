@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_hunt_news/blocs/ads_bloc.dart';
 import 'package:online_hunt_news/blocs/bottomNavBar_bloc.dart';
@@ -31,11 +31,11 @@ class _HomePageState extends State<HomePage> {
   PageController _pageController = PageController(keepPage: true);
 
   List<IconData> iconList = [
-    Feather.home,
-    FontAwesome.newspaper_o,
-    Feather.tv,
-    Feather.user,
-    // Feather.plus_circle
+    Icons.home,
+    Icons.newspaper,
+    Icons.tv,
+    Icons.person,
+    // Icons.plus_circle
   ];
   List<String> states = [];
   List districts = [];
