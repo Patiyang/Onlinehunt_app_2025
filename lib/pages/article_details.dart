@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fk_user_agent/fk_user_agent.dart';
+// import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
@@ -41,6 +41,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ua_client_hints/ua_client_hints.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/followingModel.dart';
@@ -91,6 +92,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   bool loadingFollowing = true;
   UserServices _userServices = UserServices();
   MobileAdsaModel? _mobileAdsaModel;
+
   @override
   void initState() {
     initUserAgent();
@@ -105,8 +107,11 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   }
 
   initUserAgent() async {
-    await FkUserAgent.init();
-    webViewUserAgent = FkUserAgent.webViewUserAgent!;
+    final ua = await userAgent();
+    final uaData = await userAgentData();
+    final header = await userAgentClientHintsHeader();
+    // await FkUserAgent.init();
+    // webViewUserAgent = FkUserAgent.webViewUserAgent!;
   }
 
   @override

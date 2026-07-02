@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_hunt_news/cards/card3.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
@@ -25,8 +26,9 @@ class RelatedArticles extends StatefulWidget {
 }
 
 class _RelatedArticlesState extends State<RelatedArticles> {
-  int _lastIndex = 0;
+  // int _lastIndex = 0;
   int currentPage = 1;
+  int totalPages = 1;
   late List<Object> adsList;
   PostServices postServices = PostServices();
   bool _isLoading = true;
@@ -47,7 +49,7 @@ class _RelatedArticlesState extends State<RelatedArticles> {
   }
 
   _scrollListener() {
-    if (this.widget.sc!.offset >= this.widget.sc!.position.maxScrollExtent && !this.widget.sc!.position.outOfRange) {
+    if (this.widget.sc!.offset >= this.widget.sc!.position.maxScrollExtent && !this.widget.sc!.position.outOfRange && currentPage < totalPages) {
       getApiData(mounted, widget.category!, true);
     }
   }
@@ -86,7 +88,7 @@ class _RelatedArticlesState extends State<RelatedArticles> {
                   separatorBuilder: (context, index) => SizedBox(height: 15),
                   itemBuilder: (BuildContext context, int index) {
                     if (_posts.isEmpty) return Container();
-                    return Card3(postModel: _posts[index], heroTag: null, replace: true, categoryName: widget.category!.name,author:  _posts[index].author,);
+                    return Card3(postModel: _posts[index], heroTag: null, replace: true, categoryName: widget.category!.name, author: _posts[index].author);
                     // if (index == adsList.length) {
                     //   return _buildProgressIndicator();
                     // }
@@ -131,42 +133,13 @@ class _RelatedArticlesState extends State<RelatedArticles> {
             response = jsonDecode(value.body);
           })
           .whenComplete(() {
+            totalPages = response['meta']['total_pages'];
+            Fluttertoast.showToast(msg: totalPages.toString());
             for (int i = 0; i < response['data'].length; i++) {
               _posts.add(PostModel.fromJson(response['data'][i]));
             }
           });
-      // articles.forEach((element) {
-      //   if (element.langId == languageID && element.categoryId == category.id) {
-      //     if (_articlesData.isNotEmpty) {
-      //       _articlesData.any((data) {
-      //         if (data.id == element.id) {
-      //           print('true');
-      //           return false;
-      //         } else {
-      //           _articlesData.add(element);
-      //           print('false');
-      //           return true;
-      //         }
-      //       });
-      //     } else {
-      //       _articlesData.add(element);
-      //     }
 
-      //     // stringList.add(element.id!);
-      //   }
-      // });
-      // _articlesData.removeWhere((element) => element.visibility == '0' ? true : false);
-
-      // adsList = List.from(_articlesData);
-
-      // for (int i = 1; i <= _articlesData.length; i++) {
-      //   var min = 1;
-      //   var random = Random();
-      //   var randomPositions = min + random.nextInt(_articlesData.length);
-      //   if ((i + 1) % 5 == 0) {
-      //     adsList.insert(i, AdmobHelper.getBannerAd()..load());
-      //   }
-      // }
       if (mounted && updateList == false) {
         setState(() {
           _isLoading = false;

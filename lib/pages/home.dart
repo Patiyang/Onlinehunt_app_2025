@@ -14,6 +14,8 @@ import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
 import 'package:online_hunt_news/pages/explore.dart';
+import 'package:online_hunt_news/pages/iptv/iptv_list.dart';
+import 'package:online_hunt_news/pages/iptv/videos_explore.dart';
 import 'package:online_hunt_news/pages/profile.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/snacbar.dart';
@@ -163,7 +165,7 @@ class _HomePageState extends State<HomePage> {
             Explore(),
             // VideoArticles(),
             Categories(),
-            // IptvList(),
+            VideoExplore(),
             ProfilePage(),
           ],
         ),
@@ -195,7 +197,7 @@ class _HomePageState extends State<HomePage> {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(iconList[0]), label: 'home'.tr()),
         BottomNavigationBarItem(icon: Icon(iconList[1], size: 25), label: 'categories'.tr()),
-        // BottomNavigationBarItem(icon: Icon(iconList[2]), label: 'iptv'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[2]), label: 'iptv'.tr()),
         BottomNavigationBarItem(icon: Icon(iconList[3]), label: 'profile'.tr()),
       ],
     );

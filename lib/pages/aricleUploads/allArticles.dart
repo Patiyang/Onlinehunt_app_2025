@@ -1,6 +1,5 @@
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';

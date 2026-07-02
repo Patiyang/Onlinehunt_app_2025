@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 // import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:online_hunt_news/blocs/live_news_bloc.dart';
 import 'package:online_hunt_news/blocs/userArticleBLocs/allUserArticlesBloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/pages/splash.dart';
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<RecentBloc>(create: (context) => RecentBloc()),
               ChangeNotifierProvider<AllUserArticlesBloc>(create: (context) => AllUserArticlesBloc()),
               ChangeNotifierProvider<CategoriesBloc>(create: (context) => CategoriesBloc()),
+              ChangeNotifierProvider<LiveNewsBloc>(create: (context) => LiveNewsBloc()),
               ChangeNotifierProvider<AdsBloc>(create: (context) => AdsBloc()),
               // ChangeNotifierProvider<RelatedBloc>(create: (context) => RelatedBloc()),
               ChangeNotifierProvider<TabIndexBloc>(create: (context) => TabIndexBloc()),

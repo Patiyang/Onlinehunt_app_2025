@@ -103,7 +103,7 @@ class CustomMobileAd {
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor.withOpacity(.95),
+                      color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .95),
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                     ),
                     child: Padding(
@@ -118,7 +118,7 @@ class CustomMobileAd {
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor.withOpacity(.75),
+                      color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .75),
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                     ),
                     child: Padding(

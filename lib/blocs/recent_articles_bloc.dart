@@ -90,7 +90,7 @@ class RecentBloc extends ChangeNotifier {
               response = jsonDecode(utf8.decode(value.bodyBytes));
             })
             .whenComplete(() {
-              print(response['data']);
+              // print(response['data']);
               for (int i = 0; i < response['data'].length; i++) {
                 posts.add(PostModel.fromJson(response['data'][i]));
               }

@@ -58,10 +58,11 @@ class _PopularWidgetState extends State<PopularWidget> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
-                  itemCount: pb.apiArticle.isEmpty ? 2 : pb.apiArticle.length,
+                  itemCount: pb.posts.isEmpty ? 2 : pb.posts.length,
                   separatorBuilder: (context, index) => SizedBox(height: 15),
                   itemBuilder: (BuildContext context, int index) {
                     if (pb.posts.isEmpty) return LoadingCard(height: 200);
+                    // return Text(pb.posts.length.toString());
                     return Card1(
                       authorModel: pb.posts[index].author!,
                       heroTag: 'popular$index',

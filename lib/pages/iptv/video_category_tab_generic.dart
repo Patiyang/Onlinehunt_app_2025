@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/tab_index_bloc.dart';
 import 'package:online_hunt_news/cards/card2.dart';
+import 'package:online_hunt_news/helpers&Widgets/key.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:online_hunt_news/models/apiCategoriesModel.dart';
@@ -15,25 +16,24 @@ import 'package:online_hunt_news/models/mobile_ads_model.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/services/category_services.dart';
 import 'package:online_hunt_news/services/post_service.dart';
+import 'package:online_hunt_news/services/userServices.dart';
 import 'package:online_hunt_news/utils/empty.dart';
 import 'package:online_hunt_news/utils/sign_in_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../blocs/sign_in_bloc.dart';
-import '../helpers&Widgets/key.dart';
+import '../../blocs/sign_in_bloc.dart';
 
-import '../services/userServices.dart';
 
-class CategoryTabGeneric extends StatefulWidget {
+class VideoCategoryTabGeneric extends StatefulWidget {
   final Category? apiCategory;
   final ScrollController? sc;
-  CategoryTabGeneric({Key? key, this.sc, this.apiCategory}) : super(key: key);
+  VideoCategoryTabGeneric({Key? key, this.sc, this.apiCategory}) : super(key: key);
 
   @override
-  _CategoryTabGenericState createState() => _CategoryTabGenericState();
+  _VideoCategoryTabGenericState createState() => _VideoCategoryTabGenericState();
 }
 
-class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticKeepAliveClientMixin {
+class _VideoCategoryTabGenericState extends State<VideoCategoryTabGeneric> with AutomaticKeepAliveClientMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   PostServices postServices = PostServices();
@@ -232,7 +232,7 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
 
     try {
       await categoryServices
-          .getCategoriesWithPosts(widget.apiCategory!.id, currentPage)
+          .getCategoriesWithPosts(widget.apiCategory!.id, currentPage,is_video: 1)
           .then((value) {
             response = jsonDecode(value.body);
             print(response['posts'].length);

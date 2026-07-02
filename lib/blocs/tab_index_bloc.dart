@@ -11,3 +11,15 @@ class TabIndexBloc extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+
+class VideoTabIndexBloc extends ChangeNotifier {
+  int _tabIndex = 0;
+  int get tabIndex => _tabIndex;
+
+  setTabIndex(newIndex) {
+    _tabIndex = newIndex;
+    // print(_tabIndex);
+    notifyListeners();
+  }
+}

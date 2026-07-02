@@ -44,7 +44,7 @@ class PopularBloc extends ChangeNotifier {
             }
             Comparator<ApiArticle> sortById = (a, b) => a.pageViews!.compareTo(b.pageViews!);
             articles.sort(sortById);
-            print('length of api articles is ${articles.length}');
+            print('length of featured api articles is ${articles.length}');
           });
       // articles.sort((a, b) => int.parse(a.pageViews!).compareTo(int.parse(b.pageViews!)));
 

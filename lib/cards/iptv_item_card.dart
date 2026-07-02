@@ -1,15 +1,21 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_video_thumbnail/get_video_thumbnail.dart';
+import 'package:get_video_thumbnail/index.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
+import 'package:online_hunt_news/models/api_live_news.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/models/iptv_like_model.dart';
 import 'package:online_hunt_news/models/iptv_model.dart';
 import 'package:online_hunt_news/utils/icons.dart';
 import 'package:path_provider/path_provider.dart';
+// import 'package:video_thumbnail/video_thumbnail.dart';
 // import 'package:share/share.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+// import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../config/config.dart';
 import '../helpers&Widgets/loading.dart';
@@ -19,12 +25,9 @@ import '../services/userServices.dart';
 import '../utils/next_screen.dart';
 
 class IptvItemCard extends StatelessWidget {
-  final IptvModel? item;
-  final IptvLikeModel? likeId;
-  final bool? handlnigLike;
-  final bool? liked;
-  final VoidCallback? handleLoveCLick;
-  const IptvItemCard({Key? key, this.item, this.likeId, this.handlnigLike, this.liked, this.handleLoveCLick}) : super(key: key);
+  final LiveNews? item;
+
+  const IptvItemCard({Key? key, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,85 +46,43 @@ class IptvItemCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                FutureBuilder(
-                  future: getAuthorProfile(item!.userId!),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      UserModel user = snapshot.data;
-                      return Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(shape: BoxShape.circle),
-                        child: user.avatar!.contains('http')
-                            ? Image.network(user.avatar!, width: 40, fit: BoxFit.cover)
-                            : ClipOval(child: Image.network('https://onlinehunt.in/news/${user.avatar!}', width: 40, fit: BoxFit.cover)),
-                      );
-                    }
-                    return Container(
-                      decoration: BoxDecoration(shape: BoxShape.circle),
-                      child: GestureDetector(
-                        onTap: () => getAuthorProfile(item!.userId!),
-                        child: Image.asset(Config().splashIcon, height: 40, width: 40, fit: BoxFit.cover),
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  child:
+                      // item!.avatar!.contains('http')
+                      //     ?
+                      ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: '${HelperClass.avatarIp}${item!.avatar!}',
+                          placeholder: (_, c) {
+                            return ClipOval(child: Icon(Icons.person_off));
+                          },
+                          errorWidget: (_, c, o) {
+                            return ClipOval(child: Icon(Icons.person_off));
+                          },
+                        ),
                       ),
-                    );
-                  },
+                  // : CircleAvatar(
+                  //     radius: 20,
+                  //     backgroundColor: Theme.of(context).primaryColorDark,
+                  //     child: Icon(Icons.person_off),
+                  //   )
                 ),
                 SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FutureBuilder(
-                      future: getAuthorProfile(item!.userId!),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          UserModel user = snapshot.data;
-                          return Text(user.userName!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                        }
-                        return Text(
-                          '- -',
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: Colors.grey),
-                        );
-                      },
-                    ),
-                    FutureBuilder(
-                      future: getUserFollowing(item!.userId!),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          return Text('${snapshot.data} ${'followers'.tr()}');
-                        }
-                        return Text('--');
-                      },
-                    ),
-                  ],
-                ),
-                Spacer(),
-                IconButton(
-                  icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
-                  onPressed: () async {
-                    _handleWhatsappShare();
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.share, size: 22),
-                  onPressed: () async {
-                    _handleContentShare();
-                  },
-                ),
-                handlnigLike == true ? Loading() : IconButton(icon: liked == true ? LoveIcon().bold : LoveIcon().normal, onPressed: handleLoveCLick),
-                SizedBox(width: 3),
+                Text(item!.title!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               ],
             ),
-            SizedBox(height: 10),
-            Text(item!.iptvName!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+
             SizedBox(height: 10),
             FutureBuilder(
-              future: videoThumbnail(item!.iptvUrl!),
+              future: videoThumbnail(item!.url!),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.file(File(snapshot.data), width: MediaQuery.of(context).size.width - 22, height: 150, fit: BoxFit.cover),
+                    child: Image.file(File(snapshot.data), width: MediaQuery.of(context).size.width, height: 230, fit: BoxFit.cover),
                   );
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -134,7 +95,11 @@ class IptvItemCard extends StatelessWidget {
                 }
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(5),
-                  child: Image.asset(Config().splashIcon, width: MediaQuery.of(context).size.width - 22, height: 150, fit: BoxFit.cover),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width - 22,
+                    height: 150,
+                    child: Image.asset(Config().splashIcon, fit: BoxFit.scaleDown),
+                  ),
                 );
               },
             ),
@@ -145,14 +110,15 @@ class IptvItemCard extends StatelessWidget {
   }
 
   Future videoThumbnail(String url) async {
-    String? fileName = await VideoThumbnail.thumbnailFile(
-      video: url, // "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+    // VideoThumbnail? videoThumbnail = VideoThumbnail();
+    XFile? fileName = await VideoThumbnail.thumbnailFile(
+      video: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
       thumbnailPath: (await getTemporaryDirectory()).path,
       imageFormat: ImageFormat.JPEG,
-      maxHeight: 70, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+      maxHeight: 200, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
       quality: 100,
     );
-    return fileName;
+    return fileName.path;
   }
 
   Future getUserFollowing(String userId) async {

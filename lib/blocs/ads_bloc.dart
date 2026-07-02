@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facebook_audience_network/ad/ad_interstitial.dart'; //fb ads
+// import 'package:facebook_audience_network/ad/ad_interstitial.dart'; //fb ads
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart'; //admob ads
 import 'package:online_hunt_news/config/ad_config.dart';
@@ -108,38 +108,38 @@ class AdsBloc extends ChangeNotifier {
 
   // Fb Ads -- START --
 
-  void createInterstitialAdFb() {
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId: AdConfig().getFbInterstitialAdUnitId(),
-      listener: (result, value) {
-        print('ad result : $result');
-        if (result == InterstitialAdResult.LOADED) {
-          _isAdLoaded = true;
-          debugPrint('ads loaded');
-          notifyListeners();
-          showInterstitialAdFb();
-        } else if (result == InterstitialAdResult.DISMISSED && value["invalidated"] == true) {
-          _isAdLoaded = false;
-          notifyListeners();
-          debugPrint('ads dismissed or error : $result');
-        }
-      },
-    );
-  }
+  // void createInterstitialAdFb() {
+  //   FacebookInterstitialAd.loadInterstitialAd(
+  //     placementId: AdConfig().getFbInterstitialAdUnitId(),
+  //     listener: (result, value) {
+  //       print('ad result : $result');
+  //       if (result == InterstitialAdResult.LOADED) {
+  //         _isAdLoaded = true;
+  //         debugPrint('ads loaded');
+  //         notifyListeners();
+  //         showInterstitialAdFb();
+  //       } else if (result == InterstitialAdResult.DISMISSED && value["invalidated"] == true) {
+  //         _isAdLoaded = false;
+  //         notifyListeners();
+  //         debugPrint('ads dismissed or error : $result');
+  //       }
+  //     },
+  //   );
+  // }
 
-  void showInterstitialAdFb() async {
-    await FacebookInterstitialAd.showInterstitialAd();
-    _isAdLoaded = false;
-    notifyListeners();
-  }
+  // void showInterstitialAdFb() async {
+  //   await FacebookInterstitialAd.showInterstitialAd();
+  //   _isAdLoaded = false;
+  //   notifyListeners();
+  // }
 
-  Future disposefbInterstitial() async {
-    if (_isAdLoaded == true) {
-      FacebookInterstitialAd.destroyInterstitialAd();
-      _isAdLoaded = false;
-      notifyListeners();
-    }
-  }
+  // Future disposefbInterstitial() async {
+  //   if (_isAdLoaded == true) {
+  //     FacebookInterstitialAd.destroyInterstitialAd();
+  //     _isAdLoaded = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   // Fb Ads -- END --
 }

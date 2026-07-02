@@ -125,7 +125,7 @@ class _ItemList extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withOpacity(.2)],
+            colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withValues(alpha: .2)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),

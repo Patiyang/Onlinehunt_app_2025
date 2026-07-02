@@ -20,6 +20,7 @@ import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/theme_model.dart';
 import 'package:online_hunt_news/pages/home.dart';
 import 'package:online_hunt_news/pages/intro.dart';
+import 'package:online_hunt_news/pages/iptv/video_tab_medium.dart';
 import 'package:online_hunt_news/pages/notifications.dart';
 import 'package:online_hunt_news/pages/search.dart';
 import 'package:online_hunt_news/services/category_services.dart';
@@ -32,14 +33,14 @@ import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Explore extends StatefulWidget {
-  Explore({Key? key}) : super(key: key);
+class VideoExplore extends StatefulWidget {
+  VideoExplore({Key? key}) : super(key: key);
 
   @override
-  _ExploreState createState() => _ExploreState();
+  _VideoExploreState createState() => _VideoExploreState();
 }
 
-class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   TabController? _tabController;
   List<String> states = [];
@@ -53,7 +54,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
   CategoryServices categoryServices = CategoryServices();
   bool loading = false;
 
-  List<Tab> tabsList = [Tab(text: "explore".tr())];
+  List<Tab> tabsList = [Tab(text: "iptv".tr())];
   List<Category>? incomingList = [];
   List controllers = [];
 
@@ -65,15 +66,15 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
       _tabController = TabController(length: tabsList.length, vsync: this);
       _tabController!.addListener(() {
         // print('tab ctrl ${_tabController!.index}');
-        context.read<TabIndexBloc>().setTabIndex(_tabController!.index);
+        context.read<VideoTabIndexBloc>().setTabIndex(_tabController!.index);
       });
     });
 
-    Future.delayed(Duration(milliseconds: 0)).then((value) {
-      context.read<FeaturedBloc>().getApiData(mounted);
-      context.read<PopularBloc>().getApiData(mounted, context);
-      context.read<RecentBloc>().getApiData(mounted);
-    });
+    // Future.delayed(Duration(milliseconds: 0)).then((value) {
+    //   context.read<FeaturedBloc>().getApiData(mounted);
+    //   context.read<PopularBloc>().getApiData(mounted, context);
+    //   context.read<RecentBloc>().getApiData(mounted);
+    // });
   }
 
   @override
@@ -117,41 +118,41 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                         incomingList!.isEmpty
                             ? IconButton(onPressed: () => nextScreenReplace(context, HomePage()), icon: Icon(Icons.refresh))
                             : SizedBox.shrink(),
-                        IconButton(
-                          icon: Icon(Icons.translate, size: 22),
-                          onPressed: () async {
-                            // nextScreen(context, IntroPage());
-                            // await AdServices().getMobileAds('1', adspace: 'main_screen_ad');
-                            var value = await getLanguageBottomSheet() ?? false;
-                            if (value == true) {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
-                            }
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.search, size: 22),
-                          onPressed: () {
-                            nextScreen(context, SearchPage());
-                          },
-                        ),
-                        badges.Badge(
-                          position: badges.BadgePosition.topEnd(top: 14, end: 15),
-                          badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
-                          badgeAnimation: badges.BadgeAnimation.fade(
-                            animationDuration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                            loopAnimation: false,
-                          ),
-                          showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
-                          badgeContent: Container(),
-                          child: IconButton(
-                            icon: Icon(LineIcons.bell, size: 25),
-                            onPressed: () {
-                              context.read<NotificationBloc>().saveNlengthToSP();
-                              nextScreen(context, NotificationsPage());
-                            },
-                          ),
-                        ),
+                        // IconButton(
+                        //   icon: Icon(Icons.translate, size: 22),
+                        //   onPressed: () async {
+                        //     // nextScreen(context, IntroPage());
+                        //     // await AdServices().getMobileAds('1', adspace: 'main_screen_ad');
+                        //     var value = await getLanguageBottomSheet() ?? false;
+                        //     if (value == true) {
+                        //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+                        //     }
+                        //   },
+                        // ),
+                        // IconButton(
+                        //   icon: Icon(Icons.search, size: 22),
+                        //   onPressed: () {
+                        //     nextScreen(context, SearchPage());
+                        //   },
+                        // ),
+                        // badges.Badge(
+                        //   position: badges.BadgePosition.topEnd(top: 14, end: 15),
+                        //   badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
+                        //   badgeAnimation: badges.BadgeAnimation.fade(
+                        //     animationDuration: Duration(milliseconds: 300),
+                        //     curve: Curves.easeInOut,
+                        //     loopAnimation: false,
+                        //   ),
+                        //   showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
+                        //   badgeContent: Container(),
+                        //   child: IconButton(
+                        //     icon: Icon(LineIcons.bell, size: 25),
+                        //     onPressed: () {
+                        //       context.read<NotificationBloc>().saveNlengthToSP();
+                        //       nextScreen(context, NotificationsPage());
+                        //     },
+                        //   ),
+                        // ),
           
                         SizedBox(width: 5),
                       ],
@@ -178,7 +179,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                 },
                 body: Builder(
                   builder: (cpntext) {
-                    return TabMediumAlt(
+                    return VideoTabMediumAlt(
                       controllers: controllers,
                       sc: innerScrollController,
                       tc: _tabController,
@@ -273,10 +274,10 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
   }
 
   Future refresh(BuildContext context) async {
-    context.read<FeaturedBloc>().onRefresh(mounted);
-    context.read<PopularBloc>().onRefresh(mounted, context: context);
-    context.read<RecentBloc>().onRefresh(mounted);
-    context.read<CategoriesBloc>().onRefresh(mounted);
+    // context.read<FeaturedBloc>().onRefresh(mounted);
+    // context.read<PopularBloc>().onRefresh(mounted, context: context);
+    // context.read<RecentBloc>().onRefresh(mounted);
+    // context.read<CategoriesBloc>().onRefresh(mounted);
   }
 
   Future getData() async {

@@ -2,14 +2,14 @@ import 'package:chewie/chewie.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:online_hunt_news/models/iptv_model.dart';
-import 'package:online_hunt_news/services/iptv_services.dart';
+import 'package:online_hunt_news/models/api_live_news.dart';
+
 import 'package:video_player/video_player.dart';
 
 import '../../helpers&Widgets/loading.dart';
 
 class IptvVideo extends StatefulWidget {
-  final IptvModel? iptvModel;
+  final LiveNews? iptvModel;
   final String? id;
   IptvVideo({Key? key, this.iptvModel, this.id}) : super(key: key);
 
@@ -23,7 +23,7 @@ class _IptvVideoState extends State<IptvVideo> {
   bool success = false;
   bool loadingVideo = true;
 
-  IptvModel? iptvModel;
+  LiveNews? iptvModel;
   @override
   void initState() {
     super.initState();
@@ -60,13 +60,13 @@ class _IptvVideoState extends State<IptvVideo> {
   initializePlayer() async {
     if (widget.iptvModel == null) {
       try {
-        iptvModel = await IptvServices().getSingleIptv(widget.id!);
+        // iptvModel = await IptvServices().getSingleIptv(widget.id!);
 
-        videoPlayerController = VideoPlayerController.network(iptvModel!.iptvUrl!);
+        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(iptvModel!.url!));
 
         await videoPlayerController!.initialize();
 
-        chewieController = ChewieController(videoPlayerController: videoPlayerController!, autoPlay: true, looping: true);
+        chewieController = ChewieController(videoPlayerController: videoPlayerController!, autoPlay: true, looping: true, isLive: true);
         setState(() {
           loadingVideo = false;
           success = true;
@@ -77,11 +77,11 @@ class _IptvVideoState extends State<IptvVideo> {
     } else {
       try {
         iptvModel = widget.iptvModel;
-        videoPlayerController = VideoPlayerController.network(iptvModel!.iptvUrl!);
+        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(iptvModel!.url!));
 
         await videoPlayerController!.initialize();
 
-        chewieController = ChewieController(videoPlayerController: videoPlayerController!, autoPlay: true, looping: true);
+        chewieController = ChewieController(videoPlayerController: videoPlayerController!, autoPlay: true, looping: true, isLive: true);
         setState(() {
           loadingVideo = false;
           success = true;

@@ -4,14 +4,14 @@ import 'package:online_hunt_news/helpers&Widgets/key.dart';
 
 class HelperClass {
   static const baseUrl = "https://onlinehunt.in/api/";
-  static const fileUpload = "https://onlinehunt.in/news/uploads/videos/";
-  static const publicMainIpAddress = 'https://onlinehunt.in/news/';
-  static const publicTestIpAddress = 'http://192.168.0.105/news/';
+  static const fileUpload = "https://onlinehunt.in/api/uploads/videos/";
+  static const publicMainIpAddress = 'https://onlinehunt.in/';
+  static const publicTestIpAddress = 'http://192.168.0.104/';
 
-  static const String testipAddress = 'http://${kIsWeb ? '127.0.0.1' : '192.168.0.105'}/news/api/';
-  static const serverpAddress = 'https://onlinehunt.in/news/api/';
-  static const mainIp = serverpAddress;
-  static const avatarIp = publicMainIpAddress;
+  static const String testipAddress = 'http://${kIsWeb ? '127.0.0.1' : '192.168.0.104'}/api/';
+  static const serverpAddress = 'https://onlinehunt.in/api/';
+  static const mainIp = testipAddress;
+  static const avatarIp = publicTestIpAddress;
 
   static const tokenKey = 'token';
   String getBaseUrl(String param, {int currentPage = 1, count = 6, String type = 'all', String categoryid = 'all', String id = ''}) {
