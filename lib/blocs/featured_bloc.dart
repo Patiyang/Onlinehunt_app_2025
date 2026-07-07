@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:online_hunt_news/models/article.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/services/post_service.dart';
@@ -69,9 +68,8 @@ class FeaturedBloc with ChangeNotifier {
   // }
   Future getApiData(mounted) async {
     Map<String, dynamic> response = {};
-    List<ApiArticle> articles = [];
     // _apiArticle = [];
-    int languageID = await returnCategoryId();
+    await returnCategoryId();
     try {
       print('GETTING SLIDER');
       await _postServices

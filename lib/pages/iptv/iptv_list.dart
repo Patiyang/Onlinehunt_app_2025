@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,17 +7,12 @@ import 'package:online_hunt_news/cards/iptv_item_card.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
 import 'package:online_hunt_news/models/api_live_news.dart';
 import 'package:online_hunt_news/models/iptv_like_model.dart';
-import 'package:online_hunt_news/models/iptv_model.dart';
 import 'package:online_hunt_news/services/iptv_services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart';
 
-import '../../blocs/sign_in_bloc.dart';
-import '../../helpers&Widgets/key.dart';
 import '../../helpers&Widgets/loading.dart';
 import '../../services/userServices.dart';
-import '../../utils/sign_in_dialog.dart';
 
 class IptvList extends StatefulWidget {
   IptvList({Key? key}) : super(key: key);

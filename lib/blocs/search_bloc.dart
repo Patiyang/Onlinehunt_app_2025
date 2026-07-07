@@ -67,7 +67,7 @@ class SearchBloc with ChangeNotifier {
     Map<String, dynamic> response = {};
     List<ApiArticle> articles = [];
     List<ApiArticle> _apiArticle = [];
-    int languageID = await returnCategoryId();
+    await returnCategoryId();
     try {
       // Fluttertoast.showToast(msg: 'GETTING RECENT');
       await _postServices

@@ -48,14 +48,15 @@ class Card2 extends StatelessWidget {
                     tag: heroTag,
                     child: CustomCacheImage(
                       imageUrl: postModel!.imageUrl,
-                      // contentType: 'article',
+                      videoUrl: postModel!.video_url,
+                      contentType:postModel!.video_url!.isEmpty ? 'article' : 'video',
                       radius: 5.0,
                       // circularShape: false,
                     ),
                   ),
                 ),
                 VideoIcon(
-                  contentType: 'Image',
+                  contentType: postModel!.video_url!.isNotEmpty? 'video' : 'image',
                   // contentType: d.contentType,
                   iconSize: 80,
                 ),

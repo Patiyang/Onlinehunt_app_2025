@@ -68,47 +68,6 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
     getApiCategories(mounted);
   }
 
-  // Future<Null> _getData() async {
-  //   setState(() => _hasData = true);
-  //   QuerySnapshot data;
-  //   if (_lastVisible == null)
-  //     data = await firestore.collection(collectionName).where('category', isEqualTo: widget.category).orderBy('timestamp', descending: true).limit(8).get();
-  //   else
-  //     data = await firestore
-  //         .collection(collectionName)
-  //         .where('category', isEqualTo: widget.category)
-  //         .orderBy('timestamp', descending: true)
-  //         .startAfter([_lastVisible!['timestamp']])
-  //         .limit(8)
-  //         .get();
-
-  //   if (data.docs.length > 0) {
-  //     _lastVisible = data.docs[data.docs.length - 1];
-  //     if (mounted) {
-  //       setState(() {
-  //         _isLoading = false;
-  //         _snap.addAll(data.docs);
-  //         _data = _snap.map((e) => Article.fromFirestore(e)).toList();
-  //       });
-  //     }
-  //   } else {
-  //     if (_lastVisible == null) {
-  //       setState(() {
-  //         _isLoading = false;
-  //         _hasData = false;
-  //         print('no items');
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _isLoading = false;
-  //         _hasData = true;
-  //         print('no more items');
-  //       });
-  //     }
-  //   }
-  //   return null;
-  // }
-
   @override
   void dispose() {
     controller!.removeListener(_scrollListener);
@@ -201,26 +160,6 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
                           return _buildProgressIndicator();
                         }
                         return SliverCard(apiArticle: posts[index], heroTag: 'categorybased$index', categoryName: widget.categoryModel!.name);
-                        // if (adsList[index] is ApiArticle) {
-                        //   if (index < adsList.length) {
-                        //     if (index % 2 == 0 && index != 0)
-                        //       // return SliverCard1(apiArticle: adsList[index], heroTag: 'categorybased$index', categoryName: widget.category);
-                        //     return SliverCard(apiArticle: adsList[index], heroTag: 'categorybased$index', categoryName: widget.category);
-                        //   }
-                        //   return Opacity(
-                        //     opacity: _isLoading ? 1.0 : 0.0,
-                        //     child: _lastVisible == null
-                        //         ? Column(children: [LoadingCard(height: 200), SizedBox(height: 15)])
-                        //         : Center(child: SizedBox(width: 32.0, height: 32.0, child: new CupertinoActivityIndicator())),
-                        //   );
-                        // } else {
-                        //   final Container adContent = Container(
-                        //     width: AdmobHelper.getBannerAd().size.width.toDouble(),
-                        //     height: AdmobHelper.getBannerAd().size.height.toDouble(),
-                        //     child: AdWidget(ad: adsList[index] as BannerAd, key: UniqueKey()),
-                        //   );
-                        //   return adContent;
-                        // }
                       }, childCount: posts.length),
                     ),
                   ),
@@ -265,40 +204,6 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
             metaData = Metamodel.fromJson(response['meta']);
             totalPages = metaData!.totalPages;
           });
-      // await categoryServices
-      //     .getCategoriesWithPosts('posts')
-      //     .then((value) {
-      //       response = jsonDecode(utf8.decode(value.bodyBytes));
-      //     })
-      //     .whenComplete(() {
-      //       response.forEach((element) {
-      //         dummyList.add(ApiArticle.fromJson(element));
-      //       });
-      //     });
-      // dummyList.forEach((element) {
-      //   if (element.langId == language && element.categoryId == widget.categoryId) {
-      //     _data.add(element);
-      //   }
-      // });
-      // _data.removeWhere((element) => element.visibility == '0' ? true : false);
-
-      // adsList = List.from(_data);
-
-      // for (
-      //   int i = 1;
-      //   i <=
-      //       (_data.length > 20
-      //           ? getAriclesLength()
-      //           : _data.length > 10
-      //           ? 1
-      //           : 0);
-      //   i++
-      // ) {
-      //   var min = 1;
-      //   var random = Random();
-      //   var randomPositions = min + random.nextInt(_data.length);
-      //   adsList.insert(randomPositions, AdmobHelper.getBannerAd()..load());
-      // }
 
       if (mounted) {
         setState(() {
@@ -315,14 +220,4 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
       print(e.toString());
     }
   }
-
-  // getAriclesLength() {
-  //   if (_data.length > 20 && _data.length < 75) {
-  //     return 4;
-  //   } else if (_data.length > 75 && _data.length < 100) {
-  //     return 6;
-  //   } else if (_data.length > 100) {
-  //     return 8;
-  //   }
-  // }
 }

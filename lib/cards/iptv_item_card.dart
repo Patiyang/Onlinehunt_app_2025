@@ -1,17 +1,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_video_thumbnail/get_video_thumbnail.dart';
 import 'package:get_video_thumbnail/index.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/api_live_news.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
-import 'package:online_hunt_news/models/iptv_like_model.dart';
-import 'package:online_hunt_news/models/iptv_model.dart';
-import 'package:online_hunt_news/utils/icons.dart';
+import 'package:online_hunt_news/utils/cached_image.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart';
 // import 'package:share/share.dart';
@@ -35,7 +31,8 @@ class IptvItemCard extends StatelessWidget {
       onTap: () => nextScreen(context, IptvVideo(iptvModel: item)),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 3),
+        height: 300,
+        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 3),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColorLight,
           borderRadius: BorderRadius.circular(5),
@@ -55,7 +52,7 @@ class IptvItemCard extends StatelessWidget {
                       //     ?
                       ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: '${HelperClass.avatarIp}${item!.avatar!}',
+                          imageUrl: '${HelperClass.avatarIp}${item!.avatar}',
                           placeholder: (_, c) {
                             return ClipOval(child: Icon(Icons.person_off));
                           },
@@ -76,43 +73,59 @@ class IptvItemCard extends StatelessWidget {
             ),
 
             SizedBox(height: 10),
-            FutureBuilder(
-              future: videoThumbnail(item!.url!),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.file(File(snapshot.data), width: MediaQuery.of(context).size.width, height: 230, fit: BoxFit.cover),
-                  );
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container(
+            item!.url!.contains('youtube')
+                ? Container(
+                    height: 240,
                     width: MediaQuery.of(context).size.width - 22,
-                    height: 150,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                    child: Center(child: Loading()),
-                  );
-                }
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 22,
-                    height: 150,
-                    child: Image.asset(Config().splashIcon, fit: BoxFit.scaleDown),
+
+                    child: CustomCacheImage(  imageUrl: '', radius: 5, contentType: 'video', circularShape: false, mediaType: 'video', videoUrl: item!.url),
+                  )
+                : FutureBuilder(
+                    future: videoThumbnail(item!.url!),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Image.file(File(snapshot.data), width: MediaQuery.of(context).size.width, height: 230, fit: BoxFit.cover),
+                        );
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width - 22,
+                          height: 150,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                          child: Center(child: Loading()),
+                        );
+                      }
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 22,
+                          height: 150,
+                          child: Image.asset(Config().splashIcon, fit: BoxFit.scaleDown),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ],
         ),
       ),
     );
   }
 
+  String getYoutubeThumbnail(String videoUrl) {
+    final Uri? uri = Uri.tryParse(videoUrl);
+    if (uri == null) {
+      return '';
+    }
+
+    return 'https://img.youtube.com/vi/${uri.queryParameters['v']}/0.jpg';
+  }
+
   Future videoThumbnail(String url) async {
     // VideoThumbnail? videoThumbnail = VideoThumbnail();
     XFile? fileName = await VideoThumbnail.thumbnailFile(
-      video: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+      video: url,
       thumbnailPath: (await getTemporaryDirectory()).path,
       imageFormat: ImageFormat.JPEG,
       maxHeight: 200, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio

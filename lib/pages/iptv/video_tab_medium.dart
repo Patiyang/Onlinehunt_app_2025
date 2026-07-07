@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/pages/iptv/iptv_list.dart';
 import 'package:online_hunt_news/pages/iptv/video_category_tab_generic.dart';
-import 'package:online_hunt_news/tabs/categoryTabGeneric.dart';
-import 'package:online_hunt_news/tabs/tab0.dart';
 
 class VideoTabMediumAlt extends StatefulWidget {
   final List? controllers;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
+import 'package:online_hunt_news/pages/video_article_details.dart';
 
 nextScreen(context, page) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => page));
@@ -24,23 +25,23 @@ void nextScreenPopup(context, page) {
 }
 
 void navigateToDetailsScreen(context, PostModel article, String? heroTag, String categoryId) {
-  // if (article.videoUrl!.isNotEmpty) {
-  //   // Navigator.push(
-  //   //   context,
-  //   //   MaterialPageRoute(
-  //   //     builder: (context) => VideoArticleDetails(data: article, categoryId: categoryId, articleId: article.id),
-  //   //   ),
-  //   // );
-  //   print('video');
-  //   Fluttertoast.showToast(msg: 'msg');
-  // } else {
+  if (article.video_url!.isNotEmpty) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoArticleDetails(data: article, post_id: article.id),
+      ),
+    );
+    print('video');
+    // Fluttertoast.showToast(msg: 'msg');
+  } else {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id),
       ),
     );
-  // }
+  }
 }
 
 void navigateToDetailsScreenByReplace(context, PostModel article, String? heroTag, bool? replace, String categoryId) {

@@ -8,7 +8,6 @@ import 'package:online_hunt_news/cards/card2.dart';
 import 'package:online_hunt_news/helpers&Widgets/key.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
-import 'package:online_hunt_news/models/apiCategoriesModel.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/like_model.dart';
 import 'package:online_hunt_news/models/metaModel.dart';

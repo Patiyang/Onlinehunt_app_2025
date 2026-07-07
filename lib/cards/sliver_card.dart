@@ -37,7 +37,7 @@ class SliverCard extends StatelessWidget {
                   Container(
                     height: 160,
                     width: MediaQuery.of(context).size.width,
-                    child: CustomCacheImage(imageUrl: apiArticle!.imageUrl, radius: 5.0, circularShape: false),
+                    child: CustomCacheImage(imageUrl: apiArticle!.imageUrl,videoUrl: apiArticle!.video_url, radius: 5.0, circularShape: false),
                   ),
                   VideoIcon(contentType: 'Image', iconSize: 80),
                 ],

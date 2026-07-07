@@ -19,7 +19,6 @@ import 'package:online_hunt_news/models/categoriesModel.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/theme_model.dart';
 import 'package:online_hunt_news/pages/home.dart';
-import 'package:online_hunt_news/pages/intro.dart';
 import 'package:online_hunt_news/pages/notifications.dart';
 import 'package:online_hunt_news/pages/search.dart';
 import 'package:online_hunt_news/services/category_services.dart';
@@ -94,8 +93,9 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
         ? Center(
             child: Loading(spinkit: SpinKitSpinningLines(color: Theme.of(context).primaryColor)),
           )
-        : SafeArea(bottom: false,
-          child: Scaffold(
+        : SafeArea(
+            bottom: false,
+            child: Scaffold(
               drawer: DrawerMenu(),
               key: scaffoldKey,
               body: NestedScrollView(
@@ -152,7 +152,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                             },
                           ),
                         ),
-          
+
                         SizedBox(width: 5),
                       ],
                       pinned: true,
@@ -189,7 +189,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                 ),
               ),
             ),
-        );
+          );
   }
 
   @override

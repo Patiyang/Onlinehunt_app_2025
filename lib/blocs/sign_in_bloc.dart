@@ -9,7 +9,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
-import 'package:online_hunt_news/helpers&Widgets/key.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
 import 'package:online_hunt_news/services/userServices.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -268,7 +267,7 @@ class SignInBloc extends ChangeNotifier {
   }
 
   Future<bool> checkApiUserExists() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     // String? email = sp.getString('email');
     List response = [];
     List<UserModel> dummyList = [];
@@ -311,41 +310,8 @@ class SignInBloc extends ChangeNotifier {
     // };
     // await ref.set(userData);
     var id = Uuid();
-    var v4 = id.v4();
+    id.v4();
     bool success = false;
-    var userData = {
-      "api_key": "$apiKey",
-      // "id": "11",
-      "username": _name,
-      "slug": _name!.replaceAll(' ', '-').toLowerCase(),
-      "email": _email,
-      "email_status": "1",
-      "token": v4,
-      "password": null,
-      "role": "user",
-      "user_type": _userType,
-      "google_id": _userType == 'google' ? _idToken : null,
-      "facebook_id": _userType == 'facebook' ? _idToken : null,
-      "vk_id": null,
-      "avatar": _imageUrl,
-      "status": "1",
-      "about_me": null,
-      "facebook_url": null,
-      "twitter_url": null,
-      "instagram_url": null,
-      "pinterest_url": null,
-      "linkedin_url": null,
-      "vk_url": null,
-      "telegram_url": null,
-      "youtube_url": null,
-      "last_seen": DateTime.now().toString(),
-      "show_email_on_profile": "1",
-      "show_rss_feeds": "1",
-      "reward_system_enabled": "0",
-      "balance": "0",
-      "total_pageviews": "0",
-      "created_at": DateTime.now().toString(),
-    };
     // await _userServices.createUser('users', userData).then((value) {
     //   if (value.statusCode == 200) {
     //     Map mapRes = jsonDecode(value.body);

@@ -1,9 +1,6 @@
-import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LiveNewsService {

@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
 import 'package:online_hunt_news/models/article.dart';
-import 'package:online_hunt_news/services/post_service.dart';
 import 'package:online_hunt_news/services/userServices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +18,6 @@ class AllUserArticlesBloc with ChangeNotifier {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<DocumentSnapshot> _snap = [];
-  PostServices _postServices = PostServices();
   UserServices _userServices = UserServices();
   DocumentSnapshot? _lastVisible;
   DocumentSnapshot? get lastVisible => _lastVisible;
@@ -54,7 +52,6 @@ class AllUserArticlesBloc with ChangeNotifier {
 
   Future getApiData(mounted) async {
     _apiArticle.clear();
-    List response = [];
     List<ApiArticle> articles = [];
     // _apiArticle = [];
     String userIdd = await getUserId();

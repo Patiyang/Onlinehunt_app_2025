@@ -31,7 +31,6 @@ import 'blocs/theme_bloc.dart';
 import 'blocs/videoCategoryBlocs/videos_bloc.dart';
 
 import 'config/config.dart';
-import 'models/dynamicLinks.dart';
 import 'models/theme_model.dart';
 
 final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
@@ -66,6 +65,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<AdsBloc>(create: (context) => AdsBloc()),
               // ChangeNotifierProvider<RelatedBloc>(create: (context) => RelatedBloc()),
               ChangeNotifierProvider<TabIndexBloc>(create: (context) => TabIndexBloc()),
+              ChangeNotifierProvider<VideoTabIndexBloc>(create: (context) => VideoTabIndexBloc()),
               ChangeNotifierProvider<BottomNavBloc>(create: (context) => BottomNavBloc()),
               ChangeNotifierProvider<NotificationBloc>(create: (context) => NotificationBloc()),
               ChangeNotifierProvider<CustomNotificationBloc>(create: (context) => CustomNotificationBloc()),
@@ -98,7 +98,7 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
-  final DynamicLinkService _dynamicLinkService = DynamicLinkService();
+  // final DynamicLinkService _dynamicLinkService = DynamicLinkService();
 
   Timer? _timerLink;
   bool checked = false;
@@ -236,7 +236,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     await context.read<FeaturedBloc>().onRefresh(mounted);
     await context.read<PopularBloc>().onRefresh(mounted, context: context);
     await context.read<RecentBloc>().onRefresh(mounted);
-        context.read<CategoriesBloc>().onRefresh(mounted);
+    context.read<CategoriesBloc>().onRefresh(mounted);
 
     return true;
   }

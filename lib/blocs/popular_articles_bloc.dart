@@ -27,7 +27,7 @@ class PopularBloc extends ChangeNotifier {
     Map<String, dynamic> response = {};
     List<ApiArticle> articles = [];
     // _apiArticle = [];
-    int languageID = await returnCategoryId();
+    await returnCategoryId();
     if (mounted) {
       _loading = true;
 

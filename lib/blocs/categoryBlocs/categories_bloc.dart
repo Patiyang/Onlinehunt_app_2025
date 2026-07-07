@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:online_hunt_news/models/categoryModel.dart' as cat;
 import 'package:online_hunt_news/services/category_services.dart';
 
-import '../../helpers&Widgets/key.dart';
+// import '../../helpers&Widgets/key.dart';
 
 class CategoriesBloc extends ChangeNotifier {
   DocumentSnapshot? _lastVisible;
@@ -60,8 +60,8 @@ class CategoriesBloc extends ChangeNotifier {
 
   Future categoriesStream(mounted) async {
     Map<String, dynamic> response = {};
-    List<cat.Category> dummyList = [];
-    int language = await returnCategoryId();
+    // List<cat.Category> dummyList = [];
+    // int language = await returnCategoryId();
     // List<ApiCategories> apiCategories = [];
     try {
       await categoryServices

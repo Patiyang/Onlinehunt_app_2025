@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:facebook_audience_network/ad/ad_interstitial.dart'; //fb ads
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart'; //admob ads
 import 'package:online_hunt_news/config/ad_config.dart';
 
@@ -14,23 +13,33 @@ class AdsBloc extends ChangeNotifier {
   bool _isAdLoaded = false;
   bool get isAdLoaded => _isAdLoaded;
 
+  BannerAd? _bannerAd;
+  BannerAd? get bannerAd => _bannerAd;
+
+  bool _isBannerAdReady = false;
+  bool get isBannerAdReady => _isBannerAdReady;
+
+  // bool get isBannerAdLoaded => _bannerAd != null;
+
   Future checkAdsEnable() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    await firestore
-        .collection('admin')
-        .doc('ads')
-        .get()
-        .then((DocumentSnapshot snap) {
-          bool? _banner = snap['banner_ad'];
-          bool? _interstitial = snap['interstitial_ad'];
-          _bannerAdEnabled = _banner;
-          _interstitialAdEnabled = _interstitial;
-          print('banner : $_bannerAdEnabled, interstitial: $_interstitialAdEnabled');
-          notifyListeners();
-        })
-        .catchError((e) {
-          print('error : $e');
-        });
+    // FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // await firestore
+    //     .collection('admin')
+    //     .doc('ads')
+    //     .get()
+    //     .then((DocumentSnapshot snap) {
+    //       bool? _banner = snap['banner_ad'];
+    //       bool? _interstitial = snap['interstitial_ad'];
+    //       _bannerAdEnabled = _banner;
+    //       _interstitialAdEnabled = _interstitial;
+    //       print('banner : $_bannerAdEnabled, interstitial: $_interstitialAdEnabled');
+    //       notifyListeners();
+    //     })
+    //     .catchError((e) {
+    //       print('error : $e');
+    //     });
+    _bannerAdEnabled = true;
+    _interstitialAdEnabled = true;
   }
 
   //enable only one
@@ -40,8 +49,9 @@ class AdsBloc extends ChangeNotifier {
   }
 
   //enbale only one
-  void loadAds() {
-    createInterstitialAdAdmob(); //admob
+  void loadAds({double? width}) {
+    // createInterstitialAdAdmob(); //admob
+    loadBannerAd(width: width ?? 320); //admob
     //createInterstitialAdFb(); //fb
   }
 
@@ -49,6 +59,7 @@ class AdsBloc extends ChangeNotifier {
   @override
   void dispose() {
     interstitialAdAdmob?.dispose(); //admob
+    bannerAd?.dispose(); //admob
     //disposefbInterstitial();       //fb
     super.dispose();
   }
@@ -67,7 +78,7 @@ class AdsBloc extends ChangeNotifier {
           interstitialAdAdmob = ad;
           _isAdLoaded = true;
           notifyListeners();
-          showInterstitialAdAdmob();
+          // showInterstitialAdAdmob();
         },
         onAdFailedToLoad: (LoadAdError error) {
           print('InterstitialAd failed to load: $error.');
@@ -79,15 +90,16 @@ class AdsBloc extends ChangeNotifier {
     );
   }
 
-  void showInterstitialAdAdmob() {
+  Future showInterstitialAdAdmob({BuildContext? context}) async {
     if (interstitialAdAdmob != null) {
       interstitialAdAdmob!.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (InterstitialAd ad) => print('ad onAdShowedFullScreenContent.'),
         onAdDismissedFullScreenContent: (InterstitialAd ad) {
           print('$ad onAdDismissedFullScreenContent.');
+          Navigator.pop(context!, true);
           ad.dispose();
           interstitialAdAdmob = null;
-          _isAdLoaded = false;
+          _isAdLoaded = true;
           notifyListeners();
         },
         onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
@@ -98,12 +110,36 @@ class AdsBloc extends ChangeNotifier {
           notifyListeners();
         },
       );
+
       interstitialAdAdmob!.show();
       interstitialAdAdmob = null;
       notifyListeners();
     }
   }
 
+  loadBannerAd({double? width}) async {
+    AdSize size = AdSize(width: width!.toInt(), height: (kBottomNavigationBarHeight + 5.0).toInt());
+    print('banner ad loaded');
+    _bannerAd = BannerAd(
+      adUnitId: AdConfig().getAdmobBannerAdUnitId(),
+      request: AdRequest(),
+      size: size,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          _isBannerAdReady = true;
+          notifyListeners();
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('The ad failed to load${err.message + ad.adUnitId}');
+          _isBannerAdReady = false;
+          ad.dispose();
+          notifyListeners();
+        },
+      ),
+    );
+
+    _bannerAd!.load();
+  }
   // Admob Ads -- END --
 
   // Fb Ads -- START --

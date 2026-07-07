@@ -12,18 +12,17 @@ class LiveNewsBloc extends ChangeNotifier {
 
   Future getApiData(mounted, BuildContext context) async {
     Map<String, dynamic> response = {};
-    List<LiveNews> links = [];
     if (mounted) {
       _loading = true;
       _data = [];
       print('GETTING Live News');
       await LiveNewsService().getLiveNews().then((value) {
         response = jsonDecode(value.body);
-        print(response['data']);
+        // print(response['data']);
         for (int i = 0; i < response['data'].length; i++) {
           _data.add(LiveNews.fromJson(response['data'][i]));
         }
-        print('length of featured api articles is ${_data.length}');
+        print('length of live  news links is  ${_data.length}');
       });
       _loading = false;
     }

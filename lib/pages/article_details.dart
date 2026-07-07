@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:online_hunt_news/blocs/ads_bloc.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
@@ -29,6 +31,7 @@ import 'package:online_hunt_news/services/post_service.dart';
 import 'package:online_hunt_news/services/userServices.dart';
 import 'package:online_hunt_news/utils/cached_image.dart';
 import 'package:online_hunt_news/utils/icons.dart';
+import 'package:online_hunt_news/utils/interstitial_ads_page.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/utils/sign_in_dialog.dart';
 //admob
@@ -213,57 +216,69 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             ? SizedBox.shrink()
                                             /*   : loadingFollowing == true
                                             ? Loading() */
-                                            : GestureDetector(
-                                                onTap: () async {
-                                                  // SharedPreferences sp = await SharedPreferences.getInstance();
-                                                  // print(sp.getString('uid'));
-                                                  // print(followersList);
-                                                  // if (followersList.isEmpty) {
-                                                  //   var parameters = {"api_key": "$apiKey", "following_id": "${article.userId}", "follower_id": "$userId"};
-                                                  //   _userServices.createFollow(parameters).then((value) {
-                                                  //     Map mapRes = jsonDecode(value.body);
-                                                  //     if (mapRes['status'] == true) {
-                                                  //       getUserFollowing();
-                                                  //     }
-                                                  //   });
-                                                  // } else {
-                                                  //   followersList.any((element) {
-                                                  //     if (element.followerId == userId) {
-                                                  //       print('handle unfollow');
-                                                  //       var parameters = {"api_key": "$apiKey", "id": "${element.id}"};
-                                                  //       _userServices.deleteFollow(parameters).then((value) {
-                                                  //         Map mapRes = jsonDecode(value.body);
-                                                  //         if (mapRes['status'] == true) {
-                                                  //           getUserFollowing();
-                                                  //         }
-                                                  //       });
-                                                  //       return true;
-                                                  //     } else {
-                                                  //       var parameters = {"api_key": "$apiKey", "following_id": "${article.userId}", "follower_id": "$userId"};
-                                                  //       _userServices.createFollow(parameters).then((value) {
-                                                  //         Map mapRes = jsonDecode(value.body);
-                                                  //         if (mapRes['status'] == true) {
-                                                  //           getUserFollowing();
-                                                  //         }
-                                                  //       });
-                                                  //       print('handle follow');
-                                                  //       return false;
-                                                  //     }
-                                                  //   });
-                                                  // }
-                                                },
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Theme.of(context).primaryColor),
-                                                  child: Text(
-                                                    followersList.any((element) => element.followerId == userId ? true : false)
-                                                        ? 'unfollow'.tr()
-                                                        : 'follow'.tr(),
-                                                    style: TextStyle(fontWeight: FontWeight.normal, letterSpacing: .3, color: Colors.white),
+                                            : Visibility(visible: false,
+                                              child: GestureDetector(
+                                                  onTap: () async {
+                                                    // SharedPreferences sp = await SharedPreferences.getInstance();
+                                                    // print(sp.getString('uid'));
+                                                    // print(followersList);
+                                                    // if (followersList.isEmpty) {
+                                                    //   var parameters = {"api_key": "$apiKey", "following_id": "${article.userId}", "follower_id": "$userId"};
+                                                    //   _userServices.createFollow(parameters).then((value) {
+                                                    //     Map mapRes = jsonDecode(value.body);
+                                                    //     if (mapRes['status'] == true) {
+                                                    //       getUserFollowing();
+                                                    //     }
+                                                    //   });
+                                                    // } else {
+                                                    //   followersList.any((element) {
+                                                    //     if (element.followerId == userId) {
+                                                    //       print('handle unfollow');
+                                                    //       var parameters = {"api_key": "$apiKey", "id": "${element.id}"};
+                                                    //       _userServices.deleteFollow(parameters).then((value) {
+                                                    //         Map mapRes = jsonDecode(value.body);
+                                                    //         if (mapRes['status'] == true) {
+                                                    //           getUserFollowing();
+                                                    //         }
+                                                    //       });
+                                                    //       return true;
+                                                    //     } else {
+                                                    //       var parameters = {"api_key": "$apiKey", "following_id": "${article.userId}", "follower_id": "$userId"};
+                                                    //       _userServices.createFollow(parameters).then((value) {
+                                                    //         Map mapRes = jsonDecode(value.body);
+                                                    //         if (mapRes['status'] == true) {
+                                                    //           getUserFollowing();
+                                                    //         }
+                                                    //       });
+                                                    //       print('handle follow');
+                                                    //       return false;
+                                                    //     }
+                                                    //   });
+                                                    // }
+                                                    // final adb = context.read<AdsBloc>();
+                                                    // adb.createInterstitialAdAdmob();
+                                                    // Timer.periodic(Duration(seconds: 1), (Timer t) async {
+                                                    //   print('The tick is: ${t.tick}');
+                                                    //   if (t.tick == 1) {
+                                                    //     t.cancel();
+                                                    //     nextScreen(context, InterstitialAdsPage());
+                                                    //   }
+                                                    // });
+                                                    // adb.showInterstitialAdAdmob();
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Theme.of(context).primaryColor),
+                                                    child: Text(
+                                                      followersList.any((element) => element.followerId == userId ? true : false)
+                                                          ? 'unfollow'.tr()
+                                                          : 'follow'.tr(),
+                                                      style: TextStyle(fontWeight: FontWeight.normal, letterSpacing: .3, color: Colors.white),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
+                                            ),
                                       ],
                                     ),
 
@@ -608,6 +623,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   getArticle() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('uid') ?? '0';
+
     // await AdServices().getMobileAds('1', adspace: 'post_detail_ad').then((value) {
     //   _mobileAdsaModel = value[0];
     // });
@@ -634,18 +650,35 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     //     .catchError((onError) {
     //       Exception('the error is $onError');
     //     });
-    try {
-      post = await getApiArticleById(widget.post_id!);
-      apiCategories = post!.category!;
-      setState(() {
-        loadingArticle = false;
-      });
-    } catch (e) {
-      setState(() {
-        loadingArticle = false;
-      });
-      print(e.toString());
-      throw e;
+  
+    Timer.periodic(Duration(seconds: 1), (Timer t) async {
+      print('The tick is: ${t.tick}');
+      if (t.tick == 1) {
+        t.cancel();
+        try {
+          post = await getApiArticleById(widget.post_id!);
+          apiCategories = post!.category!;
+          if(mounted){
+            setState(() {
+            loadingArticle = false;
+          });
+          }
+          
+        } catch (e) {
+          setState(() {
+            loadingArticle = false;
+          });
+          print(e.toString());
+          throw e;
+        }
+      }
+    });
+  final adb = context.read<AdsBloc>();
+    // print(adb.interstitialAdAdmob!.fullScreenContentCallback);
+    if (adb.interstitialAdEnabled == true && adb.interstitialAdAdmob != null) {
+      nextScreen(context, InterstitialAdsPage());
+      // await adb.showInterstitialAdAdmob();
+      // adb.loadAds();
     }
     // }
   }

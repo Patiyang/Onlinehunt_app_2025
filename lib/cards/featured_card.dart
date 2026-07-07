@@ -98,7 +98,7 @@ class _FeaturedCardState extends State<FeaturedCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.apiArticle!.title ?? '--',
+                      widget.apiArticle!.title ,
                       style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.normal),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -109,7 +109,7 @@ class _FeaturedCardState extends State<FeaturedCard> {
                         Icon(CupertinoIcons.time, size: 16, color: Colors.white),
                         SizedBox(width: 5),
                         Text(
-                          widget.apiArticle!.createdAt ?? '',
+                          widget.apiArticle!.createdAt,
                           style: TextStyle(color: Colors.white, fontSize: Theme.of(context).textTheme.titleSmall!.fontSize! - 2),
                         ),
                       ],

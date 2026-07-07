@@ -67,7 +67,7 @@ class Card1 extends StatelessWidget {
                   child: Hero(
                     tag: heroTag,
                     child: CustomCacheImage(
-                      imageUrl: postModel!.imageUrl,
+                      imageUrl: postModel!.imageUrl,videoUrl: postModel!.video_url,
                       radius: 5.0,
                       contentType: 'article',
                       circularShape: false,

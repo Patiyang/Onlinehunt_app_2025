@@ -1,17 +1,10 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
-import 'package:online_hunt_news/blocs/featured_bloc.dart';
-import 'package:online_hunt_news/blocs/notification_bloc.dart';
-import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';
-import 'package:online_hunt_news/blocs/recent_articles_bloc.dart';
 import 'package:online_hunt_news/blocs/tab_index_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
@@ -19,16 +12,11 @@ import 'package:online_hunt_news/models/categoriesModel.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/theme_model.dart';
 import 'package:online_hunt_news/pages/home.dart';
-import 'package:online_hunt_news/pages/intro.dart';
 import 'package:online_hunt_news/pages/iptv/video_tab_medium.dart';
-import 'package:online_hunt_news/pages/notifications.dart';
-import 'package:online_hunt_news/pages/search.dart';
 import 'package:online_hunt_news/services/category_services.dart';
 import 'package:online_hunt_news/services/post_service.dart';
-import 'package:online_hunt_news/utils/app_name.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/widgets/drawer.dart';
-import 'package:online_hunt_news/tabs/tab_medium_alt.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,7 +94,7 @@ class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClie
                       automaticallyImplyLeading: false,
                       centerTitle: false,
                       titleSpacing: 5,
-                      title: AppName(fontSize: 19.0),
+                      title: Text('videos_live'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       leading: IconButton(
                         icon: Icon(Icons.menu, size: 25),
                         onPressed: () {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_hunt_news/cards/card3.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/apiArticleModel.dart';
@@ -134,7 +133,7 @@ class _RelatedArticlesState extends State<RelatedArticles> {
           })
           .whenComplete(() {
             totalPages = response['meta']['total_pages'];
-            Fluttertoast.showToast(msg: totalPages.toString());
+            // Fluttertoast.showToast(msg: totalPages.toString());
             for (int i = 0; i < response['data'].length; i++) {
               _posts.add(PostModel.fromJson(response['data'][i]));
             }

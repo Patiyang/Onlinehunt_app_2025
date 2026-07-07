@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';
 import 'package:online_hunt_news/cards/card1.dart';
-import 'package:online_hunt_news/pages/more_articles.dart';
 import 'package:online_hunt_news/services/category_services.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
-import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -42,10 +40,10 @@ class _PopularWidgetState extends State<PopularWidget> {
                 child: Text('featured news', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
               Spacer(),
-              TextButton(
-                child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
-                onPressed: () => nextScreen(context, MoreArticles(title: 'featured news')),
-              ),
+              // TextButton(
+              //   child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
+              //   onPressed: () => nextScreen(context, MoreArticles(title: 'featured news')),
+              // ),
             ],
           ),
         ),

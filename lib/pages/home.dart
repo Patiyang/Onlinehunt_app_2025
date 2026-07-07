@@ -14,7 +14,6 @@ import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
 import 'package:online_hunt_news/pages/explore.dart';
-import 'package:online_hunt_news/pages/iptv/iptv_list.dart';
 import 'package:online_hunt_news/pages/iptv/videos_explore.dart';
 import 'package:online_hunt_news/pages/profile.dart';
 import 'package:online_hunt_news/services/app_service.dart';
@@ -100,18 +99,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onDeepLink(Uri uri) {
-  // Example: onlinehuntnews://post/12345
-  if (uri.scheme == 'onlinehunt' && uri.host == 'post' && uri.pathSegments.isNotEmpty) {
-    final postId = uri.pathSegments[0];
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ArticleDetails(post_id: int.parse(postId)),
-      ),
-    );
+    // Example: onlinehuntnews://post/12345
+    if (uri.scheme == 'onlinehunt' && uri.host == 'post' && uri.pathSegments.isNotEmpty) {
+      final postId = uri.pathSegments[0];
+      Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: int.parse(postId))));
+    }
   }
-}
-
 
   @override
   void initState() {
@@ -126,7 +119,10 @@ class _HomePageState extends State<HomePage> {
           .then((value) => adb.checkAdsEnable())
           .then((value) async {
             if (adb.interstitialAdEnabled == true || adb.bannerAdEnabled == true) {
-              adb.initiateAds();
+              adb.initiateAds().whenComplete(() {
+                adb.loadAds(width: MediaQuery.of(context).size.width);
+                // adb.showInterstitialAdAdmob();
+              });
             }
           });
     });

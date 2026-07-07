@@ -11,6 +11,7 @@ class PostModel {
   final String? imageUrl;
   final String createdAt;
   final String? post_url;
+  final String? video_url;
   final int pageviews;
   final int commentCount;
   final Author? author;
@@ -26,6 +27,7 @@ class PostModel {
     this.imageUrl,
     required this.createdAt,
     required this.post_url,
+    required this.video_url,
     required this.pageviews,
     required this.commentCount,
     this.author,
@@ -39,6 +41,7 @@ class PostModel {
       slug: json['slug'] ?? '',
       summary: json['summary'] ?? '',
       post_url: json['post_url'],
+      video_url: json['video_url']??'',
       keywords: json['keywords'] != null ? List<String>.from(json['keywords']) : [],
       content: json['content'],
       imageUrl: json['image_url'],
