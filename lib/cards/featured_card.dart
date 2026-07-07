@@ -57,7 +57,7 @@ class _FeaturedCardState extends State<FeaturedCard> {
                       padding: EdgeInsets.only(left: 10, right: 10),
                       height: 30,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Theme.of(context).primaryColor),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HelperClass().getCategoryColor(widget.apiArticle!.category!.color)),
                       child: Text(
                         widget.categoryName!,
                         style: TextStyle(color: Colors.white, fontSize: Theme.of(context).textTheme.titleSmall!.fontSize! - 2, fontWeight: FontWeight.bold),
@@ -99,7 +99,7 @@ class _FeaturedCardState extends State<FeaturedCard> {
                   children: <Widget>[
                     Text(
                       widget.apiArticle!.title ,
-                      style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.w600),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

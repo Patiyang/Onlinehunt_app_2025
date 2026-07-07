@@ -23,6 +23,7 @@ class _Tab0State extends State<Tab0> with AutomaticKeepAliveClientMixin, ChangeN
   @override
   void initState() {
     // refresh();
+    loadAdTimer();
     super.initState();
   }
 
@@ -40,7 +41,7 @@ class _Tab0State extends State<Tab0> with AutomaticKeepAliveClientMixin, ChangeN
 
   @override
   Widget build(BuildContext context) {
-    final adb = context.read<AdsBloc>();
+    final adb = context.watch<AdsBloc>();
 
     super.build(context);
     return RefreshIndicator(
@@ -52,22 +53,29 @@ class _Tab0State extends State<Tab0> with AutomaticKeepAliveClientMixin, ChangeN
         physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
-            sbwidget.SearchBar(),
+            // sbwidget.SearchBar(),
             SliderWidget(),
-            Container(
-              width:adb.bannerAd!=null ? adb.bannerAd!.size.width.toDouble() : MediaQuery.of(context).size.width,
-              height: adb.bannerAd!=null ? adb.bannerAd!.size.height.toDouble() : (kBottomNavigationBarHeight + 5.0),
-              margin: EdgeInsets.only(top:5),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Theme.of(context).shadowColor.withValues(alpha: .2)),
-              child: adb.isBannerAdReady == true
-                  ? Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Center(child: AdWidget(ad: adb.bannerAd!)),
-                      ),
-                    )
-                  : LoadingCard(height: (kBottomNavigationBarHeight + 5.0)),
+            Visibility(visible: adb.isBannerAdReady == true,
+              child: Container(
+                width: adb.bannerAd != null ? adb.bannerAd!.size.width.toDouble() : MediaQuery.of(context).size.width,
+                height: adb.bannerAd != null ? adb.bannerAd!.size.height.toDouble() : (kBottomNavigationBarHeight + 5.0),
+                margin: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                child: adb.isBannerAdReady == true
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.circular(5),
+                          boxShadow: <BoxShadow>[BoxShadow(color: Theme.of(context).shadowColor, blurRadius: 10, offset: Offset(0, 3))],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: AdWidget(ad: adb.bannerAd!),
+                        ),
+                      )
+                    : LoadingCard(height: (kBottomNavigationBarHeight + 5.0)),
+              ),
             ),
 
             PopularWidget(),
@@ -101,4 +109,6 @@ class _Tab0State extends State<Tab0> with AutomaticKeepAliveClientMixin, ChangeN
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  void loadAdTimer() {}
 }

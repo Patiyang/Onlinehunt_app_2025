@@ -50,7 +50,7 @@ class AdsBloc extends ChangeNotifier {
 
   //enbale only one
   void loadAds({double? width}) {
-    // createInterstitialAdAdmob(); //admob
+    createInterstitialAdAdmob(); //admob
     loadBannerAd(width: width ?? 320); //admob
     //createInterstitialAdFb(); //fb
   }
@@ -118,12 +118,12 @@ class AdsBloc extends ChangeNotifier {
   }
 
   loadBannerAd({double? width}) async {
-    AdSize size = AdSize(width: width!.toInt(), height: (kBottomNavigationBarHeight + 5.0).toInt());
+    // AdSize size = AdSize(width: width!.toInt(), height: (kBottomNavigationBarHeight + 5.0).toInt());
     print('banner ad loaded');
     _bannerAd = BannerAd(
       adUnitId: AdConfig().getAdmobBannerAdUnitId(),
       request: AdRequest(),
-      size: size,
+      size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (_) {
           _isBannerAdReady = true;

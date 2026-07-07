@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/pages/category_based_articles.dart';
@@ -125,7 +126,7 @@ class _ItemList extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withValues(alpha: .2)],
+            colors: [HelperClass().getCategoryColor(d.color), Theme.of(context).primaryColor.withValues(alpha: .2)],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),

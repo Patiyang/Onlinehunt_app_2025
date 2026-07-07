@@ -216,8 +216,9 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             ? SizedBox.shrink()
                                             /*   : loadingFollowing == true
                                             ? Loading() */
-                                            : Visibility(visible: false,
-                                              child: GestureDetector(
+                                            : Visibility(
+                                                visible: false,
+                                                child: GestureDetector(
                                                   onTap: () async {
                                                     // SharedPreferences sp = await SharedPreferences.getInstance();
                                                     // print(sp.getString('uid'));
@@ -278,7 +279,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                                     ),
                                                   ),
                                                 ),
-                                            ),
+                                              ),
                                       ],
                                     ),
 
@@ -288,14 +289,14 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(5),
-                                            color: context.watch<ThemeBloc>().darkTheme == false
+                                            color:HelperClass().getCategoryColor(post!.category!.color) /* context.watch<ThemeBloc>().darkTheme == false
                                                 ? CustomColor().loadingColorLight
-                                                : CustomColor().loadingColorDark,
+                                                : CustomColor().loadingColorDark, */
                                           ),
                                           child: AnimatedPadding(
                                             duration: Duration(milliseconds: 1000),
                                             padding: EdgeInsets.only(left: 10, right: rightPaddingValue, top: 5, bottom: 5),
-                                            child: Text(post!.category!.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                            child: Text(post!.category!.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white)),
                                           ),
                                         ),
                                         Spacer(),
@@ -341,28 +342,29 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                     SizedBox(height: 5),
                                     Text(post!.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, letterSpacing: -0.6, wordSpacing: 1)),
                                     Divider(color: Theme.of(context).primaryColor, endIndent: 200, thickness: 2, height: 20),
-                                    TextButton.icon(
-                                      style: ButtonStyle(
-                                        padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
-                                        backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
-                                        shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
-                                      ),
-                                      icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
-                                      label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
-                                      onPressed: () {
-                                        nextScreen(context, CommentsPage(articleId: post!.id.toString()));
-                                      },
-                                    ),
-                                    SizedBox(height: 10),
+                                    // TextButton.icon(
+                                    //   style: ButtonStyle(
+                                    //     padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
+                                    //     backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
+                                    //     shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
+                                    //   ),
+                                    //   icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
+                                    //   label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
+                                    //   onPressed: () {
+                                    //     nextScreen(context, CommentsPage(articleId: post!.id.toString()));
+                                    //   },
+                                    // ),
+                                    // SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: <Widget>[
                                         //views feature
+                                        Icon(Icons.remove_red_eye, color: Theme.of(context).primaryColorLight), SizedBox(width: 10),
+
                                         Text(
                                           post!.pageviews.toString(),
                                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey),
                                         ),
-                                        SizedBox(width: 20),
 
                                         // LoveCount(collectionName: 'contents', timestamp: article.createdAt),
                                       ],
@@ -388,28 +390,28 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             nextScreen(context, CommentsPage(articleId: post!.id.toString()));
                                           },
                                         ),
-                                        Spacer(),
-                                        IconButton(
-                                          icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
-                                          onPressed: () async {
-                                            _handleWhatsappShare();
-                                          },
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.share, size: 22),
-                                          onPressed: () async {
-                                            _handleContentShare();
-                                          },
-                                        ),
-                                        /*     handlnigLike == true
-                                            ? Loading()
-                                            :  */
-                                        IconButton(
-                                          icon: liked == true ? LoveIcon().bold : LoveIcon().normal,
-                                          onPressed: () {
-                                            // handleLoveClick();
-                                          },
-                                        ),
+                                        // Spacer(),
+                                        // IconButton(
+                                        //   icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
+                                        //   onPressed: () async {
+                                        //     _handleWhatsappShare();
+                                        //   },
+                                        // ),
+                                        // IconButton(
+                                        //   icon: const Icon(Icons.share, size: 22),
+                                        //   onPressed: () async {
+                                        //     _handleContentShare();
+                                        //   },
+                                        // ),
+                                        // /*     handlnigLike == true
+                                        //     ? Loading()
+                                        //     :  */
+                                        // IconButton(
+                                        //   icon: liked == true ? LoveIcon().bold : LoveIcon().normal,
+                                        //   onPressed: () {
+                                        //     // handleLoveClick();
+                                        //   },
+                                        // ),
                                       ],
                                     ),
                                   ],
@@ -485,7 +487,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   _handleContentShare() async {
     SharePlus share = SharePlus.instance;
     String deepLink = generateDeepLink(post!.id.toString());
-
+    print(deepLink);
     await share.share(ShareParams(text: deepLink));
     //     try {
     //       await DynamicLinkService()
@@ -506,6 +508,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   _handleWhatsappShare() async {
     // launchUrl(  Uri.parse("https://wa.me?text=${'''${postModel!.title.length > 70 ? postModel!.title.substring(0, 70) : postModel!.title}'''}"));
     String deepLink = generateDeepLink(post!.id.toString());
+    print(deepLink);
     final encodedText = Uri.encodeComponent('Check this out: $deepLink');
     final whatsappUrl = 'https://wa.me/?text=$encodedText';
 
@@ -530,7 +533,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   }
 
   String generateDeepLink(String postId) {
-    return 'https://onlinehunt.in/news/p/$postId';
+    return '${HelperClass.shareIp}$postId';
   }
 
   void _handleShare() {
@@ -650,7 +653,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     //     .catchError((onError) {
     //       Exception('the error is $onError');
     //     });
-  
+
     Timer.periodic(Duration(seconds: 1), (Timer t) async {
       print('The tick is: ${t.tick}');
       if (t.tick == 1) {
@@ -658,12 +661,11 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
         try {
           post = await getApiArticleById(widget.post_id!);
           apiCategories = post!.category!;
-          if(mounted){
+          if (mounted) {
             setState(() {
-            loadingArticle = false;
-          });
+              loadingArticle = false;
+            });
           }
-          
         } catch (e) {
           setState(() {
             loadingArticle = false;
@@ -673,7 +675,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
         }
       }
     });
-  final adb = context.read<AdsBloc>();
+    final adb = context.read<AdsBloc>();
     // print(adb.interstitialAdAdmob!.fullScreenContentCallback);
     if (adb.interstitialAdEnabled == true && adb.interstitialAdAdmob != null) {
       nextScreen(context, InterstitialAdsPage());

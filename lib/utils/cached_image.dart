@@ -54,7 +54,7 @@ class _CustomCacheImageState extends State<CustomCacheImage> {
               ),
             )
           // Image.network(getYoutubeThumbnail(widget.videoUrl!), fit: BoxFit.cover, height: MediaQuery.of(context).size.height)
-          : CachedNetworkImage(
+          :widget.contentType == 'video' && widget.videoUrl!.contains('youtube')?Container(): CachedNetworkImage(
               imageUrl: widget.imageUrl!,
               fit: BoxFit.cover,
               height: MediaQuery.of(context).size.height,

@@ -215,7 +215,7 @@ class Card2 extends StatelessWidget {
   }
 
   String generateDeepLink(String postId) {
-    return 'https://onlinehunt.in/news/p/$postId';
+    return '${HelperClass.shareIp}$postId';
   }
 
   handleLoveClick() {}

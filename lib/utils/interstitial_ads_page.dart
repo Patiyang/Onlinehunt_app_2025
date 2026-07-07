@@ -24,7 +24,7 @@ class _InterstitialAdsPageState extends State<InterstitialAdsPage> {
 
   void initializeAd() {
     final adb = context.read<AdsBloc>();
-      AdsBloc().showInterstitialAdAdmob(context: context);
-
+    // AdsBloc().showInterstitialAdAdmob(context: context);
+    adb.showInterstitialAdAdmob(context: context);
   }
 }

@@ -100,7 +100,7 @@ class Card1 extends StatelessWidget {
                     child: Text(
                       // d.title!,
                       postModel!.title,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       maxLines: 7,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -108,7 +108,7 @@ class Card1 extends StatelessWidget {
                   SizedBox(height: 10),
                   Container(
                     padding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.blueGrey[600]),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HelperClass().getCategoryColor(postModel!.category!.color)),
                     child: Text(
                       postModel!.category!.name,
                       // d.category!.toLowerCase().tr(),
@@ -228,6 +228,6 @@ class Card1 extends StatelessWidget {
   }
 
   String generateDeepLink(String postId) {
-    return 'https://onlinehunt.in/news/p/$postId';
+    return '${HelperClass.shareIp}$postId';
   }
 }

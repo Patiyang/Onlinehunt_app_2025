@@ -472,7 +472,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   }
 
   String generateDeepLink(String postId) {
-    return 'https://onlinehunt.in/news/p/$postId';
+    return '${HelperClass.shareIp}$postId';
   }
 
   handleLoveClick() {

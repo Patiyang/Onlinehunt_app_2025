@@ -109,7 +109,7 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
                   },
                 ),
               ],
-              backgroundColor: tb.darkTheme == false ? CustomColor().sliverHeaderColorLight : CustomColor().sliverHeaderColorDark,
+              backgroundColor: tb.darkTheme == false ? CustomColor().sliverHeaderColorLight : CustomColor().loadingColorLight,
               expandedHeight: MediaQuery.of(context).size.height * 0.20,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
@@ -118,7 +118,7 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Theme.of(context).primaryColor, Theme.of(context).scaffoldBackgroundColor],
+                        colors: [Theme.of(context).primaryColor, Color(int.parse(widget.categoryModel!.color.replaceFirst('#', '0xFF')))],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                       ),
