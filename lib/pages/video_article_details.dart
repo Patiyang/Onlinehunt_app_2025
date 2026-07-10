@@ -275,7 +275,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: context.watch<ThemeBloc>().darkTheme == false ? CustomColor().loadingColorLight : CustomColor().loadingColorDark,
+                          color: HelperClass().getCategoryColor(article.category!.color),
                         ),
                         child: AnimatedPadding(
                           duration: Duration(milliseconds: 1000),

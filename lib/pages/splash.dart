@@ -27,7 +27,8 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
-        child: Image(image: AssetImage(Config().splashIcon), height: 120, width: 120, fit: BoxFit.contain),
+        child: Image.asset(Config().splashIcon,height: 120, width: 120, fit: BoxFit.contain, color: Theme.of(context).appBarTheme.actionsIconTheme!.color,),
+        // child: Image(image: AssetImage(Config().splashIcon), height: 120, width: 120, fit: BoxFit.contain),
       ),
     );
   }

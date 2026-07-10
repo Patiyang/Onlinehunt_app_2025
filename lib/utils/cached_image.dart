@@ -60,7 +60,7 @@ class _CustomCacheImageState extends State<CustomCacheImage> {
               height: MediaQuery.of(context).size.height,
               placeholder: (context, url) => Container(color: Colors.grey[300]),
               errorWidget: (context, url, error) => Container(
-                color: Colors.grey[300],
+                color: Theme.of(context).primaryColorDark.withAlpha(50),
                 child: widget.contentType == 'article'
                     ? CachedNetworkImage(
                         fit: BoxFit.contain,

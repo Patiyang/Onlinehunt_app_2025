@@ -207,12 +207,12 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
             if (d == 'English') {
               context.setLocale(Locale('en'));
               prefs.setString('language', 'English');
-              prefs.setInt('lang_id', 2);
+              prefs.setInt('lang_id', 1);
               ThemeModel().myValue = 'Manrope';
             } else if (d == 'Kannada') {
               context.setLocale(Locale('kn'));
               prefs.setString('language', 'Kannada');
-              prefs.setInt('lang_id', 1);
+              prefs.setInt('lang_id', 2);
               ThemeModel().myValue = 'NotoSerif';
             } else if (d == 'Hindi') {
               context.setLocale(Locale('hi'));
@@ -236,7 +236,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     await context.read<FeaturedBloc>().onRefresh(mounted);
     await context.read<PopularBloc>().onRefresh(mounted, context: context);
     await context.read<RecentBloc>().onRefresh(mounted);
-    context.read<CategoriesBloc>().onRefresh(mounted);
+   await context.read<CategoriesBloc>().onRefresh(mounted);
 
     return true;
   }

@@ -1,4 +1,3 @@
-
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/blocs/featured_bloc.dart';
@@ -26,7 +25,7 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final fb = context.watch<FeaturedBloc>();
+    final fb = context.read<FeaturedBloc>();
     double w = MediaQuery.of(context).size.width;
 
     return Column(
@@ -48,12 +47,8 @@ class _SliderWidgetState extends State<SliderWidget> {
             },
             itemBuilder: (BuildContext context, int index) {
               if (fb.posts.isEmpty) return LoadingFeaturedCard();
-            return  FeaturedCard(
-                apiArticle: fb.posts[index],
-                heroTag: 'featured$index',
-                categoryName: fb.posts[index].category!.name,
-              );
-              return null;
+              return FeaturedCard(apiArticle: fb.posts[index], heroTag: 'featured$index');
+              // return Center(child: Text(fb.posts.length.toString(), style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),));
               // return FutureBuilder(
               //   future: categoriesStream(fb.apiArticle[index].categoryId),
               //   builder: (BuildContext context, AsyncSnapshot snapshot) {

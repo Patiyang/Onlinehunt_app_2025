@@ -69,6 +69,7 @@ class FeaturedBloc with ChangeNotifier {
   Future getApiData(mounted) async {
     Map<String, dynamic> response = {};
     // _apiArticle = [];
+    posts.clear();
     await returnCategoryId();
     try {
       print('GETTING SLIDER');
@@ -107,12 +108,12 @@ class FeaturedBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  onRefresh(mounted) {
+  onRefresh(mounted) async {
     featuredList.clear();
     _data.clear();
     _posts.clear();
     // _apiArticle.clear();
-    getApiData(mounted);
+    await getApiData(mounted);
     notifyListeners();
   }
 }

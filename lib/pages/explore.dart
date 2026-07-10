@@ -4,6 +4,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
@@ -68,11 +69,11 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
       });
     });
 
-    Future.delayed(Duration(milliseconds: 0)).then((value) {
-      context.read<FeaturedBloc>().getApiData(mounted);
-      context.read<PopularBloc>().getApiData(mounted, context);
-      context.read<RecentBloc>().getApiData(mounted);
-    });
+    // Future.delayed(Duration(milliseconds: 0)).then((value) {
+    //   context.read<FeaturedBloc>().getApiData(mounted);
+    //   context.read<PopularBloc>().getApiData(mounted, context);
+    //   context.read<RecentBloc>().getApiData(mounted);
+    // });
   }
 
   @override
@@ -114,9 +115,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                       ),
                       elevation: 1,
                       actions: <Widget>[
-                        incomingList!.isEmpty
-                            ? IconButton(onPressed: () => nextScreenReplace(context, HomePage()), icon: Icon(Icons.refresh))
-                            : SizedBox.shrink(),
+                        incomingList!.isEmpty ? IconButton(onPressed: () => refresh(context), icon: Icon(Icons.refresh)) : SizedBox.shrink(),
                         IconButton(
                           icon: Icon(Icons.translate, size: 22),
                           onPressed: () async {
@@ -125,6 +124,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                             var value = await getLanguageBottomSheet() ?? false;
                             if (value == true) {
                               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+                              // refresh(context);
                             }
                           },
                         ),
@@ -276,7 +276,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
     context.read<FeaturedBloc>().onRefresh(mounted);
     context.read<PopularBloc>().onRefresh(mounted, context: context);
     context.read<RecentBloc>().onRefresh(mounted);
-    context.read<CategoriesBloc>().onRefresh(mounted);
+    // context.read<CategoriesBloc>().onRefresh(mounted);
   }
 
   Future getData() async {
@@ -286,41 +286,25 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
       loading = true;
     });
     incomingList = await categoriesStream();
+    // Fluttertoast.showToast(msg: incomingList!.length.toString());
 
     incomingList?.forEach((element) {
-      // if(element.parentId=='0'){
-
-      // }
+      print(element.name);
       tabsList.add(Tab(text: element.name));
     });
+    refresh(context);
     setState(() {
       loading = false;
     });
   }
 
   categoriesStream() async {
-    Map<String, dynamic> response = {};
+    final cb = context.read<CategoriesBloc>();
     List<Category> apiCategories = [];
-    try {
-      await categoryServices
-          .getCategories()
-          .then((value) {
-            response = jsonDecode(utf8.decode(value.bodyBytes));
-          })
-          .whenComplete(() {
-            for (int i = 0; i < response['data'].length; i++) {
-              apiCategories.add(Category.fromJson(response['data'][i]));
-            }
-          });
-      // dummyList.forEach((element) {
-      //   if (element.languageId == language ) {
-      //     apiCategories.add(element);
-      //   }
-      // });
-    } catch (e) {
-      print(e.toString());
-    }
-
+    Map<String, dynamic> response = {};
+    await cb.categoriesStream(mounted).whenComplete(() {
+      apiCategories = cb.data;
+    });
     return apiCategories;
   }
 }

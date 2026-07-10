@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,18 +23,18 @@ void main() async {
     } else if (prefs.getString('language') == 'Hindi') {
       ThemeModel().myValue = 'Karma';
       return 'hi';
+    } else if (prefs.getString('language') == null) {
+      prefs.setString('language', 'Kannada');
+      prefs.setInt('lang_id', 2);
+      return 'kn';
     } else {
-      return 'en';
+      return 'kn';
     }
   }
 
   runApp(
     EasyLocalization(
-      supportedLocales: [
-        Locale('en'),
-        Locale('kn'),
-        Locale('hi'),
-      ],
+      supportedLocales: [Locale('en'), Locale('kn'), Locale('hi')],
       path: 'assets/translations',
       fallbackLocale: Locale(getLanguages()),
       startLocale: Locale(getLanguages()),

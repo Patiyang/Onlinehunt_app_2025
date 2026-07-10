@@ -63,6 +63,7 @@ class CategoriesBloc extends ChangeNotifier {
     // List<cat.Category> dummyList = [];
     // int language = await returnCategoryId();
     // List<ApiCategories> apiCategories = [];
+    data.clear();
     try {
       await categoryServices
           .getCategories()
@@ -71,21 +72,13 @@ class CategoriesBloc extends ChangeNotifier {
           })
           .whenComplete(() {
             for (var element in response['data']) {
-              // print(element);
+              print(element);
               data.add(cat.Category.fromJson(element));
             }
-
-            // response['data'].forEach((element) {
-            //   print(element);
-            //   dummyList.add(cat.Category.fromJson(jsonDecode(element)));
-            // });
           });
-      // dummyList.forEach((element) {
-      //   // if (element.languageId == language) {
-      //   _apiCategories.add(element);
-      //   // }
-      // });
+
       _isLoading = false;
+      notifyListeners();
     } catch (e) {
       _isLoading = false;
       notifyListeners();

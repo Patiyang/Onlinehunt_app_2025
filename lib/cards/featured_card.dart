@@ -11,16 +11,16 @@ class FeaturedCard extends StatefulWidget {
   // final Article d;
   final heroTag;
   final PostModel? apiArticle;
-  final String? categoryName;
+  // final String? categoryName;
   // final String categoryId;
-  const FeaturedCard({Key? key, required this.heroTag, this.apiArticle, this.categoryName}) : super(key: key);
+  const FeaturedCard({Key? key, required this.heroTag, this.apiArticle}) : super(key: key);
 
   @override
   State<FeaturedCard> createState() => _FeaturedCardState();
 }
 
 class _FeaturedCardState extends State<FeaturedCard> {
-  CategoryServices categoryServices = CategoryServices();
+  // CategoryServices categoryServices = CategoryServices();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _FeaturedCardState extends State<FeaturedCard> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HelperClass().getCategoryColor(widget.apiArticle!.category!.color)),
                       child: Text(
-                        widget.categoryName!,
+                        widget.apiArticle!.category!.name,
                         style: TextStyle(color: Colors.white, fontSize: Theme.of(context).textTheme.titleSmall!.fontSize! - 2, fontWeight: FontWeight.bold),
                       ),
                     ),

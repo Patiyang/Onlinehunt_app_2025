@@ -29,7 +29,7 @@ class _CategoriesState extends State<Categories> with AutomaticKeepAliveClientMi
     super.initState();
     Future.delayed(Duration(milliseconds: 0)).then((value) {
       controller = new ScrollController()..addListener(_scrollListener);
-      context.read<CategoriesBloc>().categoriesStream(mounted);
+      // context.read<CategoriesBloc>().categoriesStream(mounted);
     });
   }
 

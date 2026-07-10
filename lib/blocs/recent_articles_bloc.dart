@@ -79,6 +79,7 @@ class RecentBloc extends ChangeNotifier {
   Future getApiData(mounted) async {
     Map<String, dynamic> response = {};
     // _apiArticle = [];
+    posts.clear();
     await returnCategoryId();
     if (mounted) {
       try {

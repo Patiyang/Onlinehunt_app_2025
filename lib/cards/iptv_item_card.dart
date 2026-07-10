@@ -68,7 +68,7 @@ class IptvItemCard extends StatelessWidget {
                   //   )
                 ),
                 SizedBox(width: 10),
-                Text(item!.title!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                Expanded(child: Text(item!.title!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18), overflow: TextOverflow.ellipsis,)),
               ],
             ),
 

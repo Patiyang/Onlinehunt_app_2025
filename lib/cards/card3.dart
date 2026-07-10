@@ -124,10 +124,10 @@ class Card3 extends StatelessWidget {
                       SizedBox(height: 10),
                       Container(
                         padding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.blueGrey[600]),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.grey.withAlpha(50)),
                         child: Text(
-                          postModel!.summary,maxLines: 4,overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white,),
+                          postModel!.summary,maxLines: 3,overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,),
                         ),
                       ),
                     ],

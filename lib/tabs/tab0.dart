@@ -5,7 +5,7 @@ import 'package:online_hunt_news/blocs/featured_bloc.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';
 import 'package:online_hunt_news/blocs/recent_articles_bloc.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
-import 'package:online_hunt_news/widgets/featured.dart';
+import 'package:online_hunt_news/widgets/slider.dart';
 import 'package:online_hunt_news/widgets/popular_articles.dart';
 import 'package:online_hunt_news/widgets/recent_articles.dart';
 import 'package:online_hunt_news/widgets/search_bar.dart' as sbwidget;

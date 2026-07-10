@@ -50,7 +50,7 @@ class Card2 extends StatelessWidget {
                       imageUrl: postModel!.imageUrl,
                       videoUrl: postModel!.video_url,
                       contentType:postModel!.video_url!.isEmpty ? 'article' : 'video',
-                      radius: 5.0,
+                      radius: 5.0,avatarUrl: 'postModel!.author!.avatar',
                       // circularShape: false,
                     ),
                   ),

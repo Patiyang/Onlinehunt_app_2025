@@ -9,6 +9,6 @@ Future<int> returnCategoryId() async {
   } else if (preferences.getString('language') == 'Kannada') {
     return 2;
   } else {
-    return 0;
+    return 3;
   }
 }
