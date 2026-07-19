@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
+import 'package:online_hunt_news/blocs/categories_bloc.dart';
 import 'package:online_hunt_news/blocs/featured_bloc.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';

@@ -29,7 +29,7 @@ void navigateToDetailsScreen(context, PostModel article, String? heroTag, String
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoArticleDetails(data: article, post_id: article.id),
+        builder: (context) => VideoArticleDetails(data: article, post_id: article.id, slug:article.slug ,),
       ),
     );
     print('video');
@@ -38,7 +38,7 @@ void navigateToDetailsScreen(context, PostModel article, String? heroTag, String
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id),
+        builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id, slug: article.slug,),
       ),
     );
   }
@@ -58,7 +58,7 @@ void navigateToDetailsScreenByReplace(context, PostModel article, String? heroTa
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id),
+          builder: (context) => ArticleDetails(post: article, tag: heroTag, post_id: article.id,slug: article.slug),
         ),
       );
     // }

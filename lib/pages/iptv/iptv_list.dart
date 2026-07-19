@@ -5,9 +5,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/blocs/live_news_bloc.dart';
 import 'package:online_hunt_news/cards/iptv_item_card.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
-import 'package:online_hunt_news/models/api_live_news.dart';
+import 'package:online_hunt_news/models/live_news.dart';
 import 'package:online_hunt_news/models/iptv_like_model.dart';
-import 'package:online_hunt_news/services/iptv_services.dart';
 import 'package:provider/provider.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -22,7 +21,7 @@ class IptvList extends StatefulWidget {
 }
 
 class _IptvListState extends State<IptvList> with AutomaticKeepAliveClientMixin {
-  IptvServices iptvServices = IptvServices();
+  // IptvServices iptvServices = IptvServices();
   ScrollController scrollController = ScrollController();
   UserServices _userServices = UserServices();
 

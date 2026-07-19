@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:html/parser.dart';
@@ -144,13 +145,13 @@ class Card2 extends StatelessWidget {
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                         onPressed: () async {
-                          _handleWhatsappShare();
+                          _handleWhatsappShare(context);
                         },
                       ),
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.share, size: 22),
                         onPressed: () async {
-                          _handleContentShare();
+                          _handleContentShare(context);
                         },
                       ),
                       // IconButton(icon: liked == true ? LoveIcon().bold : LoveIcon().normal, onPressed: handleLoveCLick),
@@ -166,57 +167,71 @@ class Card2 extends StatelessWidget {
       // onTap: ()=>print('card 2 tapped'),
     );
   }
-
-  _handleContentShare() async {
+  _handleContentShare(BuildContext context, ) async {
     SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(postModel!.id.toString());
+    String deepLink = generateDeepLink(context,postModel!.slug);
 
-    await share.share(ShareParams(text: deepLink));
-    //     try {
-    //       await DynamicLinkService()
-    //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
-    //               apiArticle!.summary!.length >= 100 ? apiArticle!.summary!.substring(0, 100) : apiArticle!.summary!, apiArticle!.title!, apiArticle!.imageUrl!)
-    //           .then((value) => Share.share(
-    //                 '''${apiArticle!.title!.length > 70 ? apiArticle!.title!.substring(0, 70) : apiArticle!.title}
+    await share.share(
+      ShareParams(
+        // uri: Uri.parse(deepLink),
+        text:
+            '''
+📰 ${postModel!.title}
 
-    // ${'click for more'.tr()}:${value.toString()}
+${HelperClass().limitSummary(postModel!.summary)}
 
-    // ${'${'download here'.tr()}: https://play.google.com/store/apps/details?id=com.onlinehunt.app'}''',
-    //               ));
-    //     } catch (e) {
-    //       print(e.toString());
-    //     }
+${'click for more'.tr()}
+$deepLink
+''',
+        subject: postModel!.title,
+        title: postModel!.title,
+        // previewThumbnail: XFile(Config().splashIcon,),
+      ),
+    );
   }
 
-  _handleWhatsappShare() async {
-    // launchUrl(  Uri.parse("https://wa.me?text=${'''${postModel!.title.length > 70 ? postModel!.title.substring(0, 70) : postModel!.title}'''}"));
-    String deepLink = generateDeepLink(postModel!.id.toString());
-    final encodedText = Uri.encodeComponent('Check this out: $deepLink');
-    final whatsappUrl = 'https://wa.me/?text=$encodedText';
+  _handleWhatsappShare(BuildContext context) async {
+    SharePlus share = SharePlus.instance;
 
-    final uri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    String deepLink = generateDeepLink(context,postModel!.slug);
+          final message = '''
+📰 ${postModel!.title}
+
+${HelperClass().limitSummary(postModel!.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''';
+  final whatsappUrl = Uri.parse(
+    "https://wa.me/?text=${Uri.encodeComponent(message)}",
+  );
+    // await share.share(
+    //   ShareParams(
+    //     // uri: Uri.parse(deepLink),
+    //     text: whatsappUrl,
+    //     subject: postModel!.title,
+    //     title: postModel!.title,
+    //     // previewThumbnail: XFile(Config().splashIcon,),
+    //   ),
+    // );
+
+    // final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       debugPrint('Could not launch WhatsApp');
     }
-    //     try {
-    //       await DynamicLinkService()
-    //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
-    //               apiArticle!.summary!.length >= 100 ? apiArticle!.summary!.substring(0, 100) : apiArticle!.summary!, apiArticle!.title!, apiArticle!.imageUrl!)
-    //           .then((value) => launch("https://wa.me?text=${'''${apiArticle!.title!.length > 70 ? apiArticle!.title!.substring(0, 70) : apiArticle!.title}
-
-    // ${'click for more'.tr()}:${value.toString()}
-
-    // ${'${'download here'.tr()}: https://play.google.com/store/apps/details?id=com.onlinehunt.app'}'''}"));
-    //     } catch (e) {
-    //       print(e.toString());
-    //     }
   }
 
-  String generateDeepLink(String postId) {
-    return '${HelperClass.shareIp}$postId';
-  }
+  String generateDeepLink(BuildContext context, String slug) {
+    // return '${HelperClass.shareIp}$slug';
+    final languageCode = context.locale.languageCode;
+    print('the code is $languageCode');
+    if (languageCode == 'en') {
+      return '${HelperClass.shareIp}$slug';
+    }
+
+    return '${HelperClass.shareIp}$languageCode/$slug';  }
 
   handleLoveClick() {}
 }

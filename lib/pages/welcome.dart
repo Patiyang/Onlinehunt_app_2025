@@ -342,7 +342,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 }
               },
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 65),
           ],
         ),
       ),

@@ -1,12 +1,15 @@
 import 'dart:async';
 
+import 'package:app_links/app_links.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 // import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/blocs/live_news_bloc.dart';
-import 'package:online_hunt_news/blocs/userArticleBLocs/allUserArticlesBloc.dart';
+import 'package:online_hunt_news/blocs/allUserArticlesBloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
+import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/splash.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +19,7 @@ import 'blocs/ads_bloc.dart';
 import 'blocs/article_notification_bloc.dart';
 import 'blocs/bookmark_bloc.dart';
 import 'blocs/bottomNavBar_bloc.dart';
-import 'blocs/categoryBlocs/categories_bloc.dart';
+import 'blocs/categories_bloc.dart';
 
 import 'blocs/comments_bloc.dart';
 import 'blocs/custom_notification_bloc.dart';
@@ -28,7 +31,7 @@ import 'blocs/search_bloc.dart';
 import 'blocs/sign_in_bloc.dart';
 import 'blocs/tab_index_bloc.dart';
 import 'blocs/theme_bloc.dart';
-import 'blocs/videoCategoryBlocs/videos_bloc.dart';
+import 'blocs/videos_bloc.dart';
 
 import 'config/config.dart';
 import 'models/theme_model.dart';
@@ -62,6 +65,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<AllUserArticlesBloc>(create: (context) => AllUserArticlesBloc()),
               ChangeNotifierProvider<CategoriesBloc>(create: (context) => CategoriesBloc()),
               ChangeNotifierProvider<LiveNewsBloc>(create: (context) => LiveNewsBloc()),
+              ChangeNotifierProvider<EpaperBloc>(create: (context) => EpaperBloc()),
               ChangeNotifierProvider<AdsBloc>(create: (context) => AdsBloc()),
               // ChangeNotifierProvider<RelatedBloc>(create: (context) => RelatedBloc()),
               ChangeNotifierProvider<TabIndexBloc>(create: (context) => TabIndexBloc()),
@@ -103,6 +107,8 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   Timer? _timerLink;
   bool checked = false;
   final key = GlobalKey<ScaffoldState>();
+  late AppLinks _appLinks = AppLinks();
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -121,6 +127,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     // screenCheck();
+    // checkLink();
     getLanguage();
     super.initState();
   }
@@ -154,6 +161,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       getLanguageBottomSheet();
     } else {
       screenCheck();
+      // checkLink();
     }
   }
 
@@ -236,8 +244,8 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     await context.read<FeaturedBloc>().onRefresh(mounted);
     await context.read<PopularBloc>().onRefresh(mounted, context: context);
     await context.read<RecentBloc>().onRefresh(mounted);
-   await context.read<CategoriesBloc>().onRefresh(mounted);
-
+    await context.read<CategoriesBloc>().onRefresh(mounted);
+// await context.read<>
     return true;
   }
 
@@ -254,5 +262,41 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     // context.read<CategoryTab10Bloc>().onRefresh(mounted, Config().initialCategories[9]);
     // context.read<CategoryTab11Bloc>().onRefresh(mounted, Config().initialCategories[10]);
     // context.read<CategoryTab12Bloc>().onRefresh(mounted, Config().initialCategories[11]);
+  }
+  checkLink() async {
+    _appLinks = AppLinks();
+    _handleInitialUri();
+    _appLinks.uriLinkStream.listen(
+      (Uri? uri) {
+        if (uri != null) {
+          _onDeepLink(uri);
+        }
+      },
+      onError: (err) {
+        print('failed to get latest link: $err');
+      },
+    );
+  }
+
+  Future<void> _handleInitialUri() async {
+    final uri = await _appLinks.getInitialLink();
+    if (uri != null) {
+      _onDeepLink(uri);
+    }
+  }
+
+  void _onDeepLink(Uri uri) {
+    const allowedHosts = {'onlinehunt.in', 'www.onlinehunt.in'};
+
+    if (!allowedHosts.contains(uri.host)) {
+      debugPrint('Ignoring deep link from ${uri.host}');
+      return;
+    }
+    if (uri.pathSegments.isEmpty) {
+      debugPrint('No slug found in deep link');
+      return;
+    }
+    final slug = uri.pathSegments.first;
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
   }
 }

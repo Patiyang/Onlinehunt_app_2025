@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:online_hunt_news/models/api_live_news.dart';
+import 'package:online_hunt_news/models/live_news.dart';
 import 'package:online_hunt_news/services/live_news_service.dart';
 
 class LiveNewsBloc extends ChangeNotifier {

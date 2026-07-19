@@ -54,9 +54,10 @@ class ArticleDetails extends StatefulWidget {
   final PostModel? post;
   // final String categoryId;
   final String? tag;
+  final String? slug;
   final int? post_id;
 
-  const ArticleDetails({Key? key, this.post, this.tag, required this.post_id}) : super(key: key);
+  const ArticleDetails({Key? key, this.post, this.tag, required this.post_id, required this.slug}) : super(key: key);
 
   @override
   _ArticleDetailsState createState() => _ArticleDetailsState();
@@ -178,40 +179,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             ],
                                           ),
                                         ),
-                                        // FutureBuilder(
-                                        //   future: userServices.userDetails(article.userId!),
-                                        //   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                        //     ApiUserModel user = snapshot.data;
-                                        //     if (snapshot.connectionState == ConnectionState.waiting) {
-                                        //       return LoadingCard(height: 40, width: 100);
-                                        //     }
-                                        //     if (snapshot.hasData) {
-                                        //       return InkWell(
-                                        //         onTap: () => nextScreen(context, AuthorDetails(apiUserModel: user)),
-                                        //         child: Row(
-                                        //           children: [
-                                        //             GestureDetector(
-                                        //               onTap: () => print("https://onlinehunt.in/news/${user.avatar!}"),
-                                        //               child: user.avatar!.isEmpty
-                                        //                   ? CircleAvatar(radius: 15, backgroundColor: Colors.grey[300], child: Icon(Icons.person))
-                                        //                   : CircleAvatar(
-                                        //                       radius: 15,
-                                        //                       backgroundColor: Colors.grey[300],
-                                        //                       backgroundImage: CachedNetworkImageProvider("https://onlinehunt.in/news/${user.avatar!}"),
-                                        //                     ),
-                                        //             ),
-                                        //             SizedBox(width: 10),
-                                        //             Text(' ${user.userName!}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                                        //           ],
-                                        //         ),
-                                        //       );
-                                        //     }
-                                        //     if (snapshot.hasError) {
-                                        //       print(snapshot.error.toString());
-                                        //     }
-                                        //     return SizedBox.shrink();
-                                        //   },
-                                        // ),
+
                                         userId == post!.author!.id
                                             ? SizedBox.shrink()
                                             /*   : loadingFollowing == true
@@ -219,54 +187,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                             : Visibility(
                                                 visible: false,
                                                 child: GestureDetector(
-                                                  onTap: () async {
-                                                    // SharedPreferences sp = await SharedPreferences.getInstance();
-                                                    // print(sp.getString('uid'));
-                                                    // print(followersList);
-                                                    // if (followersList.isEmpty) {
-                                                    //   var parameters = {"api_key": "$apiKey", "following_id": "${article.userId}", "follower_id": "$userId"};
-                                                    //   _userServices.createFollow(parameters).then((value) {
-                                                    //     Map mapRes = jsonDecode(value.body);
-                                                    //     if (mapRes['status'] == true) {
-                                                    //       getUserFollowing();
-                                                    //     }
-                                                    //   });
-                                                    // } else {
-                                                    //   followersList.any((element) {
-                                                    //     if (element.followerId == userId) {
-                                                    //       print('handle unfollow');
-                                                    //       var parameters = {"api_key": "$apiKey", "id": "${element.id}"};
-                                                    //       _userServices.deleteFollow(parameters).then((value) {
-                                                    //         Map mapRes = jsonDecode(value.body);
-                                                    //         if (mapRes['status'] == true) {
-                                                    //           getUserFollowing();
-                                                    //         }
-                                                    //       });
-                                                    //       return true;
-                                                    //     } else {
-                                                    //       var parameters = {"api_key": "$apiKey", "following_id": "${article.userId}", "follower_id": "$userId"};
-                                                    //       _userServices.createFollow(parameters).then((value) {
-                                                    //         Map mapRes = jsonDecode(value.body);
-                                                    //         if (mapRes['status'] == true) {
-                                                    //           getUserFollowing();
-                                                    //         }
-                                                    //       });
-                                                    //       print('handle follow');
-                                                    //       return false;
-                                                    //     }
-                                                    //   });
-                                                    // }
-                                                    // final adb = context.read<AdsBloc>();
-                                                    // adb.createInterstitialAdAdmob();
-                                                    // Timer.periodic(Duration(seconds: 1), (Timer t) async {
-                                                    //   print('The tick is: ${t.tick}');
-                                                    //   if (t.tick == 1) {
-                                                    //     t.cancel();
-                                                    //     nextScreen(context, InterstitialAdsPage());
-                                                    //   }
-                                                    // });
-                                                    // adb.showInterstitialAdAdmob();
-                                                  },
+                                                  onTap: () async {},
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
@@ -289,14 +210,17 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(5),
-                                            color:HelperClass().getCategoryColor(post!.category!.color) /* context.watch<ThemeBloc>().darkTheme == false
+                                            color: HelperClass().getCategoryColor(post!.category!.color) /* context.watch<ThemeBloc>().darkTheme == false
                                                 ? CustomColor().loadingColorLight
-                                                : CustomColor().loadingColorDark, */
+                                                : CustomColor().loadingColorDark, */,
                                           ),
                                           child: AnimatedPadding(
                                             duration: Duration(milliseconds: 1000),
                                             padding: EdgeInsets.only(left: 10, right: rightPaddingValue, top: 5, bottom: 5),
-                                            child: Text(post!.category!.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white)),
+                                            child: Text(
+                                              post!.category!.name,
+                                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                         Spacer(),
@@ -486,55 +410,67 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
 
   _handleContentShare() async {
     SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(post!.id.toString());
-    print(deepLink);
-    await share.share(ShareParams(text: deepLink));
-    //     try {
-    //       await DynamicLinkService()
-    //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
-    //               apiArticle!.summary!.length >= 100 ? apiArticle!.summary!.substring(0, 100) : apiArticle!.summary!, apiArticle!.title!, apiArticle!.imageUrl!)
-    //           .then((value) => Share.share(
-    //                 '''${apiArticle!.title!.length > 70 ? apiArticle!.title!.substring(0, 70) : apiArticle!.title}
+    String deepLink = generateDeepLink(post!.slug);
 
-    // ${'click for more'.tr()}:${value.toString()}
+    await share.share(
+      ShareParams(
+        // uri: Uri.parse(deepLink),
+        text:
+            '''
+📰 ${post!.title}
 
-    // ${'${'download here'.tr()}: https://play.google.com/store/apps/details?id=com.onlinehunt.app'}''',
-    //               ));
-    //     } catch (e) {
-    //       print(e.toString());
-    //     }
+${HelperClass().limitSummary(post!.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''',
+        subject: post!.title,
+        title: post!.title,
+        // previewThumbnail: XFile(Config().splashIcon,),
+      ),
+    );
   }
 
   _handleWhatsappShare() async {
-    // launchUrl(  Uri.parse("https://wa.me?text=${'''${postModel!.title.length > 70 ? postModel!.title.substring(0, 70) : postModel!.title}'''}"));
-    String deepLink = generateDeepLink(post!.id.toString());
-    print(deepLink);
-    final encodedText = Uri.encodeComponent('Check this out: $deepLink');
-    final whatsappUrl = 'https://wa.me/?text=$encodedText';
+    SharePlus share = SharePlus.instance;
 
-    final uri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    String deepLink = generateDeepLink(post!.slug);
+    final message =
+        '''
+📰 ${post!.title}
+
+${HelperClass().limitSummary(post!.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''';
+    final whatsappUrl = Uri.parse("https://wa.me/?text=${Uri.encodeComponent(message)}");
+    // await share.share(
+    //   ShareParams(
+    //     // uri: Uri.parse(deepLink),
+    //     text: whatsappUrl,
+    //     subject: postModel!.title,
+    //     title: postModel!.title,
+    //     // previewThumbnail: XFile(Config().splashIcon,),
+    //   ),
+    // );
+
+    // final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       debugPrint('Could not launch WhatsApp');
     }
-    //     try {
-    //       await DynamicLinkService()
-    //           .createDynamicLink(apiArticle!.id, apiArticle!.categoryId!,
-    //               apiArticle!.summary!.length >= 100 ? apiArticle!.summary!.substring(0, 100) : apiArticle!.summary!, apiArticle!.title!, apiArticle!.imageUrl!)
-    //           .then((value) => launch("https://wa.me?text=${'''${apiArticle!.title!.length > 70 ? apiArticle!.title!.substring(0, 70) : apiArticle!.title}
-
-    // ${'click for more'.tr()}:${value.toString()}
-
-    // ${'${'download here'.tr()}: https://play.google.com/store/apps/details?id=com.onlinehunt.app'}'''}"));
-    //     } catch (e) {
-    //       print(e.toString());
-    //     }
   }
 
-  String generateDeepLink(String postId) {
-    return '${HelperClass.shareIp}$postId';
-  }
+  String generateDeepLink(String slug) {
+    final languageCode = context.locale.languageCode;
+    print('the code is $languageCode');
+    if (languageCode == 'en') {
+      return '${HelperClass.shareIp}$slug';
+    }
+
+    return '${HelperClass.shareIp}$languageCode/$slug';    }
 
   void _handleShare() {
     final sb = context.read<SignInBloc>();
@@ -558,20 +494,6 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
       openSignInDialog(context);
     } else {
       print('love clicked');
-      // if (liked == true) {
-      //   setState(() {
-      //     handlnigLike = true;
-      //   });
-      //   var params = {"api_key": "$apiKey", "id": "${likeId!.id}"};
-      //   print(params);
-      //   userServices.deleteFav(params).whenComplete(() => getLikeStatus());
-      // } else {
-      //   var params = {"api_key": "$apiKey", "user_id": "$uid", "post_id": "${post.id}", "category_id": "${widget.categoryId}"};
-      //   setState(() {
-      //     handlnigLike = true;
-      //   });
-      //   userServices.createFav(params).whenComplete(() => getLikeStatus());
-      // }
     }
   }
 
@@ -587,79 +509,18 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     }
   }
 
-  // Future<Article> getSrticleById(String? id) async => await firestore.collection('contents').doc(id).get().then((doc) {
-  //   return Article.fromFirestore(doc);
-  // });
-
-  // Future<ApiUserModel> getUserById(String id) async {
-  //   List response = [];
-  //   List<ApiUserModel> articles = [];
-  //   await postServices
-  //       .getPosts('users')
-  //       .then((value) {
-  //         response = jsonDecode(utf8.decode(value.bodyBytes));
-  //       })
-  //       .whenComplete(() {
-  //         for (int i = 0; i < response.length; i++) {
-  //           articles.add(ApiUserModel.fromJson(response[i]));
-  //         }
-  //       });
-
-  //   return articles.where((element) => element.id == id ? true : false).first;
-  // }
-
-  Future<PostModel> getApiArticleById(int id) async {
-    Map<String, dynamic> response = {};
-    // List<ApiArticle> articles = [];
-    await postServices
-        .getPost(id)
-        .then((value) {
-          response = jsonDecode(value.body);
-        })
-        .whenComplete(() {
-          post = PostModel.fromJson(response['data']);
-        });
-
-    return post!;
-  }
-
   getArticle() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('uid') ?? '0';
 
-    // await AdServices().getMobileAds('1', adspace: 'post_detail_ad').then((value) {
-    //   _mobileAdsaModel = value[0];
-    // });
-    // if (widget.post != null) {
-    // article = widget.data!;
-
-    // List<ApiCategories> categories = await categoriesStream();
-    // categories = await categoriesStream();
-    // category = categories.where((element) => element.categoyId == article.categoryId ? true : false).first.categoryName!;
-
-    // apiCategories = categories.where((element) => element.categoyId == article.categoryId ? true : false).first;
-    // //  getApiData(mounted, apiCategories!, false);
-    // // getPageViews().whenComplete(() => createPageView());
-    // setState(() {
-    //   loadingArticle = false;
-    // });
-    // } else {
     print('getArticleBy');
-    // await AdServices()
-    //     .getMobileAds('1', adspace: 'post_detail_ad')
-    //     .then((value) {
-    //       _mobileAdsaModel = value[0];
-    //     })
-    //     .catchError((onError) {
-    //       Exception('the error is $onError');
-    //     });
 
     Timer.periodic(Duration(seconds: 1), (Timer t) async {
       print('The tick is: ${t.tick}');
       if (t.tick == 1) {
         t.cancel();
         try {
-          post = await getApiArticleById(widget.post_id!);
+          post = await getApiArticleBySlug(widget.slug!);
           apiCategories = post!.category!;
           if (mounted) {
             setState(() {
@@ -685,65 +546,20 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     // }
   }
 
-  // categoriesStream() async {
-  //   List response = [];
-  //   List<ApiCategories> dummyList = [];
-  //   int language = await returnCategoryId();
-  //   List<ApiCategories> apiCategories = [];
-  //   try {
-  //     await categoryServices
-  //         .getCategories()
-  //         .then((value) {
-  //           response = jsonDecode(utf8.decode(value.bodyBytes));
-  //         })
-  //         .whenComplete(() {
-  //           response.forEach((element) {
-  //             dummyList.add(ApiCategories.fromJson(element));
-  //           });
-  //         });
-  //     dummyList.forEach((element) {
-  //       if (element.languageId == language) {
-  //         apiCategories.add(element);
-  //       }
-  //     });
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  //   return apiCategories;
-  // }
+  Future<PostModel> getApiArticleBySlug(String slug) async {
+    Map<String, dynamic> response = {};
+    // List<ApiArticle> articles = [];
+    await postServices
+        .getPostBySlug(slug)
+        .then((value) {
+          response = jsonDecode(value.body);
+        })
+        .whenComplete(() {
+          post = PostModel.fromJson(response['data']);
+        });
 
-  // getdImage(String? avatar) {
-  //   String path = "${HelperClass.baseUrl}$avatar";
-  //   print(path);
-  //   Fluttertoast.showToast(msg: path);
-  //   String localPath = '';
-  //   // GallerySaver.saveImage(path).then((bool? success) {
-  //   //   // print('Success add image $path');
-  //   //   localPath = path;
-  //   // }).catchError((onError) {
-  //   //   print('Error add image $path');
-  //   // });
-  //   // Fluttertoast.showToast(msg: localPath);
-  //   // return FileImage(File(localPath));
-  // }
-
-  // getLikeStatus() async {
-  //   SharedPreferences sp = await SharedPreferences.getInstance();
-  //   uid = sp.getString('uid') ?? '0';
-  //   await userServices.getFavorite(widget.articleId, uid).then((value) {
-  //     if (value.isNotEmpty) {
-  //       print(value);
-  //       liked = true;
-  //       likeId = value[0];
-  //       handlnigLike = false;
-  //       setState(() {});
-  //     } else {
-  //       liked = false;
-  //       handlnigLike = false;
-  //       setState(() {});
-  //     }
-  //   });
-  // }
+    return post!;
+  }
 
   Widget _buildProgressIndicator() {
     return new Padding(

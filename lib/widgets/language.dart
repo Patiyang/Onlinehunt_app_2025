@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
+import 'package:online_hunt_news/blocs/categories_bloc.dart';
 
 import 'package:online_hunt_news/blocs/featured_bloc.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';

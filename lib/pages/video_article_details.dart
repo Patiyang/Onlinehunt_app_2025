@@ -19,6 +19,7 @@ import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/sign_in_dialog.dart';
 import 'package:online_hunt_news/widgets/html_body.dart';
+import 'package:online_hunt_news/widgets/related_articles.dart';
 // import 'package:share/share.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -41,9 +42,10 @@ import '../services/userServices.dart';
 class VideoArticleDetails extends StatefulWidget {
   final PostModel? data;
   final int? post_id;
+  final String slug;
   // final String categoryId;
 
-  const VideoArticleDetails({Key? key, required this.data, this.post_id}) : super(key: key);
+  const VideoArticleDetails({Key? key, required this.data, this.post_id, required this.slug}) : super(key: key);
 
   @override
   _VideoArticleDetailsState createState() => _VideoArticleDetailsState();
@@ -143,6 +145,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   Widget build(BuildContext context) {
     final sb = context.watch<SignInBloc>();
     // final Article d = article;
+    final innerScrollController = PrimaryScrollController.of(context);
 
     return Scaffold(
       body: loadingArticle == true
@@ -179,6 +182,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                               width: MediaQuery.of(context).size.height,
                               child: Chewie(controller: chewieController!),
                             ),
+                      innerScrollController,
                     ),
                   )
                 : Container()
@@ -189,14 +193,14 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                 thumbnail: YoutubePlayer(controller: _controller).thumbnail,
               ),
               builder: (context, player) {
-                return detailsWidget(context, player);
+                return detailsWidget(context, player, innerScrollController);
               },
-            )
-          // : Container(child: Center(child: Text('unable to load video'.tr()))),
+            ),
+      // : Container(child: Center(child: Text('unable to load video'.tr()))),
     );
   }
 
-  Widget detailsWidget(BuildContext context, Widget player) {
+  Widget detailsWidget(BuildContext context, Widget player, innerScrollController) {
     return SafeArea(
       bottom: false,
       top: true,
@@ -273,14 +277,14 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                     children: <Widget>[
                       Container(
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: HelperClass().getCategoryColor(article.category!.color),
-                        ),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HelperClass().getCategoryColor(article.category!.color)),
                         child: AnimatedPadding(
                           duration: Duration(milliseconds: 1000),
                           padding: EdgeInsets.only(left: 10, right: rightPaddingValue, top: 5, bottom: 5),
-                          child: Text(article.category!.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                          child: Text(
+                            article.category!.name,
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                          ),
                         ),
                       ),
                       Spacer(),
@@ -366,6 +370,14 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                     //   categoryId: ,
                     //   )
                   ),
+                  RelatedArticles(
+                    sc: innerScrollController,
+                    category: apiCategories,
+                    timestamp: article.createdAt,
+                    replace: true,
+                    post: article,
+                    categoryId: article.category!.id.toString(),
+                  ),
                 ],
               ),
             ),
@@ -375,11 +387,11 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
     );
   }
 
-  Future<PostModel> getApiArticleById(int id) async {
+  Future<PostModel> getApiArticleBySlug(String slug) async {
     Map<String, dynamic> response = {};
     // List<ApiArticle> articles = [];
     await postServices
-        .getPost(id)
+        .getPostBySlug(slug)
         .then((value) {
           response = jsonDecode(value.body);
         })
@@ -393,7 +405,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   void getArticle() async {
     print('getArticleBy');
     try {
-      article = await getApiArticleById(widget.post_id!);
+      article = await getApiArticleBySlug(widget.slug);
       apiCategories = article.category!;
 
       if (article.video_url!.contains('youtube')) {
@@ -419,9 +431,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
       flags: YoutubePlayerFlags(autoPlay: true, mute: false, forceHD: false, loop: true, controlsVisibleAtStart: false, enableCaption: false),
     );
 
-    Timer.periodic(Duration(seconds: 1), (t) {
-
-    });
+    Timer.periodic(Duration(seconds: 1), (t) {});
     _controller.addListener(() {});
     // _controller.value.isReady
     //     ? _controller.play()
@@ -453,26 +463,67 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
 
   _handleContentShare() async {
     SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(article.id.toString());
+    String deepLink = generateDeepLink(article.slug);
 
-    await share.share(ShareParams(text: deepLink));
+    await share.share(
+      ShareParams(
+        // uri: Uri.parse(deepLink),
+        text:
+            '''
+📰 ${article.title}
+
+${HelperClass().limitSummary(article.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''',
+        subject: article.title,
+        title: article.title,
+        // previewThumbnail: XFile(Config().splashIcon,),
+      ),
+    );
   }
 
   _handleWhatsappShare() async {
-    String deepLink = generateDeepLink(article.id.toString());
-    final encodedText = Uri.encodeComponent('Check this out: $deepLink');
-    final whatsappUrl = 'https://wa.me/?text=$encodedText';
+    SharePlus share = SharePlus.instance;
 
-    final uri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    String deepLink = generateDeepLink(article.slug);
+    final message =
+        '''
+📰 ${article.title}
+
+${HelperClass().limitSummary(article.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''';
+    final whatsappUrl = Uri.parse("https://wa.me/?text=${Uri.encodeComponent(message)}");
+    // await share.share(
+    //   ShareParams(
+    //     // uri: Uri.parse(deepLink),
+    //     text: whatsappUrl,
+    //     subject: postModel!.title,
+    //     title: postModel!.title,
+    //     // previewThumbnail: XFile(Config().splashIcon,),
+    //   ),
+    // );
+
+    // final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       debugPrint('Could not launch WhatsApp');
     }
   }
 
-  String generateDeepLink(String postId) {
-    return '${HelperClass.shareIp}$postId';
+  String generateDeepLink(String slug) {
+    final languageCode = context.locale.languageCode;
+    print('the code is $languageCode');
+    if (languageCode == 'en') {
+      return '${HelperClass.shareIp}$slug';
+    }
+
+    return '${HelperClass.shareIp}$languageCode/$slug';
   }
 
   handleLoveClick() {

@@ -33,9 +33,19 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-               <data
+               <!-- <data
                     android:scheme="onlinehunt"
-                    android:host="post" />
+                    android:host="post" /> -->
+                  
+                <data
+                    android:scheme="https"
+                    android:host="onlinehunt.in" 
+                    android:pathPattern="/.*" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.onlinehunt.in" 
+                    android:pathPattern="/.*" />
             </intent-filter>
 
         </activity>

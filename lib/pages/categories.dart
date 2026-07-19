@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:online_hunt_news/blocs/categoryBlocs/categories_bloc.dart';
+import 'package:online_hunt_news/blocs/categories_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
@@ -99,9 +99,9 @@ class _CategoriesState extends State<Categories> with AutomaticKeepAliveClientMi
                         }
                         return Opacity(
                           opacity: cb.isLoading ? 1.0 : 0.0,
-                          child: cb.lastVisible == null
+                          child: /* cb.lastVisible == null
                               ? LoadingCard(height: null)
-                              : Center(child: SizedBox(width: 32.0, height: 32.0, child: new CupertinoActivityIndicator())),
+                              :  */Center(child: SizedBox(width: 32.0, height: 32.0, child: new CupertinoActivityIndicator())),
                         );
                       },
                     ),

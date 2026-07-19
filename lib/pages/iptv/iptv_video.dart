@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:online_hunt_news/models/api_live_news.dart';
+import 'package:online_hunt_news/models/live_news.dart';
 
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -50,14 +50,23 @@ class _IptvVideoState extends State<IptvVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: _controller.value.isFullScreen ? 0 : 50,
-        backgroundColor:_controller.value.isFullScreen ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        title: Text(widget.iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      ),
+      appBar: widget.iptvModel!.url!.contains('youtube')
+          ? AppBar(
+              // toolbarHeight:widget.iptvModel!.url!.contains('youtube')? _controller.value.isFullScreen ? 0 : 50:chewieController!.isFullScreen?0:50,
+              toolbarHeight:loadingVideo == true?0: _controller.value.isFullScreen ? 0 : 50,
+              // backgroundColor:loadingVideo == true?Colors.transparent:iptvModel!.url!.contains('youtube')?_controller.value.isFullScreen ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent:chewieController!.isFullScreen ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
+              elevation: 0,
+              automaticallyImplyLeading: true,
+              centerTitle: true,
+              title: Text(widget.iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            )
+          : AppBar(
+            toolbarHeight: loadingVideo == true?0:chewieController!.isFullScreen?0:50,
+              elevation: 0,
+              automaticallyImplyLeading: true,
+              centerTitle: true,
+              title: Text(widget.iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
       body: loadingVideo == true
           ? Center(
               child: Loading(
@@ -80,6 +89,7 @@ class _IptvVideoState extends State<IptvVideo> {
   initializePlayer() async {
     if (widget.iptvModel!.url!.contains('youtube')) {
       try {
+        iptvModel = widget.iptvModel;
         // iptvModel = await IptvServices().getSingleIptv(widget.id!);
         _controller = YoutubePlayerController(
           initialVideoId: YoutubePlayer.convertUrlToId(widget.iptvModel!.url!)!,

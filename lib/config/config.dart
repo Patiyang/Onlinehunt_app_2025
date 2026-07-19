@@ -13,7 +13,7 @@ class Config {
   static const String youtubeChannelUrl = 'https://www.youtube.com/channel/UCnNr2eppWVVo-NpRIy1ra7A';
   static const String twitterUrl = 'https://twitter.com/FlutterDev';
 static const String emailSupport = 'onlinehuntnews@gmail.com';
-static const String phoneSupport = '+91 9886120777';
+static const String phoneSupport = '+91 9008329745';
 
   //app theme color
   final Color appColor = Colors.blue;

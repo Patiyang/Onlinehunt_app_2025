@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_video_thumbnail/get_video_thumbnail.dart';
 import 'package:get_video_thumbnail/index.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
-import 'package:online_hunt_news/models/api_live_news.dart';
+import 'package:online_hunt_news/models/live_news.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/utils/cached_image.dart';
 import 'package:path_provider/path_provider.dart';

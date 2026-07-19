@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/pages/welcome.dart';
+import 'package:online_hunt_news/services/dynamic_link_services.dart';
 import 'package:provider/provider.dart';
 import '../blocs/sign_in_bloc.dart';
 import '../utils/next_screen.dart';
@@ -15,6 +16,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final uri = DynamicLinkService.instance.pendingUri;
   @override
   void initState() {
     // checkLink();
@@ -27,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
-        child: Image.asset(Config().splashIcon,height: 120, width: 120, fit: BoxFit.contain, color: Theme.of(context).appBarTheme.actionsIconTheme!.color,),
+        child: Image.asset(Config().splashIcon,height: 120, width: 120, fit: BoxFit.contain),
         // child: Image(image: AssetImage(Config().splashIcon), height: 120, width: 120, fit: BoxFit.contain),
       ),
     );
@@ -45,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
     if (sb.isSignedIn == true) {
       sb.getDataFromSp();
     }
-    nextScreenReplace(context, HomePage());
+    nextScreenReplace(context, HomePage(initialDeepLink: uri,));
   }
 
   gotoSignInPage() {

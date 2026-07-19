@@ -7,15 +7,16 @@ class HelperClass {
   static const baseUrl = "https://onlinehunt.in/api/";
   static const fileUpload = "https://onlinehunt.in/api/uploads/videos/";
   static const publicMainIpAddress = 'https://onlinehunt.in/';
-  static const publicTestIpAddress = 'http://192.168.0.104/';
+  static const publicTestIpAddress = 'http://192.168.100.26/';
 
-  static const String testipAddress = 'http://${kIsWeb ? '127.0.0.1' : '192.168.0.104'}/api/';
+  static const testipAddress = 'http://${kIsWeb ? '127.0.0.1' : '192.168.100.26'}/api/';
   static const serverpAddress = 'https://onlinehunt.in/api/';
-  static const mainIp = serverpAddress;
-  static const avatarIp = publicMainIpAddress;
-  static const liveshareIp = 'https://onlinehunt.in/p/';
-  static const testshareIp = 'http://192.168.0.104/p/';
-
+  static const liveshareIp = 'https://onlinehunt.in/';
+  static const testshareIp = 'http://192.168.100.26/';
+  
+  static const mainIp = testipAddress;
+  static const avatarIp = publicTestIpAddress;
+  static const mediaIp = testshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';
@@ -34,9 +35,23 @@ class HelperClass {
   getDate(DateTime? date, {bool? altDate}) {
     String _d = altDate == true ? DateFormat('dd MMM yyyy').format(date!) : DateFormat('dd/MM/yyyy').format(date!);
     return _d;
-  }
+  } //12/06/2026
 
   getCategoryColor(String color) {
-   return Color(int.parse(color.replaceFirst('#', '0xFF')));
+    return Color(int.parse(color.replaceFirst('#', '0xFF')));
+  }
+
+  String limitSummary(String? summary, {int maxWords = 15}) {
+    if (summary == null || summary.trim().isEmpty) {
+      return "Read the full story on Online Hunt.";
+    }
+
+    final words = summary.trim().split(RegExp(r'\s+'));
+
+    if (words.length <= maxWords) {
+      return summary.trim();
+    }
+
+    return '${words.take(maxWords).join(' ')}...';
   }
 }

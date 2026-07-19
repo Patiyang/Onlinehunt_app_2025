@@ -35,11 +35,11 @@ class AppService {
   }
 
   Future openEmailSupport(String email) async {
-    await urlLauncher.launch('mailto:$email?subject=About ${Config().appName} App&body=');
+    await urlLauncher.launchUrl(Uri.parse('mailto:$email?subject=About ${Config().appName} App&body='));
   }
 
   Future openPhoneNumber(String phoneNumber) async {
-    urlLauncher.launch("tel:$phoneNumber");
+    urlLauncher.launchUrl(Uri.parse("tel:$phoneNumber"));
   }
 
   Future openLinkWithCustomTab(BuildContext context, String url) async {
@@ -49,7 +49,7 @@ class AppService {
         url: url,
         customTabsOptions: CustomTabsOptions(
           colorScheme: context.read<ThemeBloc>().darkTheme! ? CustomTabsColorScheme.dark : CustomTabsColorScheme.light,
-          addDefaultShareMenuItem: true,
+          shareState: CustomTabsShareState.on,
           instantAppsEnabled: true,
           showTitle: true,
           urlBarHidingEnabled: true,

@@ -31,6 +31,7 @@ class VideoExplore extends StatefulWidget {
 class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   TabController? _tabController;
+  List<Tab> tabsList = [Tab(text: "iptv".tr())];
   List<String> states = [];
   List<dynamic> districts = [];
   String selectedState = '';
@@ -42,7 +43,6 @@ class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClie
   CategoryServices categoryServices = CategoryServices();
   bool loading = false;
 
-  List<Tab> tabsList = [Tab(text: "iptv".tr())];
   List<Category>? incomingList = [];
   List controllers = [];
 
@@ -83,8 +83,9 @@ class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClie
         ? Center(
             child: Loading(spinkit: SpinKitSpinningLines(color: Theme.of(context).primaryColor)),
           )
-        : SafeArea(bottom: false,
-          child: Scaffold(
+        : SafeArea(
+            bottom: false,
+            child: Scaffold(
               drawer: DrawerMenu(),
               key: scaffoldKey,
               body: NestedScrollView(
@@ -106,42 +107,7 @@ class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClie
                         incomingList!.isEmpty
                             ? IconButton(onPressed: () => nextScreenReplace(context, HomePage()), icon: Icon(Icons.refresh))
                             : SizedBox.shrink(),
-                        // IconButton(
-                        //   icon: Icon(Icons.translate, size: 22),
-                        //   onPressed: () async {
-                        //     // nextScreen(context, IntroPage());
-                        //     // await AdServices().getMobileAds('1', adspace: 'main_screen_ad');
-                        //     var value = await getLanguageBottomSheet() ?? false;
-                        //     if (value == true) {
-                        //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
-                        //     }
-                        //   },
-                        // ),
-                        // IconButton(
-                        //   icon: Icon(Icons.search, size: 22),
-                        //   onPressed: () {
-                        //     nextScreen(context, SearchPage());
-                        //   },
-                        // ),
-                        // badges.Badge(
-                        //   position: badges.BadgePosition.topEnd(top: 14, end: 15),
-                        //   badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
-                        //   badgeAnimation: badges.BadgeAnimation.fade(
-                        //     animationDuration: Duration(milliseconds: 300),
-                        //     curve: Curves.easeInOut,
-                        //     loopAnimation: false,
-                        //   ),
-                        //   showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
-                        //   badgeContent: Container(),
-                        //   child: IconButton(
-                        //     icon: Icon(LineIcons.bell, size: 25),
-                        //     onPressed: () {
-                        //       context.read<NotificationBloc>().saveNlengthToSP();
-                        //       nextScreen(context, NotificationsPage());
-                        //     },
-                        //   ),
-                        // ),
-          
+
                         SizedBox(width: 5),
                       ],
                       pinned: true,
@@ -178,7 +144,7 @@ class _VideoExploreState extends State<VideoExplore> with AutomaticKeepAliveClie
                 ),
               ),
             ),
-        );
+          );
   }
 
   @override

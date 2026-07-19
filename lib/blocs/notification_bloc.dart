@@ -95,7 +95,7 @@ class NotificationBloc extends ChangeNotifier {
     RemoteMessage? initialMessage = await _fcm.getInitialMessage();
     print('inittal message : $initialMessage');
     if (initialMessage != null) {
-      nextScreen(context, ArticleDetails(post_id: int.parse(initialMessage.data['articleId'])));
+      nextScreen(context, ArticleDetails(post_id: int.parse(initialMessage.data['articleId']),slug: initialMessage.data['articleId'],));
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -112,7 +112,7 @@ class NotificationBloc extends ChangeNotifier {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print(message.data);
-      nextScreen(context, ArticleDetails(post_id: int.parse(message.data['articleId'])));
+      nextScreen(context, ArticleDetails(post_id: int.parse(message.data['articleId'],),slug: message.data['articleId']));
       // navigateToDetailsScreen(context, await getArticleById(message.data['articleId']), '');
     });
     notifyListeners();
@@ -144,7 +144,7 @@ class NotificationBloc extends ChangeNotifier {
     handleFcmSubscribtion();
   }
 
-  showinAppDialog(context, title, body, {String? articleId, String? categoryId, String? imageUrl}) {
+  showinAppDialog(context, title, body, {String? articleId, String? categoryId, String? imageUrl, String ?slug}) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -179,7 +179,7 @@ class NotificationBloc extends ChangeNotifier {
             child: Text('Open'),
             onPressed: () async {
               Navigator.of(context).pop();
-              nextScreen(context, ArticleDetails(post_id: int.parse(articleId!)));
+              nextScreen(context, ArticleDetails(post_id: int.parse(articleId!),slug: slug,));
             },
           ),
         ],

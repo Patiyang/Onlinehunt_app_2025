@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -13,16 +14,20 @@ import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
+import 'package:online_hunt_news/pages/epapers/epaper.dart';
+import 'package:online_hunt_news/pages/epapers/epaper_tabbarview.dart';
 import 'package:online_hunt_news/pages/explore.dart';
 import 'package:online_hunt_news/pages/iptv/videos_explore.dart';
 import 'package:online_hunt_news/pages/profile.dart';
 import 'package:online_hunt_news/services/app_service.dart';
+import 'package:online_hunt_news/services/dynamic_link_services.dart';
 import 'package:online_hunt_news/utils/snacbar.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  final Uri? initialDeepLink;
+  HomePage({Key? key, this.initialDeepLink}) : super(key: key);
 
   _HomePageState createState() => _HomePageState();
 }
@@ -30,12 +35,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   PageController _pageController = PageController(keepPage: true);
-
+  Uri? _lastHandledUri;
   List<IconData> iconList = [
     Icons.home,
-    Icons.newspaper,
+    Icons.category,
     Icons.tv,
     Icons.person,
+    Icons.newspaper,
     // Icons.plus_circle
   ];
   List<String> states = [];
@@ -47,91 +53,61 @@ class _HomePageState extends State<HomePage> {
   bool loading = false;
   bool loaded = false;
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  late AppLinks _appLinks = AppLinks();
+  StreamSubscription<Uri>? _linkSubscription;
+  // checkLink() async {
+  //   _appLinks = AppLinks();
+  //   _handleInitialUri();
+  //   _linkSubscription = _appLinks.uriLinkStream.listen(
+  //     (Uri? uri) {
+  //       if (uri != null) {
+  //         if (_lastHandledUri == uri) return;
+  //         _onDeepLink(uri);
+  //       }
+  //     },
+  //     onError: (err) {
+  //       print('failed to get latest link: $err');
+  //     },
+  //   );
+  // }
 
-  checkLink() async {
-    // final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink(); //GETTING THE INITIAL LINK IF THE APP WAS CLOSED
-    // final Uri? deepLink = data?.link;
-    // // Fluttertoast.showToast(msg: data!.link.path);
-    // if (deepLink != null && loaded == false) {
-    //   try {
-    //     print('try deeplink success');
-    //     String? id = deepLink.queryParameters['id'];
-    //     String? category = deepLink.queryParameters['categoryId'];
-    //     String? type = deepLink.queryParameters['type'] ?? 'article';
+  // Future<void> _handleInitialUri() async {
+  //   final uri = await _appLinks.getInitialLink();
+  //   if (uri != null) {
+  //     _onDeepLink(uri);
+  //   }
+  // }
 
-    //     if (type == 'iptv') {
-    //       Fluttertoast.showToast(msg: 'msg');
-    //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => IptvVideo(id: id)));
-    //     } else {
-    //       if (deepLink.queryParameters.containsKey('id')) {
-    //         Navigator.of(context).push(
-    //           MaterialPageRoute(
-    //             builder: (context) => ArticleDetails(articleId: id, data: null, tag: '', categoryId: category!),
-    //           ),
-    //         );
-    //         loaded = true;
-    //       }
-    //     }
-    //   } catch (e) {
-    //     print('deep link has error ${e.toString()}');
-    //   }
-    // }
-    _appLinks = AppLinks();
-    _handleInitialUri();
-    _appLinks.uriLinkStream.listen(
-      (Uri? uri) {
-        if (uri != null) {
-          _onDeepLink(uri);
-        }
-      },
-      onError: (err) {
-        print('failed to get latest link: $err');
-      },
-    );
-  }
+  // void _onDeepLink(Uri uri) {
+  //   const allowedHosts = {'onlinehunt.in', 'www.onlinehunt.in'};
 
-  Future<void> _handleInitialUri() async {
-    final uri = await _appLinks.getInitialLink();
-    if (uri != null) {
-      _onDeepLink(uri);
-    }
-  }
+  //   if (!allowedHosts.contains(uri.host)) {
+  //     debugPrint('Ignoring deep link from ${uri.host}');
+  //     return;
+  //   }
+  //   if (uri.pathSegments.isEmpty) {
+  //     debugPrint('No slug found in deep link');
+  //     return;
+  //   }
 
-  void _onDeepLink(Uri uri) {
-    // Example: onlinehuntnews://post/12345
-    if (uri.scheme == 'onlinehunt' && uri.host == 'post' && uri.pathSegments.isNotEmpty) {
-      final postId = uri.pathSegments[0];
-      Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: int.parse(postId))));
-    }
-  }
+  //   _lastHandledUri = uri;
+  //   final slug = uri.pathSegments.first;
+  //   Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
+  //   // _appLinks.uriLinkStream.first.ignore();
+  // }
+
+  bool _openingArticle = false;
 
   @override
   void initState() {
     super.initState();
-    checkLink();
-    Future.delayed(Duration(milliseconds: 0)).then((value) async {
-      final adb = context.read<AdsBloc>();
-      await context
-          .read<NotificationBloc>()
-          .initFirebasePushNotification(context)
-          .then((value) => context.read<NotificationBloc>().handleNotificationlength())
-          .then((value) => adb.checkAdsEnable())
-          .then((value) async {
-            if (adb.interstitialAdEnabled == true || adb.bannerAdEnabled == true) {
-              adb.initiateAds().whenComplete(() {
-                adb.loadAds(width: MediaQuery.of(context).size.width);
-                // adb.showInterstitialAdAdmob();
-              });
-            }
-          });
-    });
-    getStates();
+    initializeNotification();
+    checkDeepLink();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _linkSubscription?.cancel();
     super.dispose();
   }
 
@@ -157,13 +133,7 @@ class _HomePageState extends State<HomePage> {
           controller: _pageController,
           allowImplicitScrolling: false,
           physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Explore(),
-            // VideoArticles(),
-            Categories(),
-            VideoExplore(),
-            ProfilePage(),
-          ],
+          children: <Widget>[Explore(), Categories(), EpaperTabbarView(), VideoExplore(), ProfilePage()],
         ),
         floatingActionButton: sb.uid != null && sb.guestUser == false
             ? SizedBox.shrink() /* Container(
@@ -193,6 +163,7 @@ class _HomePageState extends State<HomePage> {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(iconList[0]), label: 'home'.tr()),
         BottomNavigationBarItem(icon: Icon(iconList[1], size: 25), label: 'categories'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[4], size: 25), label: 'epaper'.tr()),
         BottomNavigationBarItem(icon: Icon(iconList[2]), label: 'iptv'.tr()),
         BottomNavigationBarItem(icon: Icon(iconList[3]), label: 'profile'.tr()),
       ],
@@ -245,5 +216,70 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
+  }
+
+  void initializeNotification() {
+    Future.delayed(Duration(milliseconds: 0)).then((value) async {
+      final adb = context.read<AdsBloc>();
+      await context
+          .read<NotificationBloc>()
+          .initFirebasePushNotification(context)
+          .then((value) => context.read<NotificationBloc>().handleNotificationlength())
+          .then((value) => adb.checkAdsEnable())
+          .then((value) async {
+            if (adb.interstitialAdEnabled == true || adb.bannerAdEnabled == true) {
+              adb.initiateAds().whenComplete(() {
+                adb.loadAds(width: MediaQuery.of(context).size.width);
+                // adb.showInterstitialAdAdmob();
+              });
+            }
+          });
+    });
+  }
+
+  void checkDeepLink() {
+    // checkLink();
+    // _linkSubscription = DynamicLinkService.instance!.subscription;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final uri = widget.initialDeepLink;
+
+      if (uri != null) {
+        _handleDeepLink(uri);
+        DynamicLinkService.instance.clearPendingUri();
+      }
+    });
+
+    _linkSubscription ??= DynamicLinkService.instance.linkStream.listen(_handleDeepLink);
+  }
+
+  Future<void> _handleDeepLink(Uri uri) async {
+    debugPrint("HANDLE LINK: $uri");
+    if (_openingArticle) return;
+
+    // if (uri.host != 'onlinehunt.in' && uri.host != 'www.onlinehunt.in') {
+    //   return;
+    // }
+
+    // if (uri.pathSegments.length != 1) return;
+    const allowedHosts = {'onlinehunt.in', 'www.onlinehunt.in'};
+
+    if (!allowedHosts.contains(uri.host)) {
+      return;
+    }
+
+    if (uri.pathSegments.isEmpty) {
+      return;
+    }
+    _openingArticle = true;
+    String slug = uri.pathSegments.first;
+    if (uri.pathSegments.length >= 2 && RegExp(r'^[a-z]{2}$').hasMatch(uri.pathSegments.first)) {
+      slug = uri.pathSegments[1];
+    } else {
+      slug = uri.pathSegments.first;
+    }
+    print('SLUG is $slug');
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
+
+    _openingArticle = false;
   }
 }
