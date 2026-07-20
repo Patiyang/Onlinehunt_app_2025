@@ -8,6 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/blocs/live_news_bloc.dart';
 import 'package:online_hunt_news/blocs/allUserArticlesBloc.dart';
+import 'package:online_hunt_news/blocs/magazine_bloc.dart';
+import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/splash.dart';
@@ -66,7 +68,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<CategoriesBloc>(create: (context) => CategoriesBloc()),
               ChangeNotifierProvider<LiveNewsBloc>(create: (context) => LiveNewsBloc()),
               ChangeNotifierProvider<EpaperBloc>(create: (context) => EpaperBloc()),
+              ChangeNotifierProvider<MagazineBloc>(create: (context) => MagazineBloc()),
               ChangeNotifierProvider<AdsBloc>(create: (context) => AdsBloc()),
+              ChangeNotifierProvider<WeeklyPeriodicalBloc>(create: (context) => WeeklyPeriodicalBloc()),
+              ChangeNotifierProvider<FortnightlyPeriodicalBloc>(create: (context) => FortnightlyPeriodicalBloc()),
+              ChangeNotifierProvider<MonthlyPeriodicalBloc>(create: (context) => MonthlyPeriodicalBloc()),
+
               // ChangeNotifierProvider<RelatedBloc>(create: (context) => RelatedBloc()),
               ChangeNotifierProvider<TabIndexBloc>(create: (context) => TabIndexBloc()),
               ChangeNotifierProvider<VideoTabIndexBloc>(create: (context) => VideoTabIndexBloc()),
@@ -245,7 +252,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     await context.read<PopularBloc>().onRefresh(mounted, context: context);
     await context.read<RecentBloc>().onRefresh(mounted);
     await context.read<CategoriesBloc>().onRefresh(mounted);
-// await context.read<>
+    // await context.read<>
     return true;
   }
 

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:online_hunt_news/models/epaperModel.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/services/epaper_service.dart';
 
@@ -24,7 +23,7 @@ class EpaperBloc extends ChangeNotifier {
     if (mounted) {
       _loading = true;
       _data = [];
-      print('GETTING Live News');
+      print('GETTING web epaper News');
       await EpaperServices().getEpapers('websites').then((value) {
         response = jsonDecode(value.body);
         // print(response['data']);
@@ -44,7 +43,7 @@ class EpaperBloc extends ChangeNotifier {
     if (mounted) {
       _loadingPDF = true;
       _PDFdata = [];
-      print('GETTING Live News');
+      print('GETTING pdfepaper News');
       await EpaperServices().getEpapers('pdfs').then((value) {
         response = jsonDecode(value.body);
         // print(response['data']);

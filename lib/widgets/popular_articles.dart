@@ -35,7 +35,7 @@ class _PopularWidgetState extends State<PopularWidget> {
               SizedBox(width: 6),
               GestureDetector(
                 onTap: () {
-                  pb.getApiData(mounted, context);
+                  // pb.getApiData(mounted, context);
                 },
                 child: Text('featured news', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
@@ -67,39 +67,7 @@ class _PopularWidgetState extends State<PopularWidget> {
                       // apiArticle: pb.apiArticle[index],
                       postModel: pb.posts[index],
                     );
-                    // return Text(
-                    //   pb.posts[index].author!.avatar ?? '',
-                    //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-                    //   maxLines: 7,
-                    //   overflow: TextOverflow.ellipsis,
-                    // );
-                    // if (pb.adsList[index] is ApiArticle) {
-                    //   if (pb.apiArticle.isEmpty) return LoadingCard(height: 200);
-
-                    //   return FutureBuilder(
-                    //     future: categoriesStream(pb.adsList[index].categoryId!),
-                    //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    //       return snapshot.hasData
-                    //           ? Card1(
-                    //               heroTag: 'popular$index',
-                    //               apiArticle: pb.adsList[index],
-                    //               categoryTitle: apiCategories.where((element) => element.categoyId == snapshot.data ? true : false).first.categoryName!,
-                    //               categoryName: snapshot.data,
-                    //             )
-                    //           : LoadingCard(height: 200);
-                    //     },
-                    //   );
-                    // } else if (pb.adsList[index] is MobileAdsaModel) {
-                    //   return GestureDetector(
-                    //     onTap: () {
-                    //       // print(adsList.where((element) => element.runtimeType == MobileAdsaModel ? true : false));
-                    //     },
-                    //     child: CustomMobileAd.getBannerAd(context, pb.adsList[index]),
-                    //   );
-                    //   ;
-                    // } else {
-                    //   return SizedBox.shrink();
-                    // }
+        
                   },
                 ),
               ),

@@ -203,5 +203,8 @@
   "web_papers": "ऑनलाइन पेपर",
   "pdfs": "पीडीएफ पेपर",
   "periodicals": "आवधिक कागजात",
-  "magazines": "पत्रिका"
+  "magazines": "पत्रिका",
+  "weekly": "साप्ताहिक पत्र",
+  "fortnightly": "पाक्षिक पत्र",
+  "monthly": "मासिक पत्र"
 }

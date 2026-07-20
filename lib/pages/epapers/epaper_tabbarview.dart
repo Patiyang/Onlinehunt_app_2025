@@ -56,7 +56,7 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
         bottom: TabBar(
           labelStyle: TextStyle(fontFamily: 'Manrope', fontSize: 15, fontWeight: FontWeight.w600),
           controller: _tabController,
-          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorSize: TabBarIndicatorSize.label,
           labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: Color(0xff5f6368), //niceish grey
           isScrollable: false,

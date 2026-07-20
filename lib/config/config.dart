@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class Config {
   final String appName = 'OnlineHunt - Tech Defined Online Media';
   final String splashIcon = 'assets/images/splash.png';
+    final String icon = 'assets/images/icon.png';
+
   final String supportEmail = 'connect@onlinehunt.net';
   final String privacyPolicyUrl = 'https://thetechdefined.com/onlinehunt';
   final String ourWebsiteUrl = 'https://thetechdefined.com/onlinehunt';

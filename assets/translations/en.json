@@ -228,6 +228,10 @@
     "web_papers":"Online papers",
     "pdfs":"PDF papers",
     "periodicals":"Periodical papers",
-    "magazines":"Magazines"
+    "magazines":"Magazines",
+
+    "weekly":"Weekly papers",
+    "fortnightly":"Fortnightly papers",
+    "monthly":"Montly papers"
 
 }

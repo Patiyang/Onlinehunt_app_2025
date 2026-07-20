@@ -14,4 +14,25 @@ Future<http.Response> getEpapers(String source_type) async {
     final res = await http.get(Uri.parse(url));
     return res;
   }
+
+  Future<http.Response> getMagazines() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int lang_id = prefs.getInt('lang_id') ?? 1;
+    String url = '${HelperClass.mainIp}magazines?lang_id=$lang_id';
+    print(url);
+    final res = await http.get(Uri.parse(url));
+    return res;
+  }
+
+
+
+//http://onlinehunt.in.local/api/periodicals?frequency=weekly&lang_id=2
+   Future<http.Response> getPeriodicals(String period) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int lang_id = prefs.getInt('lang_id') ?? 1;
+    String url = '${HelperClass.mainIp}periodicals?frequency=$period&lang_id=$lang_id';
+    print(url);
+    final res = await http.get(Uri.parse(url));
+    return res;
+  }
 }
