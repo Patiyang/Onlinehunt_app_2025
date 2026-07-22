@@ -13,7 +13,6 @@ import 'package:online_hunt_news/services/epaper_service.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 

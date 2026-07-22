@@ -40,6 +40,7 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,

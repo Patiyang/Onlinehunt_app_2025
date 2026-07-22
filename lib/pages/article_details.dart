@@ -74,7 +74,6 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   CategoryServices categoryServices = CategoryServices();
   String category = '';
   String webViewUserAgent = '';
-  PageViewServices _pageViewServices = PageViewServices();
   List<PageViewModel> dummyList = [];
   String pageViews = '';
   bool liked = false;
@@ -82,20 +81,12 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   LikeModel? likeId;
   bool handlnigLike = true;
   Category? apiCategories;
-  ScrollController _sc = new ScrollController();
-  int _lastIndex = 0;
-  int currentPage = 1;
   late List<Object> adsList = [];
-  bool _isLoading = true;
-  bool _isLoadingMore = false;
-  List<ApiArticle> _articlesData = [];
   List<FollowingModel> followersList = [];
   List<FollowingModel> followingList = [];
   String userId = '';
 
   bool loadingFollowing = true;
-  UserServices _userServices = UserServices();
-  MobileAdsaModel? _mobileAdsaModel;
 
   @override
   void initState() {
@@ -472,20 +463,6 @@ $deepLink
 
     return '${HelperClass.shareIp}$languageCode/$slug';    }
 
-  void _handleShare() {
-    final sb = context.read<SignInBloc>();
-    final String _shareTextAndroid =
-        '${post!.title}, Check out this app to explore more. App link: https://play.google.com/store/apps/details?id=${sb.packageName}';
-    final String _shareTextiOS =
-        '${post!.title}, Check out this app to explore more. App link: https://play.google.com/store/apps/details?id=${sb.packageName}';
-
-    if (Platform.isAndroid) {
-      // Share.share(_shareTextAndroid);
-      SharePlus.instance.share(ShareParams(text: _shareTextAndroid));
-    } else {
-      SharePlus.instance.share(ShareParams(text: _shareTextiOS));
-    }
-  }
 
   handleLoveClick() {
     bool _guestUser = context.read<SignInBloc>().guestUser;
@@ -561,17 +538,6 @@ $deepLink
     return post!;
   }
 
-  Widget _buildProgressIndicator() {
-    return new Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: new Center(
-        child: new Opacity(
-          opacity: _isLoadingMore ? 1.0 : 00,
-          child: GestureDetector(onTap: () => print(adsList.length), child: new Loading()),
-        ),
-      ),
-    );
-  }
 
   @override
   bool get wantKeepAlive => true;

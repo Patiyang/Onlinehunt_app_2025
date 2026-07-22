@@ -27,8 +27,8 @@ class AppService {
   }
 
   Future openLink(context, String url) async {
-    if (await urlLauncher.canLaunch(url)) {
-      urlLauncher.launch(url);
+    if (await urlLauncher.canLaunchUrl(Uri.parse(url))) {
+      urlLauncher.launchUrl(Uri.parse(url));
     } else {
       openToast1(context, "Can't launch the url");
     }

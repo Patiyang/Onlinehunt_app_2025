@@ -33,7 +33,6 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final String collectionName = 'contents';
   ScrollController? controller;
-  DocumentSnapshot? _lastVisible;
   late bool _isLoading;
   bool _isLoadingMore = false;
 
@@ -62,7 +61,6 @@ class _CategoryBasedArticlesState extends State<CategoryBasedArticles> {
       currentPage = 1;
       totalPages = 1;
       _isLoading = true;
-      _lastVisible = null;
     });
     // _getData();
     getApiCategories(mounted);

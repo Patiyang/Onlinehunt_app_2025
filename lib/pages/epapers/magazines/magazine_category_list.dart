@@ -20,6 +20,7 @@ class _MagazineCategoryListState extends State<MagazineCategoryList> with Automa
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final mb = context.watch<MagazineCategoriesBloc>();
     return RefreshIndicator(
       onRefresh: () async {

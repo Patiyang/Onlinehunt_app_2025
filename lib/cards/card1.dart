@@ -1,12 +1,12 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 
 import 'package:online_hunt_news/models/authorModel.dart';
 import 'package:online_hunt_news/models/postModel.dart';
-import 'package:path/path.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../pages/followScreen/author_details.dart';

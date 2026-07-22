@@ -34,9 +34,7 @@ class _CommentsPageState extends State<CommentsPage> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final String collectionName = 'contents';
   ScrollController? controller;
-  DocumentSnapshot? _lastVisible;
   late bool _isLoading;
-  List<DocumentSnapshot> _snap = [];
   List<ApiComment> _data = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var textCtrl = TextEditingController();

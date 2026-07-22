@@ -48,6 +48,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final ep = context.watch<FeaturedEpapersBloc>();
     final mb = context.watch<MagazineCategoriesBloc>();
     final fm = context.watch<FavoriteMagazineBloc>();
@@ -163,7 +164,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                               // pb.getApiData(mounted, context);
                             },
                             child: Text(
-                              '${selectedCategory!.name ?? '...'} ${'news'.tr()}',
+                              '${selectedCategory!.name} ${'news'.tr()}',
                               style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold),
                             ),
                           ),

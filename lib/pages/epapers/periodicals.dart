@@ -25,6 +25,7 @@ class _PeriodicalsState extends State<Periodicals> with AutomaticKeepAliveClient
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
         refresh(context);

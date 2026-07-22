@@ -37,7 +37,6 @@ class _VideoCategoryTabGenericState extends State<VideoCategoryTabGeneric> with 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   PostServices postServices = PostServices();
   CategoryServices categoryServices = CategoryServices();
-  List<DocumentSnapshot> _snap = [];
   // List<Article> _data = [];
   List<PostModel> posts = [];
 
@@ -48,9 +47,7 @@ class _VideoCategoryTabGenericState extends State<VideoCategoryTabGeneric> with 
   Metamodel? metaData;
   int currentPage = 1;
   int totalPages = 1;
-  bool? _hasData;
   QuerySnapshot? rawData;
-  DocumentSnapshot? _lastVisible;
   bool _isLoading = true;
   bool _isLoadingMore = false;
   late List<Object> adsList;

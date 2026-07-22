@@ -146,20 +146,8 @@ class IptvItemCard extends StatelessWidget {
     return _userDetails;
   }
 
-  _handleContentShare() async {
-    //     try {
-    //       await DynamicLinkService().createDynamicLinkIptv(item!.id!, item!.iptvUrl!, item!.iptvName!).then((value) => Share.share(
-    //             '''${item!.iptvName!.length > 70 ? item!.iptvName!.substring(0, 70) : item!.iptvName}
 
-    // ${'click for more'.tr()}:${value.toString()}
-
-    // ${'${'download here'.tr()}: https://play.google.com/store/apps/details?id=com.onlinehunt.app'}''',
-    //           ));
-    //     } catch (e) {
-    //       print(e.toString());
-    //     }
-  }
-
+  // ignore: unused_element
   _handleWhatsappShare() async {
     //     try {
     //       await DynamicLinkService()

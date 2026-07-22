@@ -1,16 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:online_hunt_news/config/ad_config.dart';
-import 'package:html/parser.dart' show parse;
-import 'package:online_hunt_news/helpers&Widgets/loading.dart';
-import 'package:online_hunt_news/models/mobile_ads_model.dart';
-import 'package:online_hunt_news/models/theme_model.dart';
-import 'package:online_hunt_news/services/ad_services.dart';
-import '../services/app_service.dart';
 
 class AdmobHelper {
   static String get bannerUnit => AdConfig().getAdmobBannerAdUnitId();

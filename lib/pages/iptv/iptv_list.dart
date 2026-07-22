@@ -23,12 +23,10 @@ class IptvList extends StatefulWidget {
 class _IptvListState extends State<IptvList> with AutomaticKeepAliveClientMixin {
   // IptvServices iptvServices = IptvServices();
   ScrollController scrollController = ScrollController();
-  UserServices _userServices = UserServices();
 
   UserModel? apiUser;
   // List<IptvModel> iptvs = [];
   bool gettingIptvs = true;
-  bool _isLoadingMore = false;
   List<String> fileNames = [];
 
   String uid = '';
@@ -47,15 +45,10 @@ class _IptvListState extends State<IptvList> with AutomaticKeepAliveClientMixin 
     });
   }
 
-  _scrollListener() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && _isLoadingMore == false) {
-      print('loadingData');
-      // getIptvs(false);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final lb = context.watch<LiveNewsBloc>();
     return lb.loading == true
         ? Center(

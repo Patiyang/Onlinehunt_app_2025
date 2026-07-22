@@ -54,7 +54,6 @@ class VideoArticleDetails extends StatefulWidget {
 class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   double rightPaddingValue = 140;
   late YoutubePlayerController _controller;
-  PageViewServices _pageViewServices = PageViewServices();
   List<PageViewModel> dummyList = [];
   String pageViews = '';
   bool liked = false;
@@ -77,7 +76,6 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   String userId = '';
   late VideoPlayerController _videoPlayerController;
   bool loadingFollowing = true;
-  UserServices _userServices = UserServices();
   ChewieController? chewieController;
   bool success = false;
   bool loadingVideo = true;

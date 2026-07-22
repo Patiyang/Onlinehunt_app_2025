@@ -35,7 +35,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   PageController _pageController = PageController(keepPage: true);
-  Uri? _lastHandledUri;
   List<IconData> iconList = [
     Icons.home,
     Icons.category,

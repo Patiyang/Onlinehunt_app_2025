@@ -33,6 +33,7 @@ class _DailyEpaperState extends State<DailyEpaper> with AutomaticKeepAliveClient
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final dp = context.watch<DailyPeriodicalBloc>();
 
     return Column(
