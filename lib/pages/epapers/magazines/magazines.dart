@@ -9,8 +9,10 @@ import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_categories.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
+import 'package:online_hunt_news/pages/epapers/magazines/more_magazines.dart';
 import 'package:online_hunt_news/services/epaper_service.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
+import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -18,7 +20,8 @@ import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 
 class Magazines extends StatefulWidget {
   final MagazineCategory? magazineCategory;
-  final ScrollController? sc;  final int refreshToken;
+  final ScrollController? sc;
+  final int refreshToken;
   const Magazines({super.key, required this.magazineCategory, this.sc, required this.refreshToken});
 
   @override
@@ -39,6 +42,7 @@ class _MagazinesState extends State<Magazines> with AutomaticKeepAliveClientMixi
     });
     super.initState();
   }
+
   @override
   void didUpdateWidget(covariant Magazines oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -47,6 +51,7 @@ class _MagazinesState extends State<Magazines> with AutomaticKeepAliveClientMixi
       getData();
     }
   }
+
   void _scrollListener() {}
   @override
   Widget build(BuildContext context) {
@@ -72,7 +77,12 @@ class _MagazinesState extends State<Magazines> with AutomaticKeepAliveClientMixi
                 child: Text(widget.magazineCategory!.name, style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)),
               ),
               Spacer(),
-     
+              Visibility(visible: magazines.isNotEmpty,
+                child: TextButton(
+                  child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 16)).tr(),
+                  onPressed: () => nextScreen(context, MoreMagazines(magazineCategory: widget.magazineCategory!)),
+                ),
+              ),
             ],
           ),
         ),
@@ -114,9 +124,7 @@ class _MagazinesState extends State<Magazines> with AutomaticKeepAliveClientMixi
         magazines.add(EpaperModel.fromJson(response['data'][i]));
       }
       print('length of magazine category is  ${magazines.length}');
-      setState(() {
-        
-      });
+      setState(() {});
     });
   }
 

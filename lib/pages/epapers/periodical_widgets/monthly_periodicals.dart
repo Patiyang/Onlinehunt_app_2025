@@ -4,7 +4,9 @@ import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
+import 'package:online_hunt_news/pages/epapers/magazines/more_epapers.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
+import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
 
 class MonthlyPeriodicals extends StatefulWidget {
@@ -15,7 +17,6 @@ class MonthlyPeriodicals extends StatefulWidget {
 }
 
 class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
-
   @override
   Widget build(BuildContext context) {
     final mp = context.watch<MonthlyPeriodicalBloc>();
@@ -39,10 +40,13 @@ class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
                 child: Text('monthly', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
               Spacer(),
-              // TextButton(
-              //   child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
-              //   onPressed: () => nextScreen(context, MoreArticles(title: 'featured news')),
-              // ),
+              Visibility(
+                visible: mp.data.isNotEmpty,
+                child: TextButton(
+                  child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
+                  onPressed: () => nextScreen(context, MoreEpapers(periodType: mp.data[0].publication!.publication_type)),
+                ),
+              ),
             ],
           ),
         ),
@@ -51,7 +55,8 @@ class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
             : Container(
                 width: MediaQuery.of(context).size.width,
                 height: 250,
-                child: ListView.separated(padding: EdgeInsets.symmetric(horizontal: 10),
+                child: ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: mp.data.isEmpty ? 2 : mp.data.length,
@@ -61,8 +66,11 @@ class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
                   itemBuilder: (BuildContext context, int index) {
                     // EpaperModel paper = mp.data[index];
 
-                    return  mp.data.isEmpty
-                        ? LoadingCard(height: 300, width: 210):  mp.data[index].source_type == 'website' ? URLepaper(epaperModel: mp.data[index],) : PDFepaper(epaperModel: mp.data[index]);
+                    return mp.data.isEmpty
+                        ? LoadingCard(height: 300, width: 210)
+                        : mp.data[index].source_type == 'website'
+                        ? URLepaper(epaperModel: mp.data[index])
+                        : PDFepaper(epaperModel: mp.data[index]);
                   },
                 ),
                 // child: GridView.builder(
@@ -85,5 +93,5 @@ class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
               ),
       ],
     );
-  }  
+  }
 }

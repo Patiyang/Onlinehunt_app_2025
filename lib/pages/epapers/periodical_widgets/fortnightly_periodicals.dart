@@ -4,7 +4,9 @@ import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
+import 'package:online_hunt_news/pages/epapers/magazines/more_epapers.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
+import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
 
 class FortnightlyPeriodicals extends StatefulWidget {
@@ -38,10 +40,12 @@ class _FortnightlyPeriodicalsState extends State<FortnightlyPeriodicals> {
                 child: Text('fortnightly', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
               Spacer(),
-              // TextButton(
-              //   child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
-              //   onPressed: () => nextScreen(context, MoreArticles(title: 'featured news')),
-              // ),
+            Visibility(visible: fp.data.isNotEmpty,
+              child: TextButton(
+                  child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
+                  onPressed: () => nextScreen(context, MoreEpapers(periodType: fp.data[0].publication!.publication_type)),
+                ),
+            ),
             ],
           ),
         ),

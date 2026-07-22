@@ -2,11 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
-import 'package:online_hunt_news/pages/epapers/magazines/magazine_category_list.dart';
+import 'package:online_hunt_news/pages/epapers/magazine_category_list.dart';
 import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/for_you.dart';
 import 'package:online_hunt_news/pages/epapers/magazines/magazines.dart';
-import 'package:online_hunt_news/pages/epapers/pdf_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/periodicals.dart';
 import 'package:provider/provider.dart';
 

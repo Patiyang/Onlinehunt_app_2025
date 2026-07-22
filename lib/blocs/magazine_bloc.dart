@@ -12,13 +12,13 @@ class MagazineBloc extends ChangeNotifier {
   bool _loading = true;
   bool get loading => _loading;
 
-  Future getData(mounted) async {
+  Future getData(mounted,{int ?limit}) async {
     Map<String, dynamic> response = {};
     if (mounted) {
       _loading = true;
       _data = [];
       print('GETTING magazine News');
-      await EpaperServices().getMagazines().then((value) {
+      await EpaperServices().getMagazines(limit: limit!).then((value) {
         response = jsonDecode(value.body);
         // print(response['data']);
         for (int i = 0; i < response['data'].length; i++) {
@@ -37,10 +37,10 @@ class MagazineBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  onRefresh(mounted) {
+  onRefresh(mounted,{int ?limit}) {
     _loading = true;
     _data.clear();
-    getData(mounted);
+    getData(mounted,limit: limit);
     notifyListeners();
   }
 }
@@ -53,13 +53,13 @@ class FavoriteMagazineBloc extends ChangeNotifier {
   bool _loading = true;
   bool get loading => _loading;
 
-  Future getData(mounted, int category_id) async {
+  Future getData(mounted, int category_id, {int ?limit}) async {
     Map<String, dynamic> response = {};
     if (mounted) {
       _loading = true;
       _data = [];
       print('GETTING magazine News');
-      await EpaperServices().getMagazines(category_id: category_id).then((value) {
+      await EpaperServices().getMagazines(category_id: category_id,limit: limit=5).then((value) {
         response = jsonDecode(value.body);
         // print(response['data']);
         for (int i = 0; i < response['data'].length; i++) {
@@ -78,10 +78,10 @@ class FavoriteMagazineBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  onRefresh(mounted,int category_id) {
+  onRefresh(mounted,int category_id, {int ?limit}) {
     _loading = true;
     _data.clear();
-    getData(mounted,category_id);
+    getData(mounted,category_id,limit: limit);
     notifyListeners();
   }
 }

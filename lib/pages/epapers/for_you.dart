@@ -11,14 +11,13 @@ import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/blocs/featured_epapers.dart';
 import 'package:online_hunt_news/blocs/magazine_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
-import 'package:online_hunt_news/helpers&Widgets/cover_flow.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaperModel.dart';
 import 'package:online_hunt_news/models/epaper_categories.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
-import 'package:online_hunt_news/pages/epapers/more_epapers.dart';
+import 'package:online_hunt_news/pages/epapers/magazines/more_magazines.dart';
 import 'package:online_hunt_news/pages/more_articles.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
@@ -171,7 +170,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                           Spacer(),
                           TextButton(
                             child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 16)).tr(),
-                            onPressed: () => nextScreen(context, MoreEpapers(categoryId: selectedCategory!.id)),
+                            onPressed: () => nextScreen(context, MoreMagazines(magazineCategory: selectedCategory!)),
                           ),
                         ],
                       ),

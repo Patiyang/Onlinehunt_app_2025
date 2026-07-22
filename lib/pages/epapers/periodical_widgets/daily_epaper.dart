@@ -8,7 +8,9 @@ import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
+import 'package:online_hunt_news/pages/epapers/magazines/more_epapers.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
+import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,10 +58,13 @@ class _DailyEpaperState extends State<DailyEpaper> with AutomaticKeepAliveClient
                 child: Text('daily', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
               Spacer(),
-              // TextButton(
-              //   child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
-              //   onPressed: () => nextScreen(context, MoreArticles(title: 'featured news')),
-              // ),
+              Visibility(
+                visible: dp.data.isNotEmpty,
+                child: TextButton(
+                  child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
+                  onPressed: () => nextScreen(context, MoreEpapers(periodType: 'daily')),
+                ),
+              ),
             ],
           ),
         ),

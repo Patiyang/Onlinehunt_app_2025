@@ -18,78 +18,74 @@ class URLepaper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: epaperModel.title!,
-
-      child: InkWell(
-        child: Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            // image: DecorationImage(image: CachedNetworkImageProvider('${HelperClass.mediaIp}${epaperModel.cover_image!}'), fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color:  Theme.of(context).shadowColor)],
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: '${HelperClass.mediaIp}${epaperModel.cover_image!}',
-                  placeholder: (context, url) => Container(color: Colors.grey[300]),
-                  errorWidget: (context, url, error) {
-                    return Image.asset(Config().splashIcon, height: 120, width: 120, fit: BoxFit.cover);
-                  },
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  gradient: LinearGradient(
-                    colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
-
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  // decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('${HelperClass.mediaIp}${epaperModel.cover_image!}'))),
-                  margin: EdgeInsets.only(left: 15, bottom: 15, right: 10),
-                  child: Text(
-                    epaperModel.title!,
-                    // '${data['link']}${HelperClass().getDate(DateTime.now())}',
-                    style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, fontSize: 18),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  // decoration: BoxDecoration(image: ),
-                  margin: EdgeInsets.only(left: 15, top: 15, right: 10),
-                  child: Icon(Icons.link),
-                ),
-              ),
-            ],
-          ),
+    return InkWell(
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          // image: DecorationImage(image: CachedNetworkImageProvider('${HelperClass.mediaIp}${epaperModel.cover_image!}'), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color:  Theme.of(context).shadowColor)],
         ),
-        onTap: () {
-          // print('${HelperClass.mediaIp}${epaperModel.cover_image!}');
-          // launchPaper('${data['link']}${HelperClass().getDate(DateTime.now())}&page=1&url=home&ced=14');
-
-          if (customUrl == true) {            launchDailyPaper(epaperModel, context);
-
-          } else {            launchPaper(epaperModel, context);
-
-          }
-        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: '${HelperClass.mediaIp}${epaperModel.cover_image!}',
+                placeholder: (context, url) => Container(color: Colors.grey[300]),
+                errorWidget: (context, url, error) {
+                  return Image.asset(Config().splashIcon, height: 120, width: 120, fit: BoxFit.cover);
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                gradient: LinearGradient(
+                  colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
+    
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                // decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('${HelperClass.mediaIp}${epaperModel.cover_image!}'))),
+                margin: EdgeInsets.only(left: 15, bottom: 15, right: 10),
+                child: Text(
+                  epaperModel.title!,
+                  // '${data['link']}${HelperClass().getDate(DateTime.now())}',
+                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, fontSize: 18),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                // decoration: BoxDecoration(image: ),
+                margin: EdgeInsets.only(left: 15, top: 15, right: 10),
+                child: Icon(Icons.link),
+              ),
+            ),
+          ],
+        ),
       ),
+      onTap: () {
+        // print('${HelperClass.mediaIp}${epaperModel.cover_image!}');
+        // launchPaper('${data['link']}${HelperClass().getDate(DateTime.now())}&page=1&url=home&ced=14');
+    
+        if (customUrl == true) {            launchDailyPaper(epaperModel, context);
+    
+        } else {            launchPaper(epaperModel, context);
+    
+        }
+      },
     );
   }
 

@@ -47,7 +47,8 @@ class PostServices {
     final res = await TokenService().urlGetAuthentication(url);
     return res;
   }
- Future<http.Response> getPostBySlug(String slug) async {
+
+  Future<http.Response> getPostBySlug(String slug) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
 
@@ -56,6 +57,7 @@ class PostServices {
     final res = await TokenService().urlGetAuthentication(url);
     return res;
   }
+
   Future<http.Response> createPosts(String param, body) async {
     String url = HelperClass().getBaseUrl(param);
     final res = await TokenService().urlPostAuthentication(url, body);
@@ -88,6 +90,7 @@ class PostServices {
           )
           .catchError((onError) {
             print(onError);
+            return Response(requestOptions: RequestOptions());
           });
       // print('status message is ${response.statusCode}');
 
