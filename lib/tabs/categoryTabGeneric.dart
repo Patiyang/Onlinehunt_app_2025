@@ -125,27 +125,6 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
                             liked: false,
                             handleLoveCLick: () => handleLoveClick(index),
                           );
-                          // if (adsList[index] is ApiArticle) {
-                          //   // bool handlingLike = true;
-                          //   // bool liked = false;
-                          //   // LikeModel? likeId;
-                          //   return Card2(
-                          //     categoryName: selectedSubCat == null ? '--' : selectedSubCat!.name,
-                          //     heroTag: 'tab1$index',
-                          //     // apiArticle: adsList[index] as ApiArticle,
-                          //     handlnigLike: handlingLikes[index],
-                          //     likeId: likeId[index],
-                          //     liked: liked[index],
-                          //     handleLoveCLick: () => handleLoveClick(index),
-                          //   );
-                          // } else {
-                          //   return GestureDetector(
-                          //     onTap: () {
-                          //       print(adsList.where((element) => element.runtimeType == MobileAdsaModel ? true : false));
-                          //     },
-                          //     child: CustomMobileAd.getBannerAd(context, mobileAds[index ~/ 5]),
-                          //   );
-                          // }
                         },
                       ),
 
@@ -165,41 +144,6 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
                         ),
                       )
                     : SizedBox.shrink(),
-
-                // Align(
-                //   alignment: Alignment.bottomLeft,
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(16.0),
-                //     child: ddCategoriesList.length == 1
-                //         ? SizedBox.shrink()
-                //         : Container(
-                //             decoration: BoxDecoration(
-                //               shape: BoxShape.circle,
-                //               color: Colors.grey.shade300,
-                //               gradient: LinearGradient(
-                //                 colors: [Config().appColor, Colors.grey.shade600],
-                //                 begin: Alignment.bottomCenter,
-                //                 end: Alignment.topCenter,
-                //               ),
-                //             ),
-                //             child: IconButton(
-                //               onPressed: () async {
-                //                 var value = await showSubcategorySelection();
-                //                 if (value == null) {
-                //                   print('no subcategory selected');
-                //                 } else {
-                //                   setState(() {
-                //                     selectedSubCat = value;
-                //                   });
-                //                   getApiData(mounted, selectedSubCat!, false);
-                //                 }
-                //               },
-                //               icon: Icon(Icons.sort),
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //   ),
-                // ),
               ],
             ),
           );
@@ -244,55 +188,7 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
             totalPages = metaData!.totalPages;
             _lastIndex = _lastIndex + 4;
           });
-      // articles.forEach((element) {
-      //   if (element.langId == languageID && element.categoryId == category.categoyId!) {
-      //     if (_articlesData.isNotEmpty) {
-      //       _articlesData.any((data) {
-      //         if (data.id == element.id) {
-      //           print('true');
-      //           return false;
-      //         } else {
-      //           _articlesData.add(element);
 
-      //           print('false');
-      //           return true;
-      //         }
-      //       });
-      //     } else {
-      //       _articlesData.add(element);
-      //     }
-
-      //     // stringList.add(element.id!);
-      //   }
-      // });
-      // _articlesData.removeWhere((element) => element.visibility == '0' ? true : false);
-
-      // adsList = List.from(posts);
-
-      // await AdServices().getMobileAds(currentPage.toString(), adspace: 'post_detail_ad', categoryId: category.categoyId.toString()).then((value) {
-      //   if (value.isNotEmpty) {
-      //     MobileAdsaModel _mobileAdsaModel;
-      //     _mobileAdsaModel = value[0];
-      //     mobileAds.add(_mobileAdsaModel);
-      //     // Fluttertoast.showToast(msg: value.toString());
-
-      //     for (int i = 0; i <= adsList.length; i++) {
-      //       if ((i + 1) % 5 == 0) {
-      //         adsList.insert(i, mobileAds[currentPage - 1]);
-      //       }
-      //     }
-      //   } else {
-      //     mobileAds.forEach((element) {
-      //       adsList.insert((4 * (mobileAds.indexOf(element) + 1)), element);
-      //     });
-      //   }
-      // });
-      // adsList.forEach((element) {
-      //   liked.add(false);
-      //   likeId.add(LikeModel());
-      //   handlingLikes.add(false);
-      //   getLikeStatus(adsList.indexOf(element));
-      // });
       if (mounted && updateList == false) {
         // handlingLikes.add(false);
         // liked.add(false);
@@ -319,52 +215,6 @@ class _CategoryTabGenericState extends State<CategoryTabGeneric> with AutomaticK
       print('THIS ERROR HAS BEEN ENCOUNTERED ${e.toString()}');
     }
   }
-
-  getAriclesLength() {
-    // if (_articlesData.length > 20 && _articlesData.length < 75) {
-    //   return 3;
-    // } else if (_articlesData.length > 75 && _articlesData.length < 100) {
-    //   return 6;
-    // } else if (_articlesData.length > 100) {
-    //   return 8;
-    // }
-  }
-
-  // Future categoriesStreadm() async {
-  //   Map<String, dynamic> response = {};
-  //   List<ApiCategories> dummyList = [];
-  //   int language = await returnCategoryId();
-  //   List<ApiCategories> apiCategories = [];
-  //   ddCategoriesList = [];
-
-  //   try {
-  //     await categoryServices
-  //         .getCategories()
-  //         .then((value) {
-  //           response = jsonDecode(utf8.decode(value.bodyBytes));
-  //         })
-  //         .whenComplete(() {
-  //           response['data'].forEach((element) {
-  //             dummyList.add(ApiCategories.fromJson(element));
-  //           });
-  //         });
-  //     // dummyList.forEach((element) {
-  //     //   if (element.parentId == widget.apiCategory!.categoyId) {
-  //     //     ddCategoriesList.add(element);
-  //     //   }
-  //     //   if (element.languageId == language && element.parentId == '0') {
-  //     //     apiCategories.add(element);
-  //     //   }
-  //     // });
-  //     // ddCategoriesList.insert(0, dummyList.where((element) => element.categoyId == widget.apiCategory!.categoyId ? true : false).first);
-
-  //     selectedSubCat = ddCategoriesList[0];
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-
-  //   return apiCategories;
-  // }
 
   Widget _buildProgressIndicator() {
     return new Padding(

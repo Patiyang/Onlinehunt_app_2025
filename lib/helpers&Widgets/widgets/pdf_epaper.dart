@@ -6,7 +6,7 @@ import 'package:line_icons/line_icon.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
-import 'package:online_hunt_news/helpers&Widgets/pdf_viewer.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:url_launcher/url_launcher.dart';

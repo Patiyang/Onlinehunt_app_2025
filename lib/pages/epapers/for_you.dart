@@ -14,7 +14,7 @@ import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/cover_flow.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
-import 'package:online_hunt_news/helpers&Widgets/web_epaper.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaperModel.dart';
 import 'package:online_hunt_news/models/epaper_categories.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
@@ -76,20 +76,21 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).scaffoldBackgroundColor,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(blurRadius: 3, offset: Offset(1, 2),color: Theme.of(context).shadowColor),
-                            ],
+                            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color: Theme.of(context).shadowColor)],
                           ),
-                          child: TextButton.icon(onPressed: () {}, label: Text('search').tr(), icon: Icon(Icons.search)),
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
+                            onPressed: () {},
+                            label: Text('search', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color)).tr(),
+                            icon: Icon(Icons.search, color: Theme.of(context).textTheme.bodyMedium!.color),
+                          ),
                         ),
                         SizedBox(width: 20),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).scaffoldBackgroundColor,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(blurRadius: 3, offset: Offset(1, 2), color: Theme.of(context).shadowColor),
-                            ],
+                            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color: Theme.of(context).shadowColor)],
                           ),
 
                           // width: 300,
@@ -162,7 +163,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                               // pb.getApiData(mounted, context);
                             },
                             child: Text(
-                              '${selectedCategory!.name??'...'} ${'news'.tr()}',
+                              '${selectedCategory!.name ?? '...'} ${'news'.tr()}',
                               style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold),
                             ),
                           ),

@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
-import 'package:online_hunt_news/helpers&Widgets/pdf_epaper.dart';
-import 'package:online_hunt_news/helpers&Widgets/web_epaper.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/pages/epapers/pdf_epaper.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';

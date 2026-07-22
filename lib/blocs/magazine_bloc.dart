@@ -85,3 +85,5 @@ class FavoriteMagazineBloc extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+
