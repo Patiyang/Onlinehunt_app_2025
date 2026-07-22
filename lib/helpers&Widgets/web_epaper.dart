@@ -9,9 +9,12 @@ import 'package:online_hunt_news/services/app_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class URLepaper extends StatelessWidget {
+  final double? height;
+  final double? width;
+  final bool? customUrl;
   final EpaperModel epaperModel;
 
-  const URLepaper({super.key, required this.epaperModel});
+  const URLepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210, this.customUrl = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +23,13 @@ class URLepaper extends StatelessWidget {
 
       child: InkWell(
         child: Container(
-          height: 200,
-          width: 140,
+          height: height,
+          width: width,
           decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
             // image: DecorationImage(image: CachedNetworkImageProvider('${HelperClass.mediaIp}${epaperModel.cover_image!}'), fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(5),
-            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 10, offset: Offset(0, 3), color: Theme.of(context).shadowColor)],
+            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color:  Theme.of(context).shadowColor)],
           ),
           child: Stack(
             alignment: Alignment.center,
@@ -45,11 +49,8 @@ class URLepaper extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).primaryColorLight.withValues(alpha: .7),
-                      // Theme.of(context).scaffoldBackgroundColor,
-                      Theme.of(context).primaryColorDark.withValues(alpha: .5),
-                    ],
+                    colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
+
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),
@@ -66,21 +67,27 @@ class URLepaper extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, fontSize: 18),
                   ),
                 ),
-              ),       Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                // decoration: BoxDecoration(image: ),
-                margin: EdgeInsets.only(left: 15, top: 15, right: 10),
-                child:  Icon(Icons.link) ,
               ),
-            ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  // decoration: BoxDecoration(image: ),
+                  margin: EdgeInsets.only(left: 15, top: 15, right: 10),
+                  child: Icon(Icons.link),
+                ),
+              ),
             ],
           ),
         ),
         onTap: () {
           // print('${HelperClass.mediaIp}${epaperModel.cover_image!}');
           // launchPaper('${data['link']}${HelperClass().getDate(DateTime.now())}&page=1&url=home&ced=14');
-          launchPaper(epaperModel, context);
+
+          if (customUrl == true) {            launchDailyPaper(epaperModel, context);
+
+          } else {            launchPaper(epaperModel, context);
+
+          }
         },
       ),
     );
@@ -95,5 +102,36 @@ class URLepaper extends StatelessWidget {
     } else {
       debugPrint('Could not launch WhatsApp');
     }
+  }
+
+  void launchDailyPaper(EpaperModel epaperModel, BuildContext context) async {
+    print(epaperModel.website_url!);
+    final uri = Uri.parse(updateUrlWithToday(epaperModel.website_url!));
+    if (await canLaunchUrl(uri)) {
+      print(updateUrlWithToday(epaperModel.website_url!));
+      // await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
+      AppService().openLinkWithCustomTab(context, updateUrlWithToday(epaperModel.website_url!));
+    } else {
+      debugPrint('Could not launch WhatsApp');
+    }
+  }
+
+  String updateUrlWithToday(String url) {
+    final uri = Uri.parse(url);
+
+    // Format today's date as dd/MM/yyyy
+    final today = HelperClass().getDate(DateTime.now().subtract(Duration(days: 0)));
+
+    // Copy existing query parameters
+    final params = Map<String, String>.from(uri.queryParameters);
+
+    // Update values
+    params['date'] = today;
+    params['page'] = '1';
+
+    // Build the query manually so '/' isn't encoded
+    final query = params.entries.map((e) => '${e.key}=${e.value}').join('&');
+
+    return '${uri.scheme}://${uri.host}${uri.path}?$query';
   }
 }

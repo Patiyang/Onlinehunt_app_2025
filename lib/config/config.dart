@@ -18,7 +18,7 @@ static const String emailSupport = 'onlinehuntnews@gmail.com';
 static const String phoneSupport = '+91 9008329745';
 
   //app theme color
-  final Color appColor = Colors.blue;
+  final Color appColor = Colors.lightBlue;
 
   //Intro images
   final String introImage1 = 'assets/images/news1.png';

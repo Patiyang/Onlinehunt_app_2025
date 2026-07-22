@@ -14,7 +14,7 @@ import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
-import 'package:online_hunt_news/pages/epapers/epaper.dart';
+import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/epaper_tabbarview.dart';
 import 'package:online_hunt_news/pages/explore.dart';
 import 'package:online_hunt_news/pages/iptv/videos_explore.dart';

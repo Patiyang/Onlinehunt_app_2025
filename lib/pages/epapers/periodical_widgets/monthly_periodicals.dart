@@ -18,7 +18,7 @@ class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
 
   @override
   Widget build(BuildContext context) {
-    final pb = context.watch<FortnightlyPeriodicalBloc>();
+    final mp = context.watch<MonthlyPeriodicalBloc>();
     return Column(
       children: [
         Padding(
@@ -46,28 +46,42 @@ class _MonthlyPeriodicalsState extends State<MonthlyPeriodicals> {
             ],
           ),
         ),
-        pb.loading == true
+        mp.loading == true
             ? Padding(padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15), child: LoadingCard(height: 200))
             : Container(
                 width: MediaQuery.of(context).size.width,
-                // height: 250,
-                child: GridView.builder(
-                  // padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+                height: 250,
+                child: ListView.separated(padding: EdgeInsets.symmetric(horizontal: 10),
                   shrinkWrap: true,
-                  // physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 8, crossAxisSpacing: 8, childAspectRatio: 1.1,),
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: pb.data.isEmpty ? 2 : pb.data.length<6?pb.data.length:6,
-                  // itemCount: 30,
-                  // separatorBuilder: (context, index) => SizedBox(height: 15),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: mp.data.isEmpty ? 2 : mp.data.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(width: 10);
+                  },
                   itemBuilder: (BuildContext context, int index) {
-                    if (pb.data.isEmpty) return LoadingCard(height: 200);
-                    EpaperModel paper = pb.data[index];
-                    return paper.source_type == 'website' ? URLepaper(epaperModel: paper) : PDFepaper(epaperModel: paper);
+                    // EpaperModel paper = mp.data[index];
+
+                    return  mp.data.isEmpty
+                        ? LoadingCard(height: 300, width: 210):  mp.data[index].source_type == 'website' ? URLepaper(epaperModel: mp.data[index],) : PDFepaper(epaperModel: mp.data[index]);
                   },
                 ),
+                // child: GridView.builder(
+                //   // padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+                //   shrinkWrap: true,
+                //   // physics: AlwaysScrollableScrollPhysics(),
+                //   padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
+                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 8, crossAxisSpacing: 8, childAspectRatio: 1.1,),
+                //   physics: NeverScrollableScrollPhysics(),
+                //   scrollDirection: Axis.vertical,
+                //   itemCount: mp.data.isEmpty ? 2 : mp.data.length<6?mp.data.length:6,
+                //   // itemCount: 30,
+                //   // separatorBuilder: (context, index) => SizedBox(height: 15),
+                //   itemBuilder: (BuildContext context, int index) {
+                //     if (mp.data.isEmpty) return LoadingCard(height: 200);
+                //     EpaperModel paper = mp.data[index];
+                //     return paper.source_type == 'website' ? URLepaper(epaperModel: paper) : PDFepaper(epaperModel: paper);
+                //   },
+                // ),
               ),
       ],
     );

@@ -2,7 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
-import 'package:online_hunt_news/pages/epapers/epaper.dart';
+import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
+import 'package:online_hunt_news/pages/epapers/for_you.dart';
 import 'package:online_hunt_news/pages/epapers/magazines.dart';
 import 'package:online_hunt_news/pages/epapers/pdf_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/periodicals.dart';
@@ -19,14 +20,13 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
   var scaffoldKey = GlobalKey<ScaffoldState>();
   TabController? _tabController;
   int selectedIndex = 0;
-  List<Tab> tabsList = [Tab(text: "web_papers".tr()), Tab(text: "pdfs".tr()), Tab(text: "periodicals".tr()), Tab(text: "magazines".tr())];
+  List<Tab> tabsList = [/* Tab(text: "web_papers".tr()), */ Tab(text: "for_you".tr()), Tab(text: "enewspapers".tr()), Tab(text: "magazines".tr())];
   @override
   void initState() {
     _tabController = TabController(length: tabsList.length, vsync: this);
     _tabController!.addListener(() {
-      print(tabsList[_tabController!.index].text!);setState(() {
-        
-      });
+      print(tabsList[_tabController!.index].text!);
+      setState(() {});
     });
     super.initState();
   }
@@ -45,13 +45,13 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
         title: _tabController == null ? SizedBox.shrink() : Text(tabsList[_tabController!.index].text!),
         elevation: 0,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh, size: 22),
-            onPressed: () async {
-              final ep = context.read<EpaperBloc>();
-              ep.onRefresh(mounted);
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.refresh, size: 22),
+          //   onPressed: () async {
+          //     final ep = context.read<EpaperBloc>();
+          //     ep.onRefresh(mounted);
+          //   },
+          // ),
         ],
         bottom: TabBar(
           labelStyle: TextStyle(fontFamily: 'Manrope', fontSize: 15, fontWeight: FontWeight.w600),
@@ -73,7 +73,7 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
           tabs: tabsList,
         ),
       ),
-      body: TabBarView(controller: _tabController, children: [WebEpaper(), PDFEpapers(), Periodicals(), Magazines()]),
+      body: TabBarView(controller: _tabController, children: [ForYou(), Periodicals(), Magazines()]),
     );
   }
 

@@ -41,13 +41,13 @@ class EpaperModel {
       id: _json[ID],
       title: _json[TITLE],
       issue_date: _json[ISSUEDATE],
-      cover_image: _json[COVERIMAGE]??'',
+      cover_image: _json[COVERIMAGE] ?? '',
       source_type: _json[SOURCETYPE] ?? '',
       website_url: _json[WEBSITEURL] ?? '',
-      pdf_file: _json[PDFFILE]??'',
+      pdf_file: _json[PDFFILE] ?? '',
       is_today: _json[ISTODAY],
       total_views: _json[TOTALVIEWS],
-      publication: PublicationModel.fromJson(_json['publication'])
+      publication: PublicationModel.fromJson(_json['publication']),
     );
   }
 }

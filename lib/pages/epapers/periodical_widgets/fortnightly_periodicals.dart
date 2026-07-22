@@ -15,10 +15,9 @@ class FortnightlyPeriodicals extends StatefulWidget {
 }
 
 class _FortnightlyPeriodicalsState extends State<FortnightlyPeriodicals> {
-
   @override
   Widget build(BuildContext context) {
-    final pb = context.watch<MonthlyPeriodicalBloc>();
+    final fp = context.watch<FortnightlyPeriodicalBloc>();
     return Column(
       children: [
         Padding(
@@ -34,7 +33,7 @@ class _FortnightlyPeriodicalsState extends State<FortnightlyPeriodicals> {
               SizedBox(width: 6),
               GestureDetector(
                 onTap: () {
-                  // pb.getApiData(mounted, context);
+                  // fp.getApiData(mounted, context);
                 },
                 child: Text('fortnightly', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
@@ -46,30 +45,31 @@ class _FortnightlyPeriodicalsState extends State<FortnightlyPeriodicals> {
             ],
           ),
         ),
-        pb.loading == true
+        fp.loading == true
             ? Padding(padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15), child: LoadingCard(height: 200))
             : Container(
                 width: MediaQuery.of(context).size.width,
-                // height: 250,
-                child: GridView.builder(
-                  // padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+                height: 250,
+                child: ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   shrinkWrap: true,
-                  // physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 8, crossAxisSpacing: 8, childAspectRatio: 1.1,),
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: pb.data.isEmpty ? 2 : pb.data.length<6?pb.data.length:6,
-                  // itemCount: 30,
-                  // separatorBuilder: (context, index) => SizedBox(height: 15),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: fp.data.isEmpty ? 2 : fp.data.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(width: 10);
+                  },
                   itemBuilder: (BuildContext context, int index) {
-                    if (pb.data.isEmpty) return LoadingCard(height: 200);
-                    EpaperModel paper = pb.data[index];
-                    return paper.source_type == 'website' ? URLepaper(epaperModel: paper) : PDFepaper(epaperModel: paper);
+                    // EpaperModel paper =fp.data.isEmpty?EpaperModel(): fp.data[index];
+
+                    return fp.data.isEmpty
+                        ? LoadingCard(height: 300, width: 210)
+                        : fp.data[index].source_type == 'website'
+                        ? URLepaper(epaperModel: fp.data[index])
+                        : PDFepaper(epaperModel: fp.data[index]);
                   },
                 ),
               ),
       ],
     );
-  }  
+  }
 }

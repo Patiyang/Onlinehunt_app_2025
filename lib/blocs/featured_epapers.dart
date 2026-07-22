@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:online_hunt_news/models/epaper_categories.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/services/epaper_service.dart';
 
-class MagazineBloc extends ChangeNotifier {
+
+class FeaturedEpapersBloc extends ChangeNotifier {
   List<EpaperModel> _data = [];
   List<EpaperModel> get data => _data;
 
@@ -18,7 +20,7 @@ class MagazineBloc extends ChangeNotifier {
       _loading = true;
       _data = [];
       print('GETTING magazine News');
-      await EpaperServices().getMagazines().then((value) {
+      await EpaperServices().getFeatured().then((value) {
         response = jsonDecode(value.body);
         // print(response['data']);
         for (int i = 0; i < response['data'].length; i++) {
@@ -46,26 +48,26 @@ class MagazineBloc extends ChangeNotifier {
 }
 
 
-class FavoriteMagazineBloc extends ChangeNotifier {
-  List<EpaperModel> _data = [];
-  List<EpaperModel> get data => _data;
+class MagazineCategoriesBloc extends ChangeNotifier {
+  List<MagazineCategory> _data = [];
+  List<MagazineCategory> get data => _data;
 
   bool _loading = true;
   bool get loading => _loading;
 
-  Future getData(mounted, int category_id) async {
+  Future getData(mounted) async {
     Map<String, dynamic> response = {};
     if (mounted) {
       _loading = true;
       _data = [];
       print('GETTING magazine News');
-      await EpaperServices().getMagazines(category_id: category_id).then((value) {
+      await EpaperServices().getMagazineCategories().then((value) {
         response = jsonDecode(value.body);
         // print(response['data']);
         for (int i = 0; i < response['data'].length; i++) {
-          _data.add(EpaperModel.fromJson(response['data'][i]));
+          _data.add(MagazineCategory.fromJson(response['data'][i]));
         }
-        print('length of magazine links is  ${_data.length}');
+        print('length of magazine categories is  ${_data.length}');
       });
       _loading = false;
     }
@@ -78,10 +80,10 @@ class FavoriteMagazineBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  onRefresh(mounted,int category_id) {
+  onRefresh(mounted) {
     _loading = true;
     _data.clear();
-    getData(mounted,category_id);
+    getData(mounted);
     notifyListeners();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_hunt_news/config/config.dart';
@@ -12,7 +14,11 @@ class ThemeModel {
 
   final lightMode = ThemeData(
     primaryColor: Config().appColor,
-    //accentColor: Config().appColor,
+    primarySwatch: getMaterialColorFromColor(Config().appColor),
+    colorScheme: ColorScheme.light(surface: Colors.white),
+
+    // colorSchemeSeed: Colors.blue, // Generates a cohesive blue color scheme
+    useMaterial3: true,
     iconTheme: IconThemeData(color: Colors.grey[900]),
     fontFamily: _fontFamily,
     scaffoldBackgroundColor: Colors.grey[100],
@@ -20,7 +26,8 @@ class ThemeModel {
     primaryColorDark: Colors.grey[800],
     primaryColorLight: Colors.white,
     secondaryHeaderColor: Colors.grey[600],
-    shadowColor: Colors.grey[200],
+
+    shadowColor: Colors.grey[300],
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       backgroundColor: Colors.white,
@@ -42,14 +49,16 @@ class ThemeModel {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: Config().appColor,
-      unselectedItemColor: Colors.grey[500],
+      unselectedItemColor: Colors.grey[400],
     ),
-    colorScheme: ColorScheme.light(surface: Colors.white),
   );
 
   final darkMode = ThemeData(
     primaryColor: Config().appColor,
-    //accentColor: Colors.white,
+    primarySwatch: getMaterialColorFromColor(Config().appColor),
+    colorScheme: ColorScheme.dark(surface: Colors.grey[900]!),
+    // colorSchemeSeed: Colors.blue, // Generates a cohesive blue color scheme
+    useMaterial3: true,
     iconTheme: IconThemeData(color: Colors.white),
     fontFamily: _fontFamily,
     scaffoldBackgroundColor: Color(0xff303030),
@@ -74,6 +83,30 @@ class ThemeModel {
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.grey[500],
     ),
-    colorScheme: ColorScheme.dark(surface: Colors.grey[900]!),
   );
+
+  static Color getShade(Color color, {bool darker = false, double value = .1}) {
+    assert(value >= 0 && value <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness((darker ? (hsl.lightness - value) : (hsl.lightness + value)).clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+
+  static MaterialColor getMaterialColorFromColor(Color color) {
+    Map<int, Color> _colorShades = {
+      50: getShade(color, value: 0.5),
+      100: getShade(color, value: 0.4),
+      200: getShade(color, value: 0.3),
+      300: getShade(color, value: 0.2),
+      400: getShade(color, value: 0.1),
+      500: color,
+      600: getShade(color, value: 0.1, darker: true),
+      700: getShade(color, value: 0.15, darker: true),
+      800: getShade(color, value: 0.2, darker: true),
+      900: getShade(color, value: 0.25, darker: true),
+    };
+    return MaterialColor(color.value, _colorShades);
+  }
 }

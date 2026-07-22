@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
+import 'package:online_hunt_news/blocs/featured_epapers.dart';
 import 'package:online_hunt_news/blocs/live_news_bloc.dart';
 import 'package:online_hunt_news/blocs/allUserArticlesBloc.dart';
 import 'package:online_hunt_news/blocs/magazine_bloc.dart';
@@ -67,12 +68,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<AllUserArticlesBloc>(create: (context) => AllUserArticlesBloc()),
               ChangeNotifierProvider<CategoriesBloc>(create: (context) => CategoriesBloc()),
               ChangeNotifierProvider<LiveNewsBloc>(create: (context) => LiveNewsBloc()),
-              ChangeNotifierProvider<EpaperBloc>(create: (context) => EpaperBloc()),
+              // ChangeNotifierProvider<EpaperBloc>(create: (context) => EpaperBloc()),
               ChangeNotifierProvider<MagazineBloc>(create: (context) => MagazineBloc()),
+              ChangeNotifierProvider<FavoriteMagazineBloc>(create: (context) => FavoriteMagazineBloc()),
+
               ChangeNotifierProvider<AdsBloc>(create: (context) => AdsBloc()),
+              ChangeNotifierProvider<DailyPeriodicalBloc>(create: (context) => DailyPeriodicalBloc()),
+
               ChangeNotifierProvider<WeeklyPeriodicalBloc>(create: (context) => WeeklyPeriodicalBloc()),
               ChangeNotifierProvider<FortnightlyPeriodicalBloc>(create: (context) => FortnightlyPeriodicalBloc()),
               ChangeNotifierProvider<MonthlyPeriodicalBloc>(create: (context) => MonthlyPeriodicalBloc()),
+              ChangeNotifierProvider<FeaturedEpapersBloc>(create: (context) => FeaturedEpapersBloc()),
+              ChangeNotifierProvider<MagazineCategoriesBloc>(create: (context) => MagazineCategoriesBloc()),
 
               // ChangeNotifierProvider<RelatedBloc>(create: (context) => RelatedBloc()),
               ChangeNotifierProvider<TabIndexBloc>(create: (context) => TabIndexBloc()),
