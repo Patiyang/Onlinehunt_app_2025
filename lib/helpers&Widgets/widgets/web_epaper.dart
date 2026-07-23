@@ -26,10 +26,11 @@ class URLepaper extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           // image: DecorationImage(image: CachedNetworkImageProvider('${HelperClass.mediaIp}${epaperModel.cover_image!}'), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(5),
-          boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color:  Theme.of(context).shadowColor)],
+          boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color: Theme.of(context).shadowColor)],
         ),
         child: Stack(
           alignment: Alignment.center,
+          fit: StackFit.passthrough,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(5),
@@ -47,7 +48,7 @@ class URLepaper extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
                 gradient: LinearGradient(
                   colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
-    
+
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                 ),
@@ -56,12 +57,15 @@ class URLepaper extends StatelessWidget {
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(color: Theme.of(context).shadowColor.withAlpha(155), borderRadius: BorderRadius.circular(5)),
+
                 // decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('${HelperClass.mediaIp}${epaperModel.cover_image!}'))),
-                margin: EdgeInsets.only(left: 15, bottom: 15, right: 10),
-                child: Text(
-                  epaperModel.title!,
+                padding: EdgeInsets.only(left: 15, bottom: 3, top: 12, right: 10),
+                child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
+                  '${epaperModel.title} ${epaperModel.issue_date!}',
                   // '${data['link']}${HelperClass().getDate(DateTime.now())}',
-                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, ),
                 ),
               ),
             ),
@@ -79,11 +83,11 @@ class URLepaper extends StatelessWidget {
       onTap: () {
         // print('${HelperClass.mediaIp}${epaperModel.cover_image!}');
         // launchPaper('${data['link']}${HelperClass().getDate(DateTime.now())}&page=1&url=home&ced=14');
-    
-        if (customUrl == true) {            launchDailyPaper(epaperModel, context);
-    
-        } else {            launchPaper(epaperModel, context);
-    
+
+        if (customUrl == true) {
+          launchDailyPaper(epaperModel, context);
+        } else {
+          launchPaper(epaperModel, context);
         }
       },
     );

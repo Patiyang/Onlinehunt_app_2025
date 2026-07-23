@@ -12,10 +12,10 @@ import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PDFepaper extends StatelessWidget {
-    final double ?height;
-  final double ?width;
+  final double? height;
+  final double? width;
   final EpaperModel epaperModel;
-  const PDFepaper( {super.key, required this.epaperModel, this.height=300, this.width=210});
+  const PDFepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210});
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +36,12 @@ class PDFepaper extends StatelessWidget {
           // ),
           borderRadius: BorderRadius.circular(5),
           color: Theme.of(context).scaffoldBackgroundColor,
-    
+
           boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color: Theme.of(context).shadowColor)],
         ),
         child: Stack(
           alignment: Alignment.center,
-          // fit: StackFit.passthrough,
+          fit: StackFit.passthrough,
           children: [
             // Hero(
             //   tag: epaperModel.title!,
@@ -49,7 +49,7 @@ class PDFepaper extends StatelessWidget {
             // ),
             ClipRRect(
               borderRadius: BorderRadius.circular(5),
-    
+
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
                 imageUrl: '${HelperClass.mediaIp}${epaperModel.cover_image!}',
@@ -63,8 +63,8 @@ class PDFepaper extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 gradient: LinearGradient(
-                  colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
-    
+                  colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .1)],
+
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                 ),
@@ -73,12 +73,13 @@ class PDFepaper extends StatelessWidget {
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
-                // decoration: BoxDecoration(image: ),
-                margin: EdgeInsets.only(left: 15, bottom: 15, right: 10),
-                child: Text(
-                  epaperModel.title!,
+                width: double.infinity,
+                decoration: BoxDecoration(color: Theme.of(context).shadowColor.withAlpha(155), borderRadius: BorderRadius.circular(5)),
+                padding: EdgeInsets.only(left: 15, bottom: 3, top: 12, right: 10),
+                child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
+                  '${epaperModel.title} ${epaperModel.issue_date!}',
                   // '${data['link']}${HelperClass().getDate(DateTime.now())}',
-                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, ),
                 ),
               ),
             ),
@@ -99,7 +100,7 @@ class PDFepaper extends StatelessWidget {
         // launchPageviewPDF(epaperModel);
         //            String url = '${HelperClass.mediaIp}${epaperModel.pdf_file}';
         // print(url);
-        nextScreen(context, CustomPdfViewer(paper_model: epaperModel,));
+        nextScreen(context, CustomPdfViewer(paper_model: epaperModel));
       },
     );
   }
