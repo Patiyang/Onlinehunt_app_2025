@@ -123,7 +123,7 @@ class AdsBloc extends ChangeNotifier {
     _bannerAd = BannerAd(
       adUnitId: AdConfig().getAdmobBannerAdUnitId(),
       request: AdRequest(),
-      size: AdSize.banner,
+      size: AdSize.fluid,
       listener: BannerAdListener(
         onAdLoaded: (_) {
           _isBannerAdReady = true;

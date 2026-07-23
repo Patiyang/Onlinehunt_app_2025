@@ -145,13 +145,15 @@ class Card1 extends StatelessWidget {
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                         onPressed: () async {
-                          _handleWhatsappShare(context);
+                          HelperClass().handleWhatsappShare(context, postModel);
                         },
                       ),
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.share, size: 22),
                         onPressed: () async {
-                          _handleContentShare(context);
+                          HelperClass().handleContentShare(context, postModel);
+
+                          // _handleContentShare(context);
                         },
                       ),
                       // handlnigLike == true ? Loading() : IconButton(icon: liked == true ? LoveIcon().bold : LoveIcon().normal, onPressed: handleLoveCLick),
@@ -166,71 +168,5 @@ class Card1 extends StatelessWidget {
       onTap: () => navigateToDetailsScreen(context, postModel!, heroTag, ''),
       // onTap: () => nextScreen(context, AuthorDetails(apiUserModel: authorModel!)),
     );
-  }
-
-  _handleContentShare(BuildContext context) async {
-    SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(context, postModel!.slug);
-
-    await share.share(
-      ShareParams(
-        // uri: Uri.parse(deepLink),
-        text:
-            '''
-📰 ${postModel!.title}
-
-${HelperClass().limitSummary(postModel!.summary)}
-
-${'click for more'.tr()}
-$deepLink
-''',
-        subject: postModel!.title,
-        title: postModel!.title,
-        // previewThumbnail: XFile(Config().splashIcon,),
-      ),
-    );
-  }
-
-  _handleWhatsappShare(BuildContext context) async {
-    SharePlus share = SharePlus.instance;
-
-    String deepLink = generateDeepLink(context, postModel!.slug);
-    final message =
-        '''
-📰 ${postModel!.title}
-
-${HelperClass().limitSummary(postModel!.summary)}
-
-${'click for more'.tr()}
-$deepLink
-''';
-    final whatsappUrl = Uri.parse("https://wa.me/?text=${Uri.encodeComponent(message)}");
-    // await share.share(
-    //   ShareParams(
-    //     // uri: Uri.parse(deepLink),
-    //     text: whatsappUrl,
-    //     subject: postModel!.title,
-    //     title: postModel!.title,
-    //     // previewThumbnail: XFile(Config().splashIcon,),
-    //   ),
-    // );
-
-    // final uri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(whatsappUrl)) {
-      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('Could not launch WhatsApp');
-    }
-  }
-
-  String generateDeepLink(BuildContext context, String slug) {
-    // return '${HelperClass.shareIp}$slug';
-    final languageCode = context.locale.languageCode;
-    print('the code is $languageCode');
-    if (languageCode == 'en') {
-      return '${HelperClass.shareIp}$slug';
-    }
-
-    return '${HelperClass.shareIp}$languageCode/$slug';
   }
 }

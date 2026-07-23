@@ -40,12 +40,12 @@ import '../services/post_service.dart';
 import '../services/userServices.dart';
 
 class VideoArticleDetails extends StatefulWidget {
-  final PostModel? data;
+  // final PostModel? data;
   final int? post_id;
   final String slug;
   // final String categoryId;
 
-  const VideoArticleDetails({Key? key, required this.data, this.post_id, required this.slug}) : super(key: key);
+  const VideoArticleDetails({Key? key, this.post_id, required this.slug}) : super(key: key);
 
   @override
   _VideoArticleDetailsState createState() => _VideoArticleDetailsState();
@@ -298,13 +298,15 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                         onPressed: () async {
-                          _handleWhatsappShare();
+                          // _handleWhatsappShare();
+                          HelperClass().handleWhatsappShare(context, article);
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.share, size: 22),
                         onPressed: () async {
-                          _handleContentShare();
+                          // _handleContentShare();
+                          HelperClass().handleContentShare(context, article);
                         },
                       ),
                       // handlnigLike == true

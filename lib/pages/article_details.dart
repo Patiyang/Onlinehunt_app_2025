@@ -227,13 +227,15 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                         IconButton(
                                           icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                                           onPressed: () async {
-                                            _handleWhatsappShare();
+                                            // _handleWhatsappShare();
+                                            HelperClass().handleWhatsappShare(context, post);
                                           },
                                         ),
                                         IconButton(
                                           icon: const Icon(Icons.share, size: 22),
                                           onPressed: () async {
-                                            _handleContentShare();
+                                            // _handleContentShare();
+                                            HelperClass().handleContentShare(context, post);
                                           },
                                         ),
                                         // handlnigLike == true
@@ -461,8 +463,8 @@ $deepLink
       return '${HelperClass.shareIp}$slug';
     }
 
-    return '${HelperClass.shareIp}$languageCode/$slug';    }
-
+    return '${HelperClass.shareIp}$languageCode/$slug';
+  }
 
   handleLoveClick() {
     bool _guestUser = context.read<SignInBloc>().guestUser;
@@ -513,13 +515,13 @@ $deepLink
         }
       }
     });
-    final adb = context.read<AdsBloc>();
-    // print(adb.interstitialAdAdmob!.fullScreenContentCallback);
-    if (adb.interstitialAdEnabled == true && adb.interstitialAdAdmob != null) {
-      nextScreen(context, InterstitialAdsPage());
-      // await adb.showInterstitialAdAdmob();
-      // adb.loadAds();
-    }
+    // final adb = context.read<AdsBloc>();
+    // // print(adb.interstitialAdAdmob!.fullScreenContentCallback);
+    // if (adb.interstitialAdEnabled == true && adb.interstitialAdAdmob != null) {
+    //   nextScreen(context, InterstitialAdsPage());
+    //   // await adb.showInterstitialAdAdmob();
+    //   // adb.loadAds();
+    // }
     // }
   }
 
@@ -537,7 +539,6 @@ $deepLink
 
     return post!;
   }
-
 
   @override
   bool get wantKeepAlive => true;

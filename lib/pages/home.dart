@@ -19,6 +19,7 @@ import 'package:online_hunt_news/pages/epapers/epaper_tabbarview.dart';
 import 'package:online_hunt_news/pages/explore.dart';
 import 'package:online_hunt_news/pages/iptv/videos_explore.dart';
 import 'package:online_hunt_news/pages/profile.dart';
+import 'package:online_hunt_news/pages/video_article_details.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/services/dynamic_link_services.dart';
 import 'package:online_hunt_news/utils/snacbar.dart';
@@ -277,7 +278,13 @@ class _HomePageState extends State<HomePage> {
       slug = uri.pathSegments.first;
     }
     print('SLUG is $slug');
-    await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
+
+    final type = uri.queryParameters['type'];
+    if (type == 'article') {
+      await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
+    } else {
+      await Navigator.push(context, MaterialPageRoute(builder: (_) => VideoArticleDetails(post_id: null, slug: slug)));
+    }
 
     _openingArticle = false;
   }

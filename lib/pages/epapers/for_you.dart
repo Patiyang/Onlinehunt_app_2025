@@ -13,6 +13,7 @@ import 'package:online_hunt_news/blocs/magazine_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaperModel.dart';
 import 'package:online_hunt_news/models/epaper_categories.dart';
@@ -61,8 +62,8 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
               onRefresh: () async {
                 ep.onRefresh(mounted);
                 mb.onRefresh(mounted);
-                // fm.onRefresh(mounted, selectedCategory!.id);
-                fm.setLoading(true);
+                fm.onRefresh(mounted, selectedCategory!.id);
+                // fm.setLoading(true);
               },
               child: ListView(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -79,7 +80,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                             boxShadow: <BoxShadow>[BoxShadow(blurRadius: 3, offset: Offset(1, 2), color: Theme.of(context).shadowColor)],
                           ),
                           child: TextButton.icon(
-                            style: TextButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
+                            style: TextButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                             onPressed: () {},
                             label: Text('search', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color)).tr(),
                             icon: Icon(Icons.search, color: Theme.of(context).textTheme.bodyMedium!.color),
@@ -121,7 +122,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
 
                   CoverflowCarousel.builder(
                     height: 330,
-                    itemCount: ep.data.length,
+                    itemCount: ep.data.isEmpty ? 4 : ep.data.length,
                     itemHeight: 300,
                     itemWidth: 210,
                     scrollDirection: Axis.horizontal,
@@ -129,17 +130,23 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                     animationDuration: Duration(seconds: 1),
                     itemBuilder: (context, index) {
                       var singlePaper = ep.data[index];
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: '${HelperClass.mediaIp}${singlePaper.cover_image!}',
-                          placeholder: (context, url) => Container(color: Colors.grey[300]),
-                          errorWidget: (context, url, error) {
-                            return Image.asset(Config().splashIcon, height: 300, width: 120, fit: BoxFit.cover);
-                          },
-                        ),
-                      );
+                      return ep.data.isEmpty
+                          ? LoadingCard(height: 300, width: 210)
+                          : singlePaper.source_type == 'website'
+                          ? URLepaper(epaperModel: singlePaper, showLabel: false, height: 300, width: 210)
+                          : PDFepaper(epaperModel: singlePaper, showLabel: false, height: 300, width: 210);
+
+                      // ClipRRect(
+                      //   borderRadius: BorderRadius.circular(10),
+                      //   child: CachedNetworkImage(
+                      //     fit: BoxFit.cover,
+                      //     imageUrl: '${HelperClass.mediaIp}${singlePaper.cover_image!}',
+                      //     placeholder: (context, url) => Container(color: Colors.grey[300]),
+                      //     errorWidget: (context, url, error) {
+                      //       return Image.asset(Config().splashIcon, height: 300, width: 120, fit: BoxFit.cover);
+                      //     },
+                      //   ),
+                      // );
                     },
                   ),
 
@@ -189,19 +196,23 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                         // EpaperModel singlePaper = fm.data[index];
                         return fm.data.isEmpty
                             ? LoadingCard(height: 300, width: 210)
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: CachedNetworkImage(
-                                  height: 300,
-                                  width: 210,
-                                  fit: BoxFit.cover,
-                                  imageUrl: '${HelperClass.mediaIp}${fm.data[index].cover_image!}',
-                                  placeholder: (context, url) => Container(color: Colors.grey[300]),
-                                  errorWidget: (context, url, error) {
-                                    return Image.asset(Config().splashIcon, height: 300, width: 120, fit: BoxFit.cover);
-                                  },
-                                ),
-                              );
+                            : fm.data[index].source_type == 'website'
+                            ? URLepaper(epaperModel: fm.data[index], showLabel: false, height: 300, width: 210)
+                            : PDFepaper(epaperModel: fm.data[index], showLabel: false, height: 300, width: 210);
+
+                        // ClipRRect(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   child: CachedNetworkImage(
+                        //     height: 300,
+                        //     width: 210,
+                        //     fit: BoxFit.cover,
+                        //     imageUrl: '${HelperClass.mediaIp}${fm.data[index].cover_image!}',
+                        //     placeholder: (context, url) => Container(color: Colors.grey[300]),
+                        //     errorWidget: (context, url, error) {
+                        //       return Image.asset(Config().splashIcon, height: 300, width: 120, fit: BoxFit.cover);
+                        //     },
+                        //   ),
+                        // );
                       },
                     ),
                   ),
@@ -230,7 +241,7 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
     Timer.periodic(Duration(seconds: 1), (Timer t) {
       print('${t.tick}${selectedCategory!.name}');
       if (selectedCategory != null) {
-        fm.getData(mounted, selectedCategory!.id).whenComplete(() {
+        fm.onRefresh(mounted, selectedCategory!.id).whenComplete(() {
           t.cancel();
           print('timer canceles');
         });

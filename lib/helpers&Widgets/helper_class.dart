@@ -2,6 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/helpers&Widgets/key.dart';
+import 'package:online_hunt_news/models/postModel.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelperClass {
   static const baseUrl = "https://onlinehunt.in/api/";
@@ -13,10 +16,10 @@ class HelperClass {
   static const serverpAddress = 'https://onlinehunt.in/api/';
   static const liveshareIp = 'https://onlinehunt.in/';
   static const testshareIp = 'http://192.168.100.26/';
-  
-  static const mainIp = testipAddress;
-  static const avatarIp = publicTestIpAddress;
-  static const mediaIp = testshareIp;
+
+  static const mainIp = serverpAddress;
+  static const avatarIp = publicMainIpAddress;
+  static const mediaIp = liveshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';
@@ -53,5 +56,66 @@ class HelperClass {
     }
 
     return '${words.take(maxWords).join(' ')}...';
+  }
+
+  //share
+
+  handleContentShare(BuildContext context, PostModel? postModel) async {
+    SharePlus share = SharePlus.instance;
+    String deepLink = generateDeepLink(context, postModel!);
+    String type = postModel.video_url!.isNotEmpty ? 'video' : 'article';
+
+    await share.share(
+      ShareParams(
+        // uri: Uri.parse(deepLink),
+        text:
+            '''
+📰 ${postModel!.title}
+
+${HelperClass().limitSummary(postModel!.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''',
+        subject: postModel!.title,
+        title: postModel!.title,
+        // previewThumbnail: XFile(Config().splashIcon,),
+      ),
+    );
+  }
+
+  handleWhatsappShare(BuildContext context, PostModel? postModel) async {
+    SharePlus share = SharePlus.instance;
+
+    String deepLink = generateDeepLink(context, postModel!);
+
+    final message =
+        '''
+📰 ${postModel!.title}
+
+${HelperClass().limitSummary(postModel!.summary)}
+
+${'click for more'.tr()}
+$deepLink
+''';
+    final whatsappUrl = Uri.parse("https://wa.me/?text=${Uri.encodeComponent(message)}");
+
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch WhatsApp');
+    }
+  }
+
+  String generateDeepLink(BuildContext context, PostModel postModel) {
+    // return '${HelperClass.shareIp}$slug';
+    String type = postModel.video_url!.isNotEmpty ? 'video' : 'article';
+    final languageCode = context.locale.languageCode;
+    print('the code is $languageCode');
+    if (languageCode == 'en') {
+      return '${HelperClass.shareIp}${postModel.slug}?type=$type';
+    }
+
+    return '${HelperClass.shareIp}$languageCode/${postModel.slug}?type=$type';
   }
 }

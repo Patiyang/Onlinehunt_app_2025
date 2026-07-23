@@ -231,15 +231,15 @@ class _WelcomePageState extends State<WelcomePage> {
                   onPressed: () => handleSkip(),
                   child: Text('skip', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)).tr(),
                 ),
-          IconButton(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(0),
-            iconSize: 22,
-            icon: Icon(Icons.language),
-            onPressed: () {
-              nextScreenPopup(context, LanguagePopup());
-            },
-          ),
+          // IconButton(
+          //   alignment: Alignment.center,
+          //   padding: EdgeInsets.all(0),
+          //   iconSize: 22,
+          //   icon: Icon(Icons.language),
+          //   onPressed: () {
+          //     nextScreenPopup(context, LanguagePopup());
+          //   },
+          // ),
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,

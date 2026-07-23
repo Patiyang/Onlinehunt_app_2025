@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -67,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
     super.build(context);
     final sb = context.watch<SignInBloc>();
     return Scaffold(
-      appBar: AppBar(title: Text('profile').tr(), centerTitle: false,automaticallyImplyLeading: false,),
+      appBar: AppBar(title: Text('profile').tr(), centerTitle: false, automaticallyImplyLeading: false),
       body: ListView(
         controller: controller,
         padding: EdgeInsets.fromLTRB(15, 20, 20, 50),
@@ -87,6 +88,9 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             onTap: () => nextScreen(context, BookmarkPage()),
           ),
           Divider(height: 3),
+          // Center(
+          //   child: Lottie.asset(Config().doneAsset, alignment: Alignment.center, fit: BoxFit.cover, height: 200, width: 200, repeat: false,),
+          // ),
           ListTile(
             title: Text('dark mode').tr(),
             leading: Container(
@@ -131,12 +135,9 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             ),
             trailing: Icon(Icons.chevron_right, size: 20),
             onTap: () async {
-              showContactBottomSheet(SettingsModel(
-                contactEmail: Config.emailSupport,
-                contactPhone: Config.phoneSupport,
-              ));
+              showContactBottomSheet(SettingsModel(contactEmail: Config.emailSupport, contactPhone: Config.phoneSupport));
               // await GeneralSettingsServices().getSettings().then((val) {
-                
+
               // });
             },
           ),

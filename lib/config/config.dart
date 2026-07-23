@@ -26,7 +26,7 @@ static const String phoneSupport = '+91 9008329745';
   final String introImage3 = 'assets/images/news7.png';
   final String noImage = 'assets/images/noImage.png';
   //animation files
-  final String doneAsset = 'assets/animation_files/done.';
+  final String doneAsset = 'assets/animation_files/done.json';
 
   //Language Setup
   final List<String> languages = [

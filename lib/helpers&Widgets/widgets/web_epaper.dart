@@ -13,8 +13,9 @@ class URLepaper extends StatelessWidget {
   final double? width;
   final bool? customUrl;
   final EpaperModel epaperModel;
+  final bool? showLabel;
 
-  const URLepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210, this.customUrl = false});
+  const URLepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210, this.customUrl = false, this.showLabel=true});
 
   @override
   Widget build(BuildContext context) {
@@ -46,35 +47,47 @@ class URLepaper extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                gradient: LinearGradient(
-                  colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
+                gradient: showLabel == false
+                    ? null
+                    : LinearGradient(
+                        colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .5)],
 
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+              ),
+            ),
+            Visibility(
+              visible: showLabel == true,
+
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Theme.of(context).shadowColor.withAlpha(155), borderRadius: BorderRadius.circular(5)),
+
+                  // decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('${HelperClass.mediaIp}${epaperModel.cover_image!}'))),
+                  padding: EdgeInsets.only(left: 15, bottom: 3, top: 12, right: 10),
+                  child: Text(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    '${epaperModel.title} ${epaperModel.issue_date!}',
+                    // '${data['link']}${HelperClass().getDate(DateTime.now())}',
+                    style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6),
+                  ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(color: Theme.of(context).shadowColor.withAlpha(155), borderRadius: BorderRadius.circular(5)),
+            Visibility(
+              visible: showLabel == true,
 
-                // decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('${HelperClass.mediaIp}${epaperModel.cover_image!}'))),
-                padding: EdgeInsets.only(left: 15, bottom: 3, top: 12, right: 10),
-                child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
-                  '${epaperModel.title} ${epaperModel.issue_date!}',
-                  // '${data['link']}${HelperClass().getDate(DateTime.now())}',
-                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, ),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  // decoration: BoxDecoration(image: ),
+                  margin: EdgeInsets.only(left: 15, top: 15, right: 10),
+                  child: Icon(Icons.link),
                 ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                // decoration: BoxDecoration(image: ),
-                margin: EdgeInsets.only(left: 15, top: 15, right: 10),
-                child: Icon(Icons.link),
               ),
             ),
           ],

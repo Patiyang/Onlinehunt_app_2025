@@ -29,7 +29,7 @@ void navigateToDetailsScreen(context, PostModel article, String? heroTag, String
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoArticleDetails(data: article, post_id: article.id, slug:article.slug ,),
+        builder: (context) => VideoArticleDetails(post_id: article.id, slug:article.slug ,),
       ),
     );
     print('video');

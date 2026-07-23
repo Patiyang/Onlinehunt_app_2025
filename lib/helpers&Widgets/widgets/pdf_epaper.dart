@@ -15,7 +15,8 @@ class PDFepaper extends StatelessWidget {
   final double? height;
   final double? width;
   final EpaperModel epaperModel;
-  const PDFepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210});
+  final bool? showLabel;
+  const PDFepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210, this.showLabel = true});
 
   @override
   Widget build(BuildContext context) {
@@ -62,33 +63,43 @@ class PDFepaper extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                gradient: LinearGradient(
-                  colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .1)],
+                gradient: showLabel == false
+                    ? null
+                    : LinearGradient(
+                        colors: [Theme.of(context).primaryColorLight.withValues(alpha: .7), Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .1)],
 
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+              ),
+            ),
+            Visibility(
+              visible: showLabel == true,
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Theme.of(context).shadowColor.withAlpha(155), borderRadius: BorderRadius.circular(5)),
+                  padding: EdgeInsets.only(left: 15, bottom: 3, top: 12, right: 10),
+                  child: Text(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    '${epaperModel.title} ${epaperModel.issue_date!}',
+                    // '${data['link']}${HelperClass().getDate(DateTime.now())}',
+                    style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6),
+                  ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(color: Theme.of(context).shadowColor.withAlpha(155), borderRadius: BorderRadius.circular(5)),
-                padding: EdgeInsets.only(left: 15, bottom: 3, top: 12, right: 10),
-                child: Text(maxLines: 1,overflow: TextOverflow.ellipsis,
-                  '${epaperModel.title} ${epaperModel.issue_date!}',
-                  // '${data['link']}${HelperClass().getDate(DateTime.now())}',
-                  style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: -0.6, ),
+            Visibility(
+              visible: showLabel == true,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  // decoration: BoxDecoration(image: ),
+                  margin: EdgeInsets.only(left: 15, top: 15, right: 10),
+                  child: Icon(Icons.picture_as_pdf),
                 ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                // decoration: BoxDecoration(image: ),
-                margin: EdgeInsets.only(left: 15, top: 15, right: 10),
-                child: Icon(Icons.picture_as_pdf),
               ),
             ),
           ],

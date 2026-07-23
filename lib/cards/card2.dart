@@ -145,13 +145,13 @@ class Card2 extends StatelessWidget {
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 22),
                         onPressed: () async {
-                          _handleWhatsappShare(context);
+                          HelperClass().handleWhatsappShare(context, postModel);
                         },
                       ),
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.share, size: 22),
                         onPressed: () async {
-                          _handleContentShare(context);
+                          HelperClass().handleContentShare(context, postModel);
                         },
                       ),
                       // IconButton(icon: liked == true ? LoveIcon().bold : LoveIcon().normal, onPressed: handleLoveCLick),
