@@ -238,5 +238,7 @@
   "news": "News",
   "search": "Search",
   "enewspapers": "E-newspapers",
-  "daily": "Daily papers"
+  "daily": "Daily papers",
+
+  "all":"All"
 }

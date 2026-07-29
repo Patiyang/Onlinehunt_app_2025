@@ -362,7 +362,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   }
 
   SliverAppBar _customAppBar(PostModel? article, BuildContext context) {
-    return SliverAppBar(
+    return SliverAppBar(automaticallyImplyLeading: true,
       expandedHeight: 270,
       flexibleSpace: FlexibleSpaceBar(
         background: widget.tag == null
@@ -500,6 +500,7 @@ $deepLink
         t.cancel();
         try {
           post = await getApiArticleBySlug(widget.slug!);
+          print('''${post!.content}''');
           apiCategories = post!.category!;
           if (mounted) {
             setState(() {

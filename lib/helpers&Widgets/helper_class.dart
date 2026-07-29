@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/helpers&Widgets/key.dart';
+import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,9 +18,9 @@ class HelperClass {
   static const liveshareIp = 'https://onlinehunt.in/';
   static const testshareIp = 'http://192.168.100.26/';
 
-  static const mainIp = serverpAddress;
-  static const avatarIp = publicMainIpAddress;
-  static const mediaIp = liveshareIp;
+  static const mainIp = testipAddress;
+  static const avatarIp = publicTestIpAddress;
+  static const mediaIp = testshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';
@@ -60,25 +61,24 @@ class HelperClass {
 
   //share
 
-  handleContentShare(BuildContext context, PostModel? postModel) async {
+  handleContentShare(BuildContext context, PostModel? postModel, {EpaperModel? epaperModel}) async {
     SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(context, postModel!);
-    String type = postModel.video_url!.isNotEmpty ? 'video' : 'article';
+    String deepLink = generateDeepLink(context, postModel, epaperModel: epaperModel);
 
     await share.share(
       ShareParams(
         // uri: Uri.parse(deepLink),
         text:
             '''
-📰 ${postModel!.title}
+📰 ${postModel == null ? epaperModel!.title : postModel!.title}
 
-${HelperClass().limitSummary(postModel!.summary)}
+${HelperClass().limitSummary(postModel == null ? 'latest news'.tr() : postModel!.summary)}
 
 ${'click for more'.tr()}
 $deepLink
 ''',
-        subject: postModel!.title,
-        title: postModel!.title,
+        subject: postModel == null ? epaperModel!.title : postModel!.title,
+        title: postModel == null ? epaperModel!.title : postModel!.title,
         // previewThumbnail: XFile(Config().splashIcon,),
       ),
     );
@@ -107,15 +107,23 @@ $deepLink
     }
   }
 
-  String generateDeepLink(BuildContext context, PostModel postModel) {
+  String generateDeepLink(BuildContext context, PostModel? postModel, {EpaperModel? epaperModel}) {
     // return '${HelperClass.shareIp}$slug';
-    String type = postModel.video_url!.isNotEmpty ? 'video' : 'article';
-    final languageCode = context.locale.languageCode;
-    print('the code is $languageCode');
-    if (languageCode == 'en') {
-      return '${HelperClass.shareIp}${postModel.slug}?type=$type';
-    }
+    if (postModel != null) {
+      String type = postModel!.video_url!.isNotEmpty ? 'video' : 'article';
+      final languageCode = context.locale.languageCode;
+      print('the code is $languageCode');
+      if (languageCode == 'en') {
+        return '${HelperClass.shareIp}${postModel.slug}?type=$type';
+      }
 
-    return '${HelperClass.shareIp}$languageCode/${postModel.slug}?type=$type';
+      return '${HelperClass.shareIp}$languageCode/${postModel.slug}?type=$type';
+    } else {
+      if (epaperModel!.source_type == 'pdf') {
+        return '${HelperClass.shareIp}paper?type=pdf&id=${epaperModel!.id}&lang_id=${epaperModel!.publication!.lang_id}';
+      } else {
+        return '${HelperClass.shareIp}paper?type=website&id=${epaperModel!.id}&lang_id=${epaperModel!.publication!.lang_id}';
+      }
+    }
   }
 }

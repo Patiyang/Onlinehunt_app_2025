@@ -5,8 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token_service.dart';
 
 class EpaperServices {
-
-
   Future<http.Response> getEpapers(String source_type) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
@@ -15,15 +13,29 @@ class EpaperServices {
     final res = await http.get(Uri.parse(url));
     return res;
   }
-  Future<http.Response> getAllEpapers({int limit =10, int page=1}) async {
+
+  Future<http.Response?> getEpaper(int id, int lang_id) async {
+    String url = '${HelperClass.mainIp}epapers/$id?lang_id=$lang_id';
+    print(url);
+    try {
+      final res = await http.get(Uri.parse(url)).catchError((onError) {});
+      return res;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<http.Response> getAllEpapers({int limit = 10, int page = 1, String? soure_type}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}newspapers?lang_id=$lang_id&limit=$limit&page=$page';
+    String url = '${HelperClass.mainIp}newspapers?lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type';
     print(url);
     final res = await http.get(Uri.parse(url));
     return res;
   }
-  Future<http.Response> getMagazines({int? category_id, int limit=10, int page=1}) async {
+
+  Future<http.Response> getMagazines({int? category_id, int limit = 10, int page = 1}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
     String url = '${HelperClass.mainIp}magazines?lang_id=$lang_id&category_id=$category_id&limit=$limit&page=$page';
@@ -33,10 +45,10 @@ class EpaperServices {
   }
 
   //http://onlinehunt.in.local/api/periodicals?frequency=weekly&lang_id=2
-  Future<http.Response> getPeriodicals(String period,{int limit =10, int page=1}) async {
+  Future<http.Response> getPeriodicals(String period, {int limit = 10, int page = 1, String? soure_type}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}periodicals?frequency=$period&lang_id=$lang_id&limit=$limit&page=$page';
+    String url = '${HelperClass.mainIp}periodicals?frequency=$period&lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type';
     print(url);
     final res = await http.get(Uri.parse(url));
     return res;

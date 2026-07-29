@@ -3,13 +3,17 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
+import 'package:online_hunt_news/models/custom_color.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/models/metaModel.dart';
 import 'package:online_hunt_news/services/epaper_service.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
+import 'package:provider/provider.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 class MoreEpapers extends StatefulWidget {
   final String? periodType;
@@ -29,6 +33,7 @@ class _MoreEpapersState extends State<MoreEpapers> {
   bool _isLoadingMore = false;
   NewspapersMetamodel? metaData;
   ScrollController scrollController = ScrollController();
+  String? source_type;
   _scrollListener() {
     if (scrollController.position.pixels >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && _isLoadingMore == false) {
       print('loadingData');
@@ -52,18 +57,57 @@ class _MoreEpapersState extends State<MoreEpapers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.periodType!).tr()),
+      appBar: AppBar(
+        title: Text(widget.periodType!).tr(),
+
+        actions: [
+          PopupMenuButton<String?>(
+            tooltip: 'View Options',
+            icon: const Icon(Icons.filter_alt_outlined),
+            onSelected: (value) {
+              switch (value) {
+                case 'null':
+                  source_type = null;
+                  print(source_type);
+                  handleRefresh();
+                  break;
+
+                case 'pdf':
+                  // Open PDF
+                  source_type = value;
+                  print(source_type);
+                  handleRefresh();
+                  break;
+
+                case 'website':
+                  // Open Website
+                  source_type = value;
+                  print(source_type);
+                  handleRefresh();
+                  break;
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'null',
+                child: Row(children: [Icon(Icons.newspaper), SizedBox(width: 12), Text('all'.tr())]),
+              ),
+              PopupMenuItem(
+                value: 'pdf',
+                child: Row(children: [Icon(Icons.picture_as_pdf), SizedBox(width: 12), Text('pdfs'.tr()), ]),
+              ),
+              PopupMenuItem(
+                value: 'website',
+                child: Row(children: [Icon(Icons.language), SizedBox(width: 12), Text('web_papers'.tr())]),
+              ),
+            ],
+          ),
+        ],
+      ),
 
       body: RefreshIndicator(
         onRefresh: () async {
-          loadingPapers = true;
-          currentPage = 1;
-          initializeFetching();
-          // Timer.periodic(Duration(seconds: 1), (t) {
-          //   if (t == 1) {
-
-          //   }
-          // });
+          handleRefresh();
         },
         child: Stack(
           children: [
@@ -88,9 +132,19 @@ class _MoreEpapersState extends State<MoreEpapers> {
                 if (index == papers.length) {
                   return _buildProgressIndicator();
                 }
-                if (papers.isEmpty) return LoadingCard(height: 200);
+                if (papers.isEmpty)
+                  return SkeletonAnimation(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: context.watch<ThemeBloc>().darkTheme == false ? CustomColor().loadingColorLight : CustomColor().loadingColorDark,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      height: 300,
+                      // width: 210,
+                    ),
+                  );
                 EpaperModel paper = papers[index];
-                return paper.source_type == 'website' ? URLepaper(epaperModel: paper) : PDFepaper(epaperModel: paper);
+                return paper.source_type == 'website' ? URLepaper(epaperModel: paper, customUrl: true) : PDFepaper(epaperModel: paper);
               },
             ),
             papers.isNotEmpty
@@ -116,9 +170,12 @@ class _MoreEpapersState extends State<MoreEpapers> {
   }
 
   initializeFetching() async {
-    papers.clear();
+    setState(() {
+      papers.clear();
+    });
+
     if (widget.periodType == 'daily') {
-      await epaperServices.getAllEpapers(page: currentPage).then((value) {
+      await epaperServices.getAllEpapers(page: currentPage, soure_type: source_type).then((value) {
         Map<String, dynamic> response = {};
 
         response = jsonDecode(value.body);
@@ -134,7 +191,7 @@ class _MoreEpapersState extends State<MoreEpapers> {
       currentPage++;
       loadingPapers = false;
     } else {
-      await epaperServices.getPeriodicals(widget.periodType!).then((value) {
+      await epaperServices.getPeriodicals(widget.periodType!, soure_type: source_type).then((value) {
         Map<String, dynamic> response = {};
 
         response = jsonDecode(value.body);
@@ -152,12 +209,27 @@ class _MoreEpapersState extends State<MoreEpapers> {
     setState(() {});
   }
 
+  handleRefresh() {
+    loadingPapers = true;
+    currentPage = 1;
+    initializeFetching();
+  }
+
   Widget _buildProgressIndicator() {
-    return new Padding(
-      padding: const EdgeInsets.all(1.0),
+    return Container(
+      height: 300,
+      width: 210,
       child: new Center(
         child: new Opacity(opacity: _isLoadingMore ? 1.0 : 0.0, child: new Loading()),
       ),
+    );
+  }
+
+  Widget markSource(String ?type) {
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle, color: source_type != type ? Colors.blue : Theme.of(context).primaryColor,),
+      height: 10,width: 10,
+     
     );
   }
 }

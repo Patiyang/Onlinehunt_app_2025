@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/epaper_viewer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/services/app_service.dart';
+import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class URLepaper extends StatelessWidget {
@@ -15,7 +17,7 @@ class URLepaper extends StatelessWidget {
   final EpaperModel epaperModel;
   final bool? showLabel;
 
-  const URLepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210, this.customUrl = false, this.showLabel=true});
+  const URLepaper({super.key, required this.epaperModel, this.height = 300, this.width = 210, this.customUrl = true, this.showLabel = true});
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +98,8 @@ class URLepaper extends StatelessWidget {
       onTap: () {
         // print('${HelperClass.mediaIp}${epaperModel.cover_image!}');
         // launchPaper('${data['link']}${HelperClass().getDate(DateTime.now())}&page=1&url=home&ced=14');
-
         if (customUrl == true) {
-          launchDailyPaper(epaperModel, context);
+          launchDailyPaper(epaperModel, context, customUrl!);
         } else {
           launchPaper(epaperModel, context);
         }
@@ -107,23 +108,28 @@ class URLepaper extends StatelessWidget {
   }
 
   void launchPaper(EpaperModel epaperModel, BuildContext context) async {
-    print(epaperModel.website_url!);
+    // print(epaperModel.website_url!);
     final uri = Uri.parse(epaperModel.website_url!);
     if (await canLaunchUrl(uri)) {
       // await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
       AppService().openLinkWithCustomTab(context, epaperModel.website_url!);
+      // CutomEpaperViewer(paper_model: epaperModel);
+      nextScreen(context, CutomEpaperViewer(paper_model: epaperModel, id: epaperModel.id, lang_id: epaperModel.publication!.lang_id));
     } else {
       debugPrint('Could not launch WhatsApp');
     }
   }
 
-  void launchDailyPaper(EpaperModel epaperModel, BuildContext context) async {
-    print(epaperModel.website_url!);
+  void launchDailyPaper(EpaperModel epaperModel, BuildContext context, bool customUrl) async {
+    // print(epaperModel.website_url!);
     final uri = Uri.parse(updateUrlWithToday(epaperModel.website_url!));
     if (await canLaunchUrl(uri)) {
       print(updateUrlWithToday(epaperModel.website_url!));
       // await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-      AppService().openLinkWithCustomTab(context, updateUrlWithToday(epaperModel.website_url!));
+      // CutomEpaperViewer(paper_model: epaperModel,);
+
+      nextScreen(context, CutomEpaperViewer(paper_model: epaperModel, id: epaperModel.id, lang_id: epaperModel.publication!.lang_id, customUrl: customUrl));
+      // AppService().openLinkWithCustomTab(context, updateUrlWithToday(epaperModel.website_url!));
     } else {
       debugPrint('Could not launch WhatsApp');
     }

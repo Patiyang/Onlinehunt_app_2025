@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/widgets/full_image.dart';
@@ -17,10 +18,11 @@ class HtmlBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return !htmlData.contains('<p>')
+    final unescape = HtmlUnescape();
+    return/*  !htmlData.contains('<p>')
         ? Text(htmlData, style: TextStyle(fontSize: 17))
-        : Html(
-            data: '''${htmlData}''',
+        :  */Html(
+            data: '''${unescape.convert(htmlData)}''',
             onLinkTap: (String? url, Map<String, String> attributes, _) {
               AppService().openLinkWithCustomTab(context, url!);
             },

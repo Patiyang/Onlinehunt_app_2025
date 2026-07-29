@@ -118,12 +118,12 @@ class AdsBloc extends ChangeNotifier {
   }
 
   loadBannerAd({double? width}) async {
-    // AdSize size = AdSize(width: width!.toInt(), height: (kBottomNavigationBarHeight + 5.0).toInt());
+    AdSize size = AdSize(width: width!.toInt(), height: 300);
     print('banner ad loaded');
     _bannerAd = BannerAd(
       adUnitId: AdConfig().getAdmobBannerAdUnitId(),
       request: AdRequest(),
-      size: AdSize.fluid,
+      size: size,
       listener: BannerAdListener(
         onAdLoaded: (_) {
           _isBannerAdReady = true;
@@ -140,42 +140,5 @@ class AdsBloc extends ChangeNotifier {
 
     _bannerAd!.load();
   }
-  // Admob Ads -- END --
 
-  // Fb Ads -- START --
-
-  // void createInterstitialAdFb() {
-  //   FacebookInterstitialAd.loadInterstitialAd(
-  //     placementId: AdConfig().getFbInterstitialAdUnitId(),
-  //     listener: (result, value) {
-  //       print('ad result : $result');
-  //       if (result == InterstitialAdResult.LOADED) {
-  //         _isAdLoaded = true;
-  //         debugPrint('ads loaded');
-  //         notifyListeners();
-  //         showInterstitialAdFb();
-  //       } else if (result == InterstitialAdResult.DISMISSED && value["invalidated"] == true) {
-  //         _isAdLoaded = false;
-  //         notifyListeners();
-  //         debugPrint('ads dismissed or error : $result');
-  //       }
-  //     },
-  //   );
-  // }
-
-  // void showInterstitialAdFb() async {
-  //   await FacebookInterstitialAd.showInterstitialAd();
-  //   _isAdLoaded = false;
-  //   notifyListeners();
-  // }
-
-  // Future disposefbInterstitial() async {
-  //   if (_isAdLoaded == true) {
-  //     FacebookInterstitialAd.destroyInterstitialAd();
-  //     _isAdLoaded = false;
-  //     notifyListeners();
-  //   }
-  // }
-
-  // Fb Ads -- END --
 }

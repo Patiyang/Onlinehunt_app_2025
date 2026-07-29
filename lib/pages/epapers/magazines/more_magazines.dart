@@ -90,7 +90,7 @@ class _MoreMagazinesState extends State<MoreMagazines> {
                 }
                 if (papers.isEmpty) return LoadingCard(height: 200);
                 EpaperModel paper = papers[index];
-                return paper.source_type == 'website' ? URLepaper(epaperModel: paper) : PDFepaper(epaperModel: paper);
+                return paper.source_type == 'website' ? URLepaper(epaperModel: paper,showLabel: false,) : PDFepaper(epaperModel: paper,showLabel: false,);
               },
             ),
             papers.isNotEmpty

@@ -8,7 +8,7 @@ import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
-import 'package:online_hunt_news/pages/epapers/magazines/more_epapers.dart';
+import 'package:online_hunt_news/pages/epapers/periodical_widgets/more_epapers.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';

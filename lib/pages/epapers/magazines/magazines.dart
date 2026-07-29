@@ -104,8 +104,8 @@ class _MagazinesState extends State<Magazines> with AutomaticKeepAliveClientMixi
               return magazines.isEmpty
                   ? LoadingCard(height: 300, width: 210)
                   : magazines[index].source_type == 'website'
-                  ? URLepaper(epaperModel: magazines[index], customUrl: true)
-                  : PDFepaper(epaperModel: magazines[index]);
+                  ? URLepaper(epaperModel: magazines[index], customUrl: true,showLabel: false,)
+                  : PDFepaper(epaperModel: magazines[index],showLabel: false,);
             },
           ),
         ),

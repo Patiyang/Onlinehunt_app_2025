@@ -49,7 +49,7 @@ class AppService {
         url: url,
         customTabsOptions: CustomTabsOptions(
           colorScheme: context.read<ThemeBloc>().darkTheme! ? CustomTabsColorScheme.dark : CustomTabsColorScheme.light,
-          shareState: CustomTabsShareState.on,
+          shareState: CustomTabsShareState.default_,
           instantAppsEnabled: true,
           showTitle: true,
           urlBarHidingEnabled: true,

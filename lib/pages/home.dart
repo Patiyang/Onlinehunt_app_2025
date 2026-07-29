@@ -3,15 +3,20 @@ import 'dart:convert';
 
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:app_links/app_links.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_hunt_news/blocs/ads_bloc.dart';
 import 'package:online_hunt_news/blocs/bottomNavBar_bloc.dart';
+import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/epaper_viewer.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
+import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
 import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
@@ -22,6 +27,8 @@ import 'package:online_hunt_news/pages/profile.dart';
 import 'package:online_hunt_news/pages/video_article_details.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/services/dynamic_link_services.dart';
+import 'package:online_hunt_news/services/epaper_service.dart';
+import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/utils/snacbar.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -256,11 +263,6 @@ class _HomePageState extends State<HomePage> {
     debugPrint("HANDLE LINK: $uri");
     if (_openingArticle) return;
 
-    // if (uri.host != 'onlinehunt.in' && uri.host != 'www.onlinehunt.in') {
-    //   return;
-    // }
-
-    // if (uri.pathSegments.length != 1) return;
     const allowedHosts = {'onlinehunt.in', 'www.onlinehunt.in'};
 
     if (!allowedHosts.contains(uri.host)) {
@@ -280,10 +282,25 @@ class _HomePageState extends State<HomePage> {
     print('SLUG is $slug');
 
     final type = uri.queryParameters['type'];
+
     if (type == 'article') {
       await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
-    } else {
+    }
+    if (type == 'video') {
+      // Fluttertoast.showToast(msg: uri.toString());
+
       await Navigator.push(context, MaterialPageRoute(builder: (_) => VideoArticleDetails(post_id: null, slug: slug)));
+    }
+    if (type == 'pdf') {
+      int id = int.parse(uri.queryParameters['id']!);
+      int lang_id = int.parse(uri.queryParameters['lang_id']!);
+      nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
+    }
+    if (type == 'website') {
+      int id = int.parse(uri.queryParameters['id']!);
+      int lang_id = int.parse(uri.queryParameters['lang_id']!);
+      nextScreen(context, CutomEpaperViewer(id: id, lang_id: lang_id));
+      // Fluttertoast.showToast(msg: uri.toString());
     }
 
     _openingArticle = false;

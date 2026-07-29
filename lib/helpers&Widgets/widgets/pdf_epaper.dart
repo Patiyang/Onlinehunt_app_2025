@@ -111,7 +111,7 @@ class PDFepaper extends StatelessWidget {
         // launchPageviewPDF(epaperModel);
         //            String url = '${HelperClass.mediaIp}${epaperModel.pdf_file}';
         // print(url);
-        nextScreen(context, CustomPdfViewer(paper_model: epaperModel));
+        nextScreen(context, CustomPdfViewer(paper_model: epaperModel,id: epaperModel.id,lang_id: epaperModel.publication!.lang_id,));
       },
     );
   }
