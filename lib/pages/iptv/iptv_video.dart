@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:chewie/chewie.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/live_news.dart';
+import 'package:online_hunt_news/services/live_news_service.dart';
 
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -14,7 +17,7 @@ import '../../helpers&Widgets/loading.dart';
 
 class IptvVideo extends StatefulWidget {
   final LiveNews? iptvModel;
-  final String? id;
+  final int? id;
   IptvVideo({Key? key, this.iptvModel, this.id}) : super(key: key);
 
   @override
@@ -30,10 +33,12 @@ class _IptvVideoState extends State<IptvVideo> {
   bool loadingVideo = true;
 
   LiveNews? iptvModel;
+  LiveNewsService liveNewsService = LiveNewsService();
   @override
   void initState() {
     super.initState();
-    initializePlayer();
+    // initializePlayer();
+    checkModelAvailability();
   }
 
   @override
@@ -50,22 +55,38 @@ class _IptvVideoState extends State<IptvVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.iptvModel!.url!.contains('youtube')
+      appBar: iptvModel!.url!.contains('youtube')
           ? AppBar(
-              // toolbarHeight:widget.iptvModel!.url!.contains('youtube')? _controller.value.isFullScreen ? 0 : 50:chewieController!.isFullScreen?0:50,
-              toolbarHeight:loadingVideo == true?0: _controller.value.isFullScreen ? 0 : 50,
+              // toolbarHeight:iptvModel!.url!.contains('youtube')? _controller.value.isFullScreen ? 0 : 50:chewieController!.isFullScreen?0:50,
+              toolbarHeight: loadingVideo == true
+                  ? 0
+                  : _controller.value.isFullScreen
+                  ? 0
+                  : 50,
               // backgroundColor:loadingVideo == true?Colors.transparent:iptvModel!.url!.contains('youtube')?_controller.value.isFullScreen ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent:chewieController!.isFullScreen ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
               elevation: 0,
               automaticallyImplyLeading: true,
               centerTitle: true,
-              title: Text(widget.iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text(iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    HelperClass().handleContentShare(context, null, liveNews: iptvModel);
+                  },
+                  icon: Icon(Icons.share),
+                ),
+              ],
             )
           : AppBar(
-            toolbarHeight: loadingVideo == true?0:chewieController!.isFullScreen?0:50,
+              toolbarHeight: loadingVideo == true
+                  ? 0
+                  : chewieController!.isFullScreen
+                  ? 0
+                  : 50,
               elevation: 0,
               automaticallyImplyLeading: true,
               centerTitle: true,
-              title: Text(widget.iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              title: Text(iptvModel!.title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
       body: loadingVideo == true
           ? Center(
@@ -78,7 +99,7 @@ class _IptvVideoState extends State<IptvVideo> {
           ? Center(
               child: Text('unable to load video'.tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             )
-          : widget.iptvModel!.url!.contains('youtube')
+          : iptvModel!.url!.contains('youtube')
           ? Center(
               child: YoutubePlayer(controller: _controller, showVideoProgressIndicator: true, progressIndicatorColor: Theme.of(context).primaryColor),
             )
@@ -86,13 +107,26 @@ class _IptvVideoState extends State<IptvVideo> {
     );
   }
 
+  checkModelAvailability() async {
+    if (widget.iptvModel == null) {
+      await liveNewsService.getLive(widget.id!).then((value) {
+        Map<String, dynamic> response = jsonDecode(value!.body);
+
+        iptvModel = LiveNews.fromJson(response['data']);
+        initializePlayer();
+      });
+    } else {
+      iptvModel = widget.iptvModel;
+      initializePlayer();
+    }
+  }
+
   initializePlayer() async {
-    if (widget.iptvModel!.url!.contains('youtube')) {
+    if (iptvModel!.url!.contains('youtube')) {
       try {
-        iptvModel = widget.iptvModel;
         // iptvModel = await IptvServices().getSingleIptv(widget.id!);
         _controller = YoutubePlayerController(
-          initialVideoId: YoutubePlayer.convertUrlToId(widget.iptvModel!.url!)!,
+          initialVideoId: YoutubePlayer.convertUrlToId(iptvModel!.url!)!,
           flags: YoutubePlayerFlags(
             autoPlay: true,
             mute: false,
@@ -123,7 +157,7 @@ class _IptvVideoState extends State<IptvVideo> {
       }
     } else {
       try {
-        iptvModel = widget.iptvModel;
+        // iptvModel = iptvModel;
         videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(iptvModel!.url!));
 
         await videoPlayerController!.initialize();

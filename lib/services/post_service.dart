@@ -53,7 +53,7 @@ class PostServices {
     int lang_id = prefs.getInt('lang_id') ?? 1;
 
     String url = '${HelperClass.mainIp}posts/$slug?exclude=keywords&lang_id=$lang_id';
-    print(url);
+    // print(url);
     final res = await TokenService().urlGetAuthentication(url);
     return res;
   }

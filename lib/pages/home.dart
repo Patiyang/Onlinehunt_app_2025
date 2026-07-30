@@ -22,6 +22,7 @@ import 'package:online_hunt_news/pages/categories.dart';
 import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/epaper_tabbarview.dart';
 import 'package:online_hunt_news/pages/explore.dart';
+import 'package:online_hunt_news/pages/iptv/iptv_video.dart';
 import 'package:online_hunt_news/pages/iptv/videos_explore.dart';
 import 'package:online_hunt_news/pages/profile.dart';
 import 'package:online_hunt_news/pages/video_article_details.dart';
@@ -32,6 +33,7 @@ import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:online_hunt_news/utils/snacbar.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final Uri? initialDeepLink;
@@ -260,6 +262,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleDeepLink(Uri uri) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     debugPrint("HANDLE LINK: $uri");
     if (_openingArticle) return;
 
@@ -294,7 +297,23 @@ class _HomePageState extends State<HomePage> {
     if (type == 'pdf') {
       int id = int.parse(uri.queryParameters['id']!);
       int lang_id = int.parse(uri.queryParameters['lang_id']!);
-      nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
+      int timemilli = prefs.getInt('pdf_timer') ?? 0;
+      if (timemilli == 0) {
+        // nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
+        nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
+      } else {
+        final last_open = DateTime.fromMillisecondsSinceEpoch(timemilli);
+        final now = DateTime.now();
+        final difference = now.difference(last_open);
+        print(difference.inSeconds); // 16591
+
+        if (difference.inSeconds >= 300) {
+        nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
+          // prefs.get('pdf_wait')
+        } else {
+          Fluttertoast.showToast(msg: '${'please wait'.tr()} ${'for'.tr()} ${5 - difference.inMinutes} ${'minutes'.tr()}');
+        }
+      }
     }
     if (type == 'website') {
       int id = int.parse(uri.queryParameters['id']!);
@@ -302,7 +321,10 @@ class _HomePageState extends State<HomePage> {
       nextScreen(context, CutomEpaperViewer(id: id, lang_id: lang_id));
       // Fluttertoast.showToast(msg: uri.toString());
     }
-
+    if (type == 'live_news') {
+      int id = int.parse(uri.queryParameters['id']!);
+      nextScreen(context, IptvVideo(iptvModel: null, id: id));
+    }
     _openingArticle = false;
   }
 }

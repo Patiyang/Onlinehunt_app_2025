@@ -1,3 +1,4 @@
+import 'package:online_hunt_news/models/FeedModel.dart';
 import 'package:online_hunt_news/models/authorModel.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 
@@ -16,6 +17,7 @@ class PostModel {
   final int commentCount;
   final Author? author;
   final Category? category;
+  final FeedModel? feedModel;
 
   PostModel({
     required this.id,
@@ -32,6 +34,7 @@ class PostModel {
     required this.commentCount,
     this.author,
     this.category,
+    this.feedModel
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -41,7 +44,7 @@ class PostModel {
       slug: json['slug'] ?? '',
       summary: json['summary'] ?? '',
       post_url: json['post_url'],
-      video_url: json['video_url']??'',
+      video_url: json['video_url'] ?? '',
       keywords: json['keywords'] != null ? List<String>.from(json['keywords']) : [],
       content: json['content'],
       imageUrl: json['image_url'],
@@ -50,6 +53,7 @@ class PostModel {
       commentCount: json['comment_count'] ?? 0,
       author: json['author'] != null ? Author.fromJson(json['author']) : null,
       category: json['category'] != null ? Category.fromJson(json['category']) : null,
+      feedModel: json['feed']!=null?FeedModel.fromJson(json['feed']):null
     );
   }
 

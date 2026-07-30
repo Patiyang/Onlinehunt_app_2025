@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/helpers&Widgets/key.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
+import 'package:online_hunt_news/models/live_news.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,9 +19,9 @@ class HelperClass {
   static const liveshareIp = 'https://onlinehunt.in/';
   static const testshareIp = 'http://192.168.100.26/';
 
-  static const mainIp = testipAddress;
-  static const avatarIp = publicTestIpAddress;
-  static const mediaIp = testshareIp;
+  static const mainIp = serverpAddress;
+  static const avatarIp = publicMainIpAddress;
+  static const mediaIp = liveshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';
@@ -61,24 +62,34 @@ class HelperClass {
 
   //share
 
-  handleContentShare(BuildContext context, PostModel? postModel, {EpaperModel? epaperModel}) async {
+  handleContentShare(BuildContext context, PostModel? postModel, {EpaperModel? epaperModel, LiveNews? liveNews}) async {
     SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(context, postModel, epaperModel: epaperModel);
+    String deepLink = generateDeepLink(context, postModel, epaperModel: epaperModel,liveNews: liveNews);
 
     await share.share(
       ShareParams(
         // uri: Uri.parse(deepLink),
         text:
             '''
-📰 ${postModel == null ? epaperModel!.title : postModel!.title}
+📰 ${postModel == null ? epaperModel == null
+                  ? liveNews!.title
+                  : epaperModel.title : postModel!.title}
 
 ${HelperClass().limitSummary(postModel == null ? 'latest news'.tr() : postModel!.summary)}
 
 ${'click for more'.tr()}
 $deepLink
 ''',
-        subject: postModel == null ? epaperModel!.title : postModel!.title,
-        title: postModel == null ? epaperModel!.title : postModel!.title,
+        subject: postModel == null
+            ? epaperModel == null
+                  ? liveNews!.title
+                  : epaperModel.title
+            : postModel!.title,
+        title: postModel == null
+            ? epaperModel == null
+                  ? liveNews!.title
+                  : epaperModel.title
+            : postModel!.title,
         // previewThumbnail: XFile(Config().splashIcon,),
       ),
     );
@@ -107,7 +118,7 @@ $deepLink
     }
   }
 
-  String generateDeepLink(BuildContext context, PostModel? postModel, {EpaperModel? epaperModel}) {
+  String generateDeepLink(BuildContext context, PostModel? postModel, {EpaperModel? epaperModel, LiveNews? liveNews}) {
     // return '${HelperClass.shareIp}$slug';
     if (postModel != null) {
       String type = postModel!.video_url!.isNotEmpty ? 'video' : 'article';
@@ -118,12 +129,16 @@ $deepLink
       }
 
       return '${HelperClass.shareIp}$languageCode/${postModel.slug}?type=$type';
-    } else {
+    }
+
+    if (epaperModel != null) {
       if (epaperModel!.source_type == 'pdf') {
         return '${HelperClass.shareIp}paper?type=pdf&id=${epaperModel!.id}&lang_id=${epaperModel!.publication!.lang_id}';
       } else {
         return '${HelperClass.shareIp}paper?type=website&id=${epaperModel!.id}&lang_id=${epaperModel!.publication!.lang_id}';
       }
+    } else {
+      return '${HelperClass.shareIp}live?type=live_news&id=${liveNews!.liveNewsId}';
     }
   }
 }

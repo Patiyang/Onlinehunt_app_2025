@@ -8,6 +8,7 @@ import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/services/epaper_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomPdfViewer extends StatefulWidget {
   final EpaperModel? paper_model;
@@ -74,6 +75,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
   }
 
   checkModelPresence(int id, int lang_id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (widget.paper_model == null) {
       await EpaperServices().getEpaper(id, lang_id).then((value) {
         Map<String, dynamic> response = jsonDecode(value!.body);
@@ -86,6 +88,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
     } else {
       epaperModel = widget.paper_model;
     }
+    prefs.setInt('pdf_timer',DateTime.now().millisecondsSinceEpoch);
     setState(() {
       loading = false;
     });

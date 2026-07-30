@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:online_hunt_news/blocs/ads_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
@@ -16,7 +17,10 @@ import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/categoryModel.dart';
 import 'package:online_hunt_news/models/custom_color.dart';
 import 'package:online_hunt_news/models/postModel.dart';
+import 'package:online_hunt_news/models/reactionItem.dart';
 import 'package:online_hunt_news/services/app_service.dart';
+import 'package:online_hunt_news/services/follow_service.dart';
+import 'package:online_hunt_news/services/post_reaction_service.dart';
 import 'package:online_hunt_news/utils/sign_in_dialog.dart';
 import 'package:online_hunt_news/widgets/html_body.dart';
 import 'package:online_hunt_news/widgets/related_articles.dart';
@@ -80,6 +84,18 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   bool success = false;
   bool loadingVideo = true;
 
+  bool is_following = false;
+  // bool handle_follo
+  FollowService followService = FollowService();
+  PostReactionService postReactionService = PostReactionService();
+  // FaIcon(FontAwesomeIcons.thumbsUp),
+
+  List<Reactionitem> reactionItems = [
+    Reactionitem(icon: FaIcon(FontAwesomeIcons.thumbsUp), reactionName: 'like', color: Colors.green),
+    Reactionitem(icon: FaIcon(FontAwesomeIcons.thumbsDown), reactionName: 'dislike', color: Colors.amber),
+    Reactionitem(icon: FaIcon(FontAwesomeIcons.faceAngry), reactionName: 'angry', color: Colors.red),
+  ];
+  Reactionitem? selectedReaction;
   // handleBookmarkClick() {
   //   bool _guestUser = context.read<SignInBloc>().guestUser;
 
@@ -199,6 +215,8 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   }
 
   Widget detailsWidget(BuildContext context, Widget player, innerScrollController) {
+    final sb = context.watch<SignInBloc>();
+
     return SafeArea(
       bottom: false,
       top: true,
@@ -251,24 +269,29 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                           ],
                         ),
                       ),
-                      userId == article.author!.id
-                          ? SizedBox.shrink()
-                          // : loadingFollowing == true
-                          // ? Loading()
-                          : GestureDetector(
-                              onTap: () async {
-                                print(_controller.value.metaData.title);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Theme.of(context).primaryColor),
-                                child: Text(
-                                  followersList.any((element) => element.followerId == userId ? true : false) ? 'unfollow'.tr() : 'follow'.tr(),
-                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, letterSpacing: .3, color: Colors.white),
+                      Container(
+                        child: sb.uid == null
+                            ? SizedBox.shrink()
+                            : int.parse(sb.uid!) == article!.author!.id
+                            ? SizedBox.shrink()
+                            : loadingFollowing == true
+                            ? Loading()
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {});
+                                  is_following == false ? followUser() : unfollowUser();
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Theme.of(context).primaryColor),
+                                  child: Text(
+                                    is_following == true ? 'unfollow'.tr() : 'follow'.tr(),
+                                    style: TextStyle(fontWeight: FontWeight.normal, letterSpacing: .3, color: Colors.white),
+                                  ),
                                 ),
                               ),
-                            ),
+                      ),
                     ],
                   ),
                   Row(
@@ -330,19 +353,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                   SizedBox(height: 5),
                   Text(article.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: -0.6, wordSpacing: 1)),
                   Divider(color: Theme.of(context).primaryColor, endIndent: 200, thickness: 2, height: 20),
-                  TextButton.icon(
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
-                      backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
-                      shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
-                    ),
-                    icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
-                    label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
-                    onPressed: () {
-                      // nextScreen(context,CommentsPage(timestamp: d.timestamp));
-                    },
-                  ),
-                  SizedBox(height: 10),
+                
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -370,6 +381,71 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                     //   categoryId: ,
                     //   )
                   ),
+                  // Text('${article.feedModel!.feedurl.isEmpty}'),
+                 article.feedModel!.feedurl.isNotEmpty
+                      ? Card(
+                          surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+                          shape: Border.all(style: BorderStyle.none),
+                          margin: const EdgeInsets.all(16),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: ExpansionTile(
+                              iconColor: Theme.of(context).primaryColor,
+                              shape: Border.all(style: BorderStyle.none),
+                              leading: const Icon(Icons.info_outline),
+                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                              title: const Text('Disclaimer', style: TextStyle(fontWeight: FontWeight.bold)),
+                              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              children: [Text('${'disclaimer'.tr()} ${article!.feedModel!.name}', textAlign: TextAlign.justify)],
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: reactionItems
+                        .map(
+                          (el) => IconButton.outlined(
+                            onPressed: () {
+                              if (sb.uid == null) {
+                                Fluttertoast.showToast(msg: 'ractionsign'.tr());
+                              } else {
+                                if (selectedReaction != null) {
+                                  if (el.reactionName == selectedReaction!.reactionName) {
+                                    removeReaction(el);
+                                  } else {
+                                    createReaction(el);
+                                  }
+                                } else {
+                                  createReaction(el);
+                                }
+                              }
+                            },
+                            icon: el.icon,
+
+                            color: selectedReaction == null
+                                ? Theme.of(context).iconTheme.color
+                                : selectedReaction!.reactionName == el.reactionName
+                                ? el.color
+                                : Theme.of(context).iconTheme.color,
+                            highlightColor: Theme.of(context).shadowColor,
+                          ),
+                        )
+                        .toList(),
+                  ),SizedBox(height: 15,),
+                    TextButton.icon(
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
+                      backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
+                      shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
+                    ),
+                    icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
+                    label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
+                    onPressed: () {
+                      // nextScreen(context,CommentsPage(timestamp: d.timestamp));
+                    },
+                  ),
+                  SizedBox(height: 10),
                   RelatedArticles(
                     sc: innerScrollController,
                     category: apiCategories,
@@ -407,7 +483,8 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
     try {
       article = await getApiArticleBySlug(widget.slug);
       apiCategories = article.category!;
-
+      checkFollowing();
+      checkReaction();
       if (article.video_url!.contains('youtube')) {
         initYoutube();
       } else {
@@ -544,17 +621,65 @@ $deepLink
     // webViewUserAgent = FkUserAgent.webViewUserAgent!;
   }
 
-  void getUserFollowing() async {
-    followersList = [];
-    followingList = [];
-    setState(() {
-      loadingFollowing = true;
-    });
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    userId = sp.getString('uid')!;
+  checkFollowing() async {
+    //  is_following = false;
+    is_following = await followService.followStatus(article!.author!.id, context);
+    // Fluttertoast.showToast(msg: is_following.toString());
+    loadingFollowing = false;
+    setState(() {});
+    // return is_following;
+  }
 
+  followUser() async {
+    loadingFollowing = true;
+    await followService.followUser(article!.author!.id, article!.author!.username, context).then((val) {
+      if (val == true) {
+        is_following = true;
+      }
+    });
     setState(() {
       loadingFollowing = false;
+    });
+  }
+
+  unfollowUser() async {
+    loadingFollowing = true;
+    await followService.unfollowUser(article!.author!.id, article!.author!.username, context).then((val) {
+      if (val == true) {
+        is_following = false;
+      }
+    });
+    setState(() {
+      loadingFollowing = false;
+    });
+  }
+
+  checkReaction() async {
+    //  is_following = false;
+    await postReactionService.postReactionValue(article!.id, context).then((val) {
+      selectedReaction = reactionItems.where((test) => test.reactionName == val).firstOrNull;
+    });
+    // Fluttertoast.showToast(msg: is_following.toString());
+    // loadingFollowing = false;
+    setState(() {});
+    // return is_following;
+  }
+
+  createReaction(Reactionitem reaction) async {
+    await postReactionService.createReaction(article!.id, reaction.reactionName, context).then((val) {
+      if (val == true) {
+        selectedReaction = reactionItems.where((test) => test.reactionName == reaction.reactionName).first;
+      }
+      setState(() {});
+    });
+  }
+
+  removeReaction(Reactionitem reaction) async {
+    await postReactionService.removeReaction(article!.id, context).then((val) {
+      if (val == true) {
+        selectedReaction = null;
+      }
+      setState(() {});
     });
   }
 }

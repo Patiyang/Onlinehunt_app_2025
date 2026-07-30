@@ -103,7 +103,7 @@ class SignInBloc extends ChangeNotifier {
         this._signInProvider = 'google';
         this._idToken = googleUser.id;
         this._userType = 'google';
-
+        // signUpwithEmailPassword(userDetails.displayName, userDetails.email, googleUser.authentication.idToken);
         _hasError = false;
         notifyListeners();
       } catch (e) {
@@ -113,6 +113,62 @@ class SignInBloc extends ChangeNotifier {
       }
     } else {
       _hasError = true;
+      notifyListeners();
+    }
+  }
+
+  Future signInwithEmailPassword(userEmail, userPassword) async {
+    try {
+      // final User? user = (await _firebaseAuth.signInWithEmailAndPassword(email: userEmail, password: userPassword)).user!;
+      // assert(user != null);
+      // await user!.getIdToken();
+      // final User currentUser = _firebaseAuth.currentUser!;
+      UserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
+      this._name = apiUserModel.userName;
+      this._uid = apiUserModel.id;
+      this._imageUrl = defaultUserImageUrl;
+      this._email = apiUserModel.email;
+      this._signInProvider = 'email';
+      this._idToken = apiUserModel.token;
+      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
+
+      _hasError = false;
+      notifyListeners();
+    } catch (e) {
+      _hasError = true;
+      _errorCode = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future signUpwithEmailPassword(userName, userEmail, userPassword) async {
+    try {
+      UserModel apiUserModel = await UserServices().signUpUser(userEmail, userPassword, userName);
+      this._name = apiUserModel.userName;
+      this._uid = apiUserModel.id;
+      this._imageUrl = defaultUserImageUrl;
+      this._email = apiUserModel.email;
+      this._signInProvider = 'email';
+      this._idToken = apiUserModel.token;
+      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
+
+      this._userType = 'registered';
+
+      // final User? user = (await _firebaseAuth.createUserWithEmailAndPassword(email: userEmail, password: userPassword)).user!;
+      // assert(user != null);
+      // await user!.getIdToken();
+      // this._name = userName;
+      // this._uid = user.uid;
+      // this._imageUrl = defaultUserImageUrl;
+      // this._email = user.email;
+      // this._signInProvider = 'email';
+      // this._idToken = null;
+      // this._userType = 'registered';
+      _hasError = false;
+      notifyListeners();
+    } catch (e) {
+      _hasError = true;
+      _errorCode = e.toString();
       notifyListeners();
     }
   }
@@ -195,62 +251,6 @@ class SignInBloc extends ChangeNotifier {
     } else if (result.status == AuthorizationStatus.cancelled) {
       _hasError = true;
       _errorCode = 'Sign In Cancelled!';
-      notifyListeners();
-    }
-  }
-
-  Future signUpwithEmailPassword(userName, userEmail, userPassword) async {
-    try {
-      UserModel apiUserModel = await UserServices().signUpUser(userEmail, userPassword,userName);
-      this._name = apiUserModel.userName;
-      this._uid = apiUserModel.id;
-      this._imageUrl = defaultUserImageUrl;
-      this._email = apiUserModel.email;
-      this._signInProvider = 'email';
-      this._idToken = apiUserModel.token;
-      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
-
-      this._userType = 'registered';
-
-      // final User? user = (await _firebaseAuth.createUserWithEmailAndPassword(email: userEmail, password: userPassword)).user!;
-      // assert(user != null);
-      // await user!.getIdToken();
-      // this._name = userName;
-      // this._uid = user.uid;
-      // this._imageUrl = defaultUserImageUrl;
-      // this._email = user.email;
-      // this._signInProvider = 'email';
-      // this._idToken = null;
-      // this._userType = 'registered';
-      _hasError = false;
-      notifyListeners();
-    } catch (e) {
-      _hasError = true;
-      _errorCode = e.toString();
-      notifyListeners();
-    }
-  }
-
-  Future signInwithEmailPassword(userEmail, userPassword) async {
-    try {
-      // final User? user = (await _firebaseAuth.signInWithEmailAndPassword(email: userEmail, password: userPassword)).user!;
-      // assert(user != null);
-      // await user!.getIdToken();
-      // final User currentUser = _firebaseAuth.currentUser!;
-      UserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
-      this._name = apiUserModel.userName;
-      this._uid = apiUserModel.id;
-      this._imageUrl = defaultUserImageUrl;
-      this._email = apiUserModel.email;
-      this._signInProvider = 'email';
-      this._idToken = apiUserModel.token;
-      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
-
-      _hasError = false;
-      notifyListeners();
-    } catch (e) {
-      _hasError = true;
-      _errorCode = e.toString();
       notifyListeners();
     }
   }

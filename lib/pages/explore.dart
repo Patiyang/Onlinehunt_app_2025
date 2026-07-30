@@ -239,7 +239,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
             if (d == 'Kannada') {
               context.setLocale(Locale('kn'));
               prefs.setString('language', 'Kannada');
-              prefs.setInt('lang_id', 2);
+              prefs.setInt('lang_id', 4);
               ThemeModel().myValue = 'NotoSerif';
               await refresh(context).whenComplete(() {
                 // getData();

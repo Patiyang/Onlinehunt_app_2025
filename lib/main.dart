@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:online_hunt_news/services/dynamic_link_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
@@ -14,9 +15,29 @@ void main() async {
   await DynamicLinkService.instance.initialize();
   await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
+  // await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  
-  String getLanguages() {
+
+  // String getLanguages() {
+  //   if (prefs.getString('language') == 'English') {
+  //     ThemeModel().myValue = 'Manrope';
+  //     return 'en';
+  //   } else if (prefs.getString('language') == 'Kannada') {
+  //     ThemeModel().myValue = 'NotoSerif';
+  //     return 'kn';
+  //   } else if (prefs.getString('language') == 'Hindi') {
+  //     ThemeModel().myValue = 'Karma';
+  //     return 'hi';
+  //   } else if (prefs.getString('language') == null) {
+  //     prefs.setString('language', 'Kannada');
+  //     prefs.setInt('lang_id', 2);
+  //     return 'kn';
+  //   } else {
+  //     return 'kn';
+  //   }
+  // }
+
+    String getLanguages() {
     if (prefs.getString('language') == 'English') {
       ThemeModel().myValue = 'Manrope';
       return 'en';
@@ -26,10 +47,6 @@ void main() async {
     } else if (prefs.getString('language') == 'Hindi') {
       ThemeModel().myValue = 'Karma';
       return 'hi';
-    } else if (prefs.getString('language') == null) {
-      prefs.setString('language', 'Kannada');
-      prefs.setInt('lang_id', 2);
-      return 'kn';
     } else {
       return 'kn';
     }

@@ -84,6 +84,8 @@ dependencies:
   carousel_slider: ^5.1.2
   coverflow_carousel: ^2.0.1
   webview_flutter: ^4.14.1
+  # flutter_windowmanager: ^0.2.0
+  # no_screenshot: ^1.2.0
   flutter_web_browser:
     git:
       url: https://github.com/Patiyang/flutter_web_browser.git

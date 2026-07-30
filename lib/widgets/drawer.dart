@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
+import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/custom_color.dart';
 import 'package:online_hunt_news/services/app_service.dart';
@@ -105,11 +106,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
                         //   AppService().openLinkWithCustomTab(context, val.privacyPolicy!);
                         // });
                       } else if (index == 2) {
-                        AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}/contact');
+                        // AppService().openLinkWithCustomTab(context, '${HelperClass.avatarIp}/contact');
 
                         // AppService().openEmailSupport();
                         // await GeneralSettingsServices().getSettings().then((val) {
-                        //   showContactBottomSheet(val);
+                        Navigator.pop(context);
+                        showContactBottomSheet(SettingsModel(contactEmail: Config.emailSupport, contactPhone: Config.phoneSupport));
                         // });
                       } else if (index == 3) {
                         AppService().openLinkWithCustomTab(context, 'https://web.facebook.com/theonlinehunt/about');

@@ -240,5 +240,13 @@
   "enewspapers": "E-newspapers",
   "daily": "Daily papers",
 
-  "all":"All"
+  "all": "All",
+  "now_following": "You are now following",
+  "follow_failed": "Follow action failed",
+  "unfollowed": "You have successfully unfollowed",
+  "unfollow _ailed": "Unfollow action failed",
+  "for":"for",
+  "minutes":"Minutes",
+  "ractionsign": "Sign in first to share your experience",
+  "disclaimer":"This content has not been generated, created or edited by Onlinehunt. Publisher:"
 }

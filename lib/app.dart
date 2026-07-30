@@ -5,6 +5,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 // import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+// import 'package:no_screenshot/no_screenshot.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/blocs/featured_epapers.dart';
 import 'package:online_hunt_news/blocs/live_news_bloc.dart';
@@ -122,6 +123,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   bool checked = false;
   final key = GlobalKey<ScaffoldState>();
   late AppLinks _appLinks = AppLinks();
+  // final _noScreenshot = NoScreenshot.instance;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -145,7 +147,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     getLanguage();
     super.initState();
   }
-
+  
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -170,6 +172,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   }
 
   getLanguage() async {
+    // await _noScreenshot.screenshotOff();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.getString('language') == null) {
       getLanguageBottomSheet();
@@ -234,7 +237,7 @@ class _MyHomeState extends State<MyHome> with WidgetsBindingObserver {
             } else if (d == 'Kannada') {
               context.setLocale(Locale('kn'));
               prefs.setString('language', 'Kannada');
-              prefs.setInt('lang_id', 2);
+              prefs.setInt('lang_id', 4);
               ThemeModel().myValue = 'NotoSerif';
             } else if (d == 'Hindi') {
               context.setLocale(Locale('hi'));

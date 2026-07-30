@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -9,6 +10,7 @@ import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PDFepaper extends StatelessWidget {
@@ -105,13 +107,25 @@ class PDFepaper extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {
-        // launchPaper('${data['link']}${HelperClass().getDate(DateTime.now())}&page=1&url=home&ced=14');
-        // launchPdfViewer(epaperModel, context);
-        // launchPageviewPDF(epaperModel);
-        //            String url = '${HelperClass.mediaIp}${epaperModel.pdf_file}';
-        // print(url);
-        nextScreen(context, CustomPdfViewer(paper_model: epaperModel,id: epaperModel.id,lang_id: epaperModel.publication!.lang_id,));
+      onTap: () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        int timemilli = prefs.getInt('pdf_timer') ?? 0;
+        if (timemilli == 0) {
+          nextScreen(context, CustomPdfViewer(paper_model: epaperModel, id: epaperModel.id, lang_id: epaperModel.publication!.lang_id));
+        } else {
+          final last_open = DateTime.fromMillisecondsSinceEpoch(timemilli);
+          final now = DateTime.now();
+          final difference = now.difference(last_open);
+          print(difference.inSeconds); // 16591
+
+          if (difference.inSeconds >= 300) {
+            nextScreen(context, CustomPdfViewer(paper_model: epaperModel, id: epaperModel.id, lang_id: epaperModel.publication!.lang_id));
+            // prefs.get('pdf_wait')
+          } else {
+            Fluttertoast.showToast(msg: '${'please wait'.tr()} ${'for'.tr()} ${5 - difference.inMinutes} ${'minutes'.tr()}');
+          }
+        }
       },
     );
   }
