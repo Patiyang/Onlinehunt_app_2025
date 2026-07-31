@@ -1,25 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
+import 'package:online_hunt_news/blocs/website_periodicals_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_epaper.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/web_epaper.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/more_epapers.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/more_epapers.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:provider/provider.dart';
 
-class WeeklyPeriodical extends StatefulWidget {
-  const WeeklyPeriodical({super.key});
+class FortnightlyPeriodicals extends StatefulWidget {
+  const FortnightlyPeriodicals({super.key});
 
   @override
-  State<WeeklyPeriodical> createState() => _WeeklyPeriodicalState();
+  State<FortnightlyPeriodicals> createState() => _FortnightlyPeriodicalsState();
 }
 
-class _WeeklyPeriodicalState extends State<WeeklyPeriodical> {
+class _FortnightlyPeriodicalsState extends State<FortnightlyPeriodicals> {
   @override
   Widget build(BuildContext context) {
-    final pb = context.watch<WeeklyPeriodicalBloc>();
+    final fp = context.watch<FortnightlyPeriodicalBloc>();
     return Column(
       children: [
         Padding(
@@ -35,22 +35,21 @@ class _WeeklyPeriodicalState extends State<WeeklyPeriodical> {
               SizedBox(width: 6),
               GestureDetector(
                 onTap: () {
-                  // pb.getApiData(mounted, context);
+                  // fp.getApiData(mounted, context);
                 },
-                child: Text('weekly', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
+                child: Text('fortnightly', style: TextStyle(fontSize: 18, letterSpacing: -0.6, wordSpacing: 1, fontWeight: FontWeight.bold)).tr(),
               ),
               Spacer(),
-              Visibility(
-                visible: pb.data.isNotEmpty,
-                child: TextButton(
+            Visibility(visible: fp.data.isNotEmpty,
+              child: TextButton(
                   child: Text('view all', style: TextStyle(color: Theme.of(context).primaryColorDark)).tr(),
-                  onPressed: () => nextScreen(context, MoreEpapers(periodType: pb.data[0].publication!.publication_type)),
+                  onPressed: () => nextScreen(context, MoreEpapers(periodType: fp.data[0].publication!.publication_type)),
                 ),
-              ),
+            ),
             ],
           ),
         ),
-        pb.loading == true
+        fp.loading == true
             ? Padding(padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15), child: LoadingCard(height: 200))
             : Container(
                 width: MediaQuery.of(context).size.width,
@@ -59,18 +58,18 @@ class _WeeklyPeriodicalState extends State<WeeklyPeriodical> {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: pb.data.isEmpty ? 2 : pb.data.length,
+                  itemCount: fp.data.isEmpty ? 2 : fp.data.length,
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(width: 10);
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    // EpaperModel paper = pb.data[index];
+                    // EpaperModel paper =fp.data.isEmpty?EpaperModel(): fp.data[index];
 
-                    return pb.data.isEmpty
+                    return fp.data.isEmpty
                         ? LoadingCard(height: 300, width: 210)
-                        : pb.data[index].source_type == 'website'
-                        ? URLepaper(epaperModel: pb.data[index])
-                        : PDFepaper(epaperModel: pb.data[index]);
+                        : fp.data[index].source_type == 'website'
+                        ? URLepaper(epaperModel: fp.data[index])
+                        : PDFepaper(epaperModel: fp.data[index]);
                   },
                 ),
               ),

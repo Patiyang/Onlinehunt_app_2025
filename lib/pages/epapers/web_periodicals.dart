@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:online_hunt_news/blocs/featured_bloc.dart';
-import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/fortnightly_periodicals.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/monthly_periodicals.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/weekly_periodicals.dart';
+import 'package:online_hunt_news/blocs/website_periodicals_bloc.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/daily_epaper.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/fortnightly_periodicals.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/monthly_periodicals.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/weekly_periodicals.dart';
 import 'package:provider/provider.dart';
 
 class Periodicals extends StatefulWidget {

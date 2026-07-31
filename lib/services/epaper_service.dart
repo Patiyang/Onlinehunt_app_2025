@@ -26,7 +26,7 @@ class EpaperServices {
     }
   }
 
-  Future<http.Response> getAllEpapers({int limit = 10, int page = 1, String? soure_type}) async {
+  Future<http.Response> getAllEpapers({int limit = 10, int page = 1, String soure_type='website'}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
     String url = '${HelperClass.mainIp}newspapers?lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type';
@@ -45,7 +45,7 @@ class EpaperServices {
   }
 
   //http://onlinehunt.in.local/api/periodicals?frequency=weekly&lang_id=2
-  Future<http.Response> getPeriodicals(String period, {int limit = 10, int page = 1, String? soure_type}) async {
+  Future<http.Response> getPeriodicals(String period, {int limit = 10, int page = 1, String soure_type='website'}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
     String url = '${HelperClass.mainIp}periodicals?frequency=$period&lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type';

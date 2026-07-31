@@ -17,7 +17,8 @@ import 'package:skeleton_text/skeleton_text.dart';
 
 class MoreEpapers extends StatefulWidget {
   final String? periodType;
-  const MoreEpapers({super.key, this.periodType});
+  final String? source_type;
+  const MoreEpapers({super.key, this.periodType, this.source_type='website'});
 
   @override
   State<MoreEpapers> createState() => _MoreEpapersState();
@@ -61,47 +62,47 @@ class _MoreEpapersState extends State<MoreEpapers> {
         title: Text(widget.periodType!).tr(),
 
         actions: [
-          PopupMenuButton<String?>(
-            tooltip: 'View Options',
-            icon: const Icon(Icons.filter_alt_outlined),
-            onSelected: (value) {
-              switch (value) {
-                case 'null':
-                  source_type = null;
-                  print(source_type);
-                  handleRefresh();
-                  break;
+          // PopupMenuButton<String?>(
+          //   tooltip: 'View Options',
+          //   icon: const Icon(Icons.filter_alt_outlined),
+          //   onSelected: (value) {
+          //     switch (value) {
+          //       case 'null':
+          //         source_type = null;
+          //         print(source_type);
+          //         handleRefresh();
+          //         break;
 
-                case 'pdf':
-                  // Open PDF
-                  source_type = value;
-                  print(source_type);
-                  handleRefresh();
-                  break;
+          //       case 'pdf':
+          //         // Open PDF
+          //         source_type = value;
+          //         print(source_type);
+          //         handleRefresh();
+          //         break;
 
-                case 'website':
-                  // Open Website
-                  source_type = value;
-                  print(source_type);
-                  handleRefresh();
-                  break;
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'null',
-                child: Row(children: [Icon(Icons.newspaper), SizedBox(width: 12), Text('all'.tr())]),
-              ),
-              PopupMenuItem(
-                value: 'pdf',
-                child: Row(children: [Icon(Icons.picture_as_pdf), SizedBox(width: 12), Text('pdfs'.tr()), ]),
-              ),
-              PopupMenuItem(
-                value: 'website',
-                child: Row(children: [Icon(Icons.language), SizedBox(width: 12), Text('web_papers'.tr())]),
-              ),
-            ],
-          ),
+          //       case 'website':
+          //         // Open Website
+          //         source_type = value;
+          //         print(source_type);
+          //         handleRefresh();
+          //         break;
+          //     }
+          //   },
+          //   itemBuilder: (context) => [
+          //     PopupMenuItem(
+          //       value: 'null',
+          //       child: Row(children: [Icon(Icons.newspaper), SizedBox(width: 12), Text('all'.tr())]),
+          //     ),
+          //     PopupMenuItem(
+          //       value: 'pdf',
+          //       child: Row(children: [Icon(Icons.picture_as_pdf), SizedBox(width: 12), Text('pdfs'.tr())]),
+          //     ),
+          //     PopupMenuItem(
+          //       value: 'website',
+          //       child: Row(children: [Icon(Icons.language), SizedBox(width: 12), Text('web_papers'.tr())]),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
 
@@ -175,7 +176,7 @@ class _MoreEpapersState extends State<MoreEpapers> {
     });
 
     if (widget.periodType == 'daily') {
-      await epaperServices.getAllEpapers(page: currentPage, soure_type: source_type).then((value) {
+      await epaperServices.getAllEpapers(page: currentPage, soure_type: widget.source_type!).then((value) {
         Map<String, dynamic> response = {};
 
         response = jsonDecode(value.body);
@@ -191,7 +192,7 @@ class _MoreEpapersState extends State<MoreEpapers> {
       currentPage++;
       loadingPapers = false;
     } else {
-      await epaperServices.getPeriodicals(widget.periodType!, soure_type: source_type).then((value) {
+      await epaperServices.getPeriodicals(widget.periodType!, soure_type: widget.source_type!).then((value) {
         Map<String, dynamic> response = {};
 
         response = jsonDecode(value.body);
@@ -225,11 +226,11 @@ class _MoreEpapersState extends State<MoreEpapers> {
     );
   }
 
-  Widget markSource(String ?type) {
+  Widget markSource(String? type) {
     return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: source_type != type ? Colors.blue : Theme.of(context).primaryColor,),
-      height: 10,width: 10,
-     
+      decoration: BoxDecoration(shape: BoxShape.circle, color: source_type != type ? Colors.blue : Theme.of(context).primaryColor),
+      height: 10,
+      width: 10,
     );
   }
 }

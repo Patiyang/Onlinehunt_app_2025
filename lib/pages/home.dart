@@ -19,7 +19,7 @@ import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/daily_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/epaper_tabbarview.dart';
 import 'package:online_hunt_news/pages/explore.dart';
 import 'package:online_hunt_news/pages/iptv/iptv_video.dart';

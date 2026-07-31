@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/pages/epapers/magazine_category_list.dart';
-import 'package:online_hunt_news/pages/epapers/periodical_widgets/daily_epaper.dart';
+import 'package:online_hunt_news/pages/epapers/pdf_periodicals.dart';
+import 'package:online_hunt_news/pages/epapers/website_periodical_widgets/daily_epaper.dart';
 import 'package:online_hunt_news/pages/epapers/for_you.dart';
 import 'package:online_hunt_news/pages/epapers/magazines/magazines.dart';
-import 'package:online_hunt_news/pages/epapers/periodicals.dart';
+import 'package:online_hunt_news/pages/epapers/web_periodicals.dart';
 import 'package:provider/provider.dart';
 
 class EpaperTabbarView extends StatefulWidget {
@@ -20,7 +21,7 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
   var scaffoldKey = GlobalKey<ScaffoldState>();
   TabController? _tabController;
   int selectedIndex = 0;
-  List<Tab> tabsList = [/* Tab(text: "web_papers".tr()), */ Tab(text: "for_you".tr()), Tab(text: "enewspapers".tr()), Tab(text: "magazines".tr())];
+  List<Tab> tabsList = [Tab(text: "for_you".tr()), Tab(text: "web_papers".tr()), Tab(text: "pdfs".tr()), Tab(text: "magazines".tr())];
   @override
   void initState() {
     _tabController = TabController(length: tabsList.length, vsync: this);
@@ -74,7 +75,7 @@ class _EpaperTabbarViewState extends State<EpaperTabbarView> with AutomaticKeepA
           tabs: tabsList,
         ),
       ),
-      body: TabBarView(controller: _tabController, children: [ForYou(), Periodicals(), MagazineCategoryList()]),
+      body: TabBarView(controller: _tabController, children: [ForYou(), Periodicals(), PDFPeriodicals(), MagazineCategoryList()]),
     );
   }
 

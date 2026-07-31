@@ -11,7 +11,8 @@ import 'package:online_hunt_news/blocs/featured_epapers.dart';
 import 'package:online_hunt_news/blocs/live_news_bloc.dart';
 import 'package:online_hunt_news/blocs/allUserArticlesBloc.dart';
 import 'package:online_hunt_news/blocs/magazine_bloc.dart';
-import 'package:online_hunt_news/blocs/periodicals_bloc.dart';
+import 'package:online_hunt_news/blocs/pdf_periodicals_bloc.dart';
+import 'package:online_hunt_news/blocs/website_periodicals_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/splash.dart';
@@ -74,11 +75,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<FavoriteMagazineBloc>(create: (context) => FavoriteMagazineBloc()),
 
               ChangeNotifierProvider<AdsBloc>(create: (context) => AdsBloc()),
+              
               ChangeNotifierProvider<DailyPeriodicalBloc>(create: (context) => DailyPeriodicalBloc()),
-
               ChangeNotifierProvider<WeeklyPeriodicalBloc>(create: (context) => WeeklyPeriodicalBloc()),
               ChangeNotifierProvider<FortnightlyPeriodicalBloc>(create: (context) => FortnightlyPeriodicalBloc()),
               ChangeNotifierProvider<MonthlyPeriodicalBloc>(create: (context) => MonthlyPeriodicalBloc()),
+              
+               ChangeNotifierProvider<DailyPDFPeriodicalBloc>(create: (context) => DailyPDFPeriodicalBloc()),
+              ChangeNotifierProvider<WeeklyPDFPeriodicalBloc>(create: (context) => WeeklyPDFPeriodicalBloc()),
+              ChangeNotifierProvider<FortnightlyPDFPeriodicalBloc>(create: (context) => FortnightlyPDFPeriodicalBloc()),
+              ChangeNotifierProvider<MonthlyPDFPeriodicalBloc>(create: (context) => MonthlyPDFPeriodicalBloc()),
+
               ChangeNotifierProvider<FeaturedEpapersBloc>(create: (context) => FeaturedEpapersBloc()),
               ChangeNotifierProvider<MagazineCategoriesBloc>(create: (context) => MagazineCategoriesBloc()),
 
