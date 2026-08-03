@@ -19,12 +19,14 @@ class HelperClass {
   static const liveshareIp = 'https://onlinehunt.in/';
   static const testshareIp = 'http://192.168.100.26/';
 
-  static const mainIp = serverpAddress;
-  static const avatarIp = publicMainIpAddress;
-  static const mediaIp = liveshareIp;
+  static const mainIp = testipAddress;
+  static const avatarIp = publicTestIpAddress;
+  static const mediaIp = testshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';
+    static const pdfItemBox = 'pdfItems';
+
   String getBaseUrl(String param, {int currentPage = 1, count = 6, String type = 'all', String categoryid = 'all', String id = ''}) {
     return 'https://onlinehunt.in/api/$param.php?api_key=$apiKey&currentpage=$currentPage&count=$count&type=$type&categoryid=$categoryid&id=$id';
   }

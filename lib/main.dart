@@ -2,6 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
+import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
 // import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:online_hunt_news/services/dynamic_link_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +22,12 @@ void main() async {
   // await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
+
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(PDFItemModelAdapter());
+
+  await Hive.openBox<PDFItemModel>(HelperClass.pdfItemBox);
   // String getLanguages() {
   //   if (prefs.getString('language') == 'English') {
   //     ThemeModel().myValue = 'Manrope';

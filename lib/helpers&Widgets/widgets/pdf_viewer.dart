@@ -4,10 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
+import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
+import 'package:online_hunt_news/models/theme_model.dart';
 import 'package:online_hunt_news/services/epaper_service.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomPdfViewer extends StatefulWidget {
@@ -31,6 +36,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final tm = context.read<ThemeBloc>();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: loading == true ? 0 : Theme.of(context).appBarTheme.toolbarHeight,
@@ -53,6 +59,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
                     swipeHorizontal: true,
                     autoSpacing: true,
                     pageSnap: true,
+                    nightMode: tm.darkTheme == true ? true : false,
                     // pageFling: false,
                     // backgroundColor: Colors.blue,
                     onError: (error) {
@@ -88,9 +95,18 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
     } else {
       epaperModel = widget.paper_model;
     }
-    prefs.setInt('pdf_timer',DateTime.now().millisecondsSinceEpoch);
+    // prefs.setInt('pdf_timer', DateTime.now().millisecondsSinceEpoch);
+    initializeHive();
     setState(() {
       loading = false;
     });
+  }
+
+  void initializeHive() async {
+    final box = Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
+
+    final pdfItem = PDFItemModel(pdf_id: epaperModel!.id!, pdf_milliseconds: DateTime.now().millisecondsSinceEpoch);
+
+    await box.put(pdfItem.pdf_id, pdfItem);
   }
 }

@@ -8,14 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:online_hunt_news/blocs/ads_bloc.dart';
 import 'package:online_hunt_news/blocs/bottomNavBar_bloc.dart';
 import 'package:online_hunt_news/blocs/epaper_bloc.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/epaper_viewer.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
+import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
 import 'package:online_hunt_news/pages/categories.dart';
@@ -63,6 +66,8 @@ class _HomePageState extends State<HomePage> {
   bool loaded = false;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   StreamSubscription<Uri>? _linkSubscription;
+  final box = Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
+
   // checkLink() async {
   //   _appLinks = AppLinks();
   //   _handleInitialUri();
@@ -297,18 +302,20 @@ class _HomePageState extends State<HomePage> {
     if (type == 'pdf') {
       int id = int.parse(uri.queryParameters['id']!);
       int lang_id = int.parse(uri.queryParameters['lang_id']!);
-      int timemilli = prefs.getInt('pdf_timer') ?? 0;
-      if (timemilli == 0) {
+      // int timemilli = prefs.getInt('pdf_timer') ?? 0;
+      final pdfItem = box.get(id);
+
+      if (pdfItem==null) {
         // nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
         nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
       } else {
-        final last_open = DateTime.fromMillisecondsSinceEpoch(timemilli);
+        final last_open = DateTime.fromMillisecondsSinceEpoch(pdfItem.pdf_milliseconds);
         final now = DateTime.now();
         final difference = now.difference(last_open);
         print(difference.inSeconds); // 16591
 
         if (difference.inSeconds >= 300) {
-        nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
+          nextScreen(context, CustomPdfViewer(id: id, lang_id: lang_id));
           // prefs.get('pdf_wait')
         } else {
           Fluttertoast.showToast(msg: '${'please wait'.tr()} ${'for'.tr()} ${5 - difference.inMinutes} ${'minutes'.tr()}');

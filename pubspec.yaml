@@ -84,6 +84,7 @@ dependencies:
   carousel_slider: ^5.1.2
   coverflow_carousel: ^2.0.1
   webview_flutter: ^4.14.1
+  # hive: ^2.2.3
   # flutter_windowmanager: ^0.2.0
   # no_screenshot: ^1.2.0
   flutter_web_browser:
@@ -126,11 +127,15 @@ dependencies:
   # fk_user_agent: any
   # webfeed: any
   http: any
+  hive_ce: ^2.19.3
+  hive_ce_flutter: ^2.3.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_launcher_icons: ^0.14.4
+  hive_ce_generator: ^1.11.2
+  build_runner: ^2.15.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

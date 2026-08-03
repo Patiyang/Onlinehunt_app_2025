@@ -3,9 +3,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
+import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
 import 'package:online_hunt_news/services/app_service.dart';
@@ -22,6 +24,8 @@ class PDFepaper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final box = Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
+
     return InkWell(
       child: Container(
         height: height,
@@ -110,11 +114,14 @@ class PDFepaper extends StatelessWidget {
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        int timemilli = prefs.getInt('pdf_timer') ?? 0;
-        if (timemilli == 0) {
+        // int timemilli = prefs.getInt('pdf_timer') ?? 0;
+        final pdfItem = box.get(epaperModel.id);
+        // print(pdfItem == null ? 'no pepers' : pdfItem.pdf_id);
+        // print('the length is ${box.values.length}');
+        if (pdfItem == null) {
           nextScreen(context, CustomPdfViewer(paper_model: epaperModel, id: epaperModel.id, lang_id: epaperModel.publication!.lang_id));
         } else {
-          final last_open = DateTime.fromMillisecondsSinceEpoch(timemilli);
+          final last_open = DateTime.fromMillisecondsSinceEpoch(pdfItem.pdf_milliseconds);
           final now = DateTime.now();
           final difference = now.difference(last_open);
           print(difference.inSeconds); // 16591
@@ -130,42 +137,42 @@ class PDFepaper extends StatelessWidget {
     );
   }
 
-  launchPageviewPDF(EpaperModel paper) {
-    String url = '${HelperClass.mediaIp}${paper.pdf_file}';
-    print(url);
-    PDF(
-      enableSwipe: true,
-      swipeHorizontal: true,
-      autoSpacing: false,
-      pageFling: false,
-      backgroundColor: Colors.grey,
-      onError: (error) {
-        print(error.toString());
-      },
-      onPageError: (page, error) {
-        print('$page: ${error.toString()}');
-      },
+  // launchPageviewPDF(EpaperModel paper) {
+  //   String url = '${HelperClass.mediaIp}${paper.pdf_file}';
+  //   print(url);
+  //   PDF(
+  //     enableSwipe: true,
+  //     swipeHorizontal: true,
+  //     autoSpacing: false,
+  //     pageFling: false,
+  //     backgroundColor: Colors.grey,
+  //     onError: (error) {
+  //       print(error.toString());
+  //     },
+  //     onPageError: (page, error) {
+  //       print('$page: ${error.toString()}');
+  //     },
 
-      // onPageChanged: (int page, int total) {
-      //   // print('page change: $page/$total');
-      // },
-    ).cachedFromUrl(
-      '${HelperClass.mediaIp}${paper.pdf_file}',
-      placeholder: (progress) => Center(child: Text('$progress %')),
-      errorWidget: (error) => Center(child: Text(error.toString())),
-    );
-  }
+  //     // onPageChanged: (int page, int total) {
+  //     //   // print('page change: $page/$total');
+  //     // },
+  //   ).cachedFromUrl(
+  //     '${HelperClass.mediaIp}${paper.pdf_file}',
+  //     placeholder: (progress) => Center(child: Text('$progress %')),
+  //     errorWidget: (error) => Center(child: Text(error.toString())),
+  //   );
+  // }
 
-  void launchPdfViewer(EpaperModel paper, BuildContext context) async {
-    String url = '${HelperClass.mediaIp}${paper.pdf_file}';
-    print(url);
-    // print(url);
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      // await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-      AppService().openLinkWithCustomTab(context, url);
-    } else {
-      debugPrint('Could not launch WhatsApp');
-    }
-  }
+  // void launchPdfViewer(EpaperModel paper, BuildContext context) async {
+  //   String url = '${HelperClass.mediaIp}${paper.pdf_file}';
+  //   print(url);
+  //   // print(url);
+  //   final uri = Uri.parse(url);
+  //   if (await canLaunchUrl(uri)) {
+  //     // await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
+  //     AppService().openLinkWithCustomTab(context, url);
+  //   } else {
+  //     debugPrint('Could not launch WhatsApp');
+  //   }
+  // }
 }

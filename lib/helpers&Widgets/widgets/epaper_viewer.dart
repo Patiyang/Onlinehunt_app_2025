@@ -84,7 +84,8 @@ class _CutomEpaperViewerState extends State<CutomEpaperViewer> {
         // setState(() {});
       });
     } else {
-      epaperModel = widget.paper_model;        String url = widget.customUrl == true ? updateUrlWithToday(epaperModel!.website_url!) : epaperModel!.website_url!;
+      epaperModel = widget.paper_model;
+      String url = /* widget.customUrl == true ? updateUrlWithToday(epaperModel!.website_url!) : */ epaperModel!.website_url!;
 
       controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
