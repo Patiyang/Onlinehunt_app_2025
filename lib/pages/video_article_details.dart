@@ -11,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:online_hunt_news/blocs/ads_bloc.dart';
+import 'package:online_hunt_news/blocs/bookmark_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -19,6 +20,7 @@ import 'package:online_hunt_news/models/custom_color.dart';
 import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/models/reactionItem.dart';
 import 'package:online_hunt_news/services/app_service.dart';
+import 'package:online_hunt_news/services/bookmark_services.dart';
 import 'package:online_hunt_news/services/follow_service.dart';
 import 'package:online_hunt_news/services/post_reaction_service.dart';
 import 'package:online_hunt_news/utils/sign_in_dialog.dart';
@@ -105,7 +107,9 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
   //     context.read<BookmarkBloc>().onBookmarkIconClick(article.timestamp);
   //   }
   // }
-
+  BookmarkServices bookmarkService = BookmarkServices();
+  bool save_status = false;
+  bool loadingBm = true;
   _initInterstitialAds() {
     final adb = context.read<AdsBloc>();
     Future.delayed(Duration(milliseconds: 0)).then((value) {
@@ -292,6 +296,20 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                                 ),
                               ),
                       ),
+
+                      IconButton(
+                        onPressed: () {
+                          if (loadingBm == false) {
+                            setState(() {});
+                            save_status == false ? addBookMark() : removeBookMark();
+                          }
+                        },
+                        icon: loadingBm == true
+                            ? Loading()
+                            : save_status == true
+                            ? Icon(Icons.bookmark)
+                            : Icon(Icons.bookmark_outline),
+                      ),
                     ],
                   ),
                   Row(
@@ -353,7 +371,6 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                   SizedBox(height: 5),
                   Text(article.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: -0.6, wordSpacing: 1)),
                   Divider(color: Theme.of(context).primaryColor, endIndent: 200, thickness: 2, height: 20),
-                
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -382,7 +399,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                     //   )
                   ),
                   // Text('${article.feedModel!.feedurl.isEmpty}'),
-                 article.feedModel!.feedurl.isNotEmpty
+                  article.feedModel!.feedurl.isNotEmpty
                       ? Card(
                           surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
                           shape: Border.all(style: BorderStyle.none),
@@ -432,8 +449,9 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
                           ),
                         )
                         .toList(),
-                  ),SizedBox(height: 15,),
-                    TextButton.icon(
+                  ),
+                  SizedBox(height: 15),
+                  TextButton.icon(
                     style: ButtonStyle(
                       padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
                       backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
@@ -485,6 +503,7 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
       apiCategories = article.category!;
       checkFollowing();
       checkReaction();
+      checkBookMark();
       if (article.video_url!.contains('youtube')) {
         initYoutube();
       } else {
@@ -538,70 +557,70 @@ class _VideoArticleDetailsState extends State<VideoArticleDetails> {
     // _videoPlayerController.play();
   }
 
-  _handleContentShare() async {
-    SharePlus share = SharePlus.instance;
-    String deepLink = generateDeepLink(article.slug);
+//   _handleContentShare() async {
+//     SharePlus share = SharePlus.instance;
+//     String deepLink = generateDeepLink(article.slug);
 
-    await share.share(
-      ShareParams(
-        // uri: Uri.parse(deepLink),
-        text:
-            '''
-📰 ${article.title}
+//     await share.share(
+//       ShareParams(
+//         // uri: Uri.parse(deepLink),
+//         text:
+//             '''
+// 📰 ${article.title}
 
-${HelperClass().limitSummary(article.summary)}
+// ${HelperClass().limitSummary(article.summary)}
 
-${'click for more'.tr()}
-$deepLink
-''',
-        subject: article.title,
-        title: article.title,
-        // previewThumbnail: XFile(Config().splashIcon,),
-      ),
-    );
-  }
+// ${'click for more'.tr()}
+// $deepLink
+// ''',
+//         subject: article.title,
+//         title: article.title,
+//         // previewThumbnail: XFile(Config().splashIcon,),
+//       ),
+//     );
+//   }
 
-  _handleWhatsappShare() async {
-    SharePlus share = SharePlus.instance;
+//   _handleWhatsappShare() async {
+//     SharePlus share = SharePlus.instance;
 
-    String deepLink = generateDeepLink(article.slug);
-    final message =
-        '''
-📰 ${article.title}
+//     String deepLink = generateDeepLink(article.slug);
+//     final message =
+//         '''
+// 📰 ${article.title}
 
-${HelperClass().limitSummary(article.summary)}
+// ${HelperClass().limitSummary(article.summary)}
 
-${'click for more'.tr()}
-$deepLink
-''';
-    final whatsappUrl = Uri.parse("https://wa.me/?text=${Uri.encodeComponent(message)}");
-    // await share.share(
-    //   ShareParams(
-    //     // uri: Uri.parse(deepLink),
-    //     text: whatsappUrl,
-    //     subject: postModel!.title,
-    //     title: postModel!.title,
-    //     // previewThumbnail: XFile(Config().splashIcon,),
-    //   ),
-    // );
+// ${'click for more'.tr()}
+// $deepLink
+// ''';
+//     final whatsappUrl = Uri.parse("https://wa.me/?text=${Uri.encodeComponent(message)}");
+//     // await share.share(
+//     //   ShareParams(
+//     //     // uri: Uri.parse(deepLink),
+//     //     text: whatsappUrl,
+//     //     subject: postModel!.title,
+//     //     title: postModel!.title,
+//     //     // previewThumbnail: XFile(Config().splashIcon,),
+//     //   ),
+//     // );
 
-    // final uri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(whatsappUrl)) {
-      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('Could not launch WhatsApp');
-    }
-  }
+//     // final uri = Uri.parse(whatsappUrl);
+//     if (await canLaunchUrl(whatsappUrl)) {
+//       await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+//     } else {
+//       debugPrint('Could not launch WhatsApp');
+//     }
+//   }
 
-  String generateDeepLink(String slug) {
-    final languageCode = context.locale.languageCode;
-    print('the code is $languageCode');
-    if (languageCode == 'en') {
-      return '${HelperClass.shareIp}$slug';
-    }
+  // String generateDeepLink(String slug) {
+  //   final languageCode = context.locale.languageCode;
+  //   print('the code is $languageCode');
+  //   if (languageCode == 'en') {
+  //     return '${HelperClass.shareIp}$slug';
+  //   }
 
-    return '${HelperClass.shareIp}$languageCode/$slug';
-  }
+  //   return '${HelperClass.shareIp}$languageCode/$slug';
+  // }
 
   handleLoveClick() {
     bool _guestUser = context.read<SignInBloc>().guestUser;
@@ -681,5 +700,44 @@ $deepLink
       }
       setState(() {});
     });
+  }
+
+  checkBookMark() async {
+    await bookmarkService.bookmarkStatus(article!.id, context).then((val) {
+      if (val == true) {
+        save_status = true;
+      }
+    });
+    loadingBm = false;
+    setState(() {});
+  }
+
+  addBookMark() async {
+    // save_status = null;
+    loadingBm = true;
+    await bookmarkService.addToBookmarks(article!.id, context).then((val) {
+      if (val == true) {
+        save_status = true;
+      }
+    });
+    loadingBm = false;
+
+    setState(() {});
+  }
+
+  removeBookMark() async {
+    // save_status = null;
+    final ub = context.read<SignInBloc>();
+
+    loadingBm = true;
+    await bookmarkService.removeBookmark(article!.id, context).then((val) {
+      if (val == true) {
+        save_status = false;
+
+        context.read<BookmarkBloc>().onRefresh(mounted, int.parse(ub.uid!));
+      }
+    });
+    loadingBm = false;
+    setState(() {});
   }
 }

@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:online_hunt_news/constants/constants.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/article.dart';
 import 'package:online_hunt_news/pages/article_details.dart';
+import 'package:online_hunt_news/pages/iptv/iptv_video.dart';
+import 'package:online_hunt_news/pages/video_article_details.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,8 +97,22 @@ class NotificationBloc extends ChangeNotifier {
 
     RemoteMessage? initialMessage = await _fcm.getInitialMessage();
     print('inittal message : $initialMessage');
+
     if (initialMessage != null) {
-      nextScreen(context, ArticleDetails(post_id: int.parse(initialMessage.data['articleId']),slug: initialMessage.data['articleId'],));
+      Map initialData = initialMessage!.data;
+      if (initialData['type'] == 'article') {
+        await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: initialData['slug'])));
+      }
+      if (initialData['type'] == 'video') {
+        await Navigator.push(context, MaterialPageRoute(builder: (_) => VideoArticleDetails(post_id: null, slug: initialData['slug'])));
+      }
+      if (initialData['type'] == 'live_news') {
+        int id = int.parse(initialData['id']);
+        print('the initial id is:$id');
+        // nextScreen(context, IptvVideo(iptvModel: null, id: id));
+      }
+      // await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: initialData['slug'])));
+      // nextScreen(context, ArticleDetails(post_id: int.parse(initialMessage.data['articleId']),slug: initialMessage.data['articleId'],));
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -104,15 +121,28 @@ class NotificationBloc extends ChangeNotifier {
         context,
         message.notification!.title,
         message.notification!.body,
-        articleId: message.data['articleId'],
-        categoryId: message.data['categoryId'],
-        imageUrl: message.data['imageUrl'],
+        // articleId: message.data['articleId'],
+        type: message.data['type'],
+        imageUrl: message.data['image_url'],
+        slug: message.data['slug'],
+        iptvId: int.parse(message.data['id']),
+        live_url: message.data['live_url'],
       );
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print(message.data);
-      nextScreen(context, ArticleDetails(post_id: int.parse(message.data['articleId'],),slug: message.data['articleId']));
+      Map onMessageOpenedAppData = message.data;
+      // navigateToDetailsScreen(context, article);
+      if (onMessageOpenedAppData['type'] == 'article') {
+        nextScreen(context, ArticleDetails(post_id: null, slug: onMessageOpenedAppData['slug']));
+      }
+      if (onMessageOpenedAppData['type'] == 'video') {
+        nextScreen(context, VideoArticleDetails(post_id: null, slug: onMessageOpenedAppData['slug']));
+      }
+      if (onMessageOpenedAppData['type'] == 'live_news') {
+        int id = int.parse(onMessageOpenedAppData['id']);
+        nextScreen(context, IptvVideo(iptvModel: null, id: id));
+      }
       // navigateToDetailsScreen(context, await getArticleById(message.data['articleId']), '');
     });
     notifyListeners();
@@ -144,14 +174,14 @@ class NotificationBloc extends ChangeNotifier {
     handleFcmSubscribtion();
   }
 
-  showinAppDialog(context, title, body, {String? articleId, String? categoryId, String? imageUrl, String ?slug}) {
+  showinAppDialog(context, title, body, {String? live_url, int? iptvId, String? type, String? imageUrl, required String? slug}) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: ClipRRect(
           borderRadius: BorderRadius.circular(9),
           child: CachedNetworkImage(
-            imageUrl: imageUrl!,
+            imageUrl: type == 'live_news' ? HelperClass().getYoutubeThumbnail(live_url!) : imageUrl!,
             height: 150,
             width: 50,
             fit: BoxFit.cover,
@@ -164,7 +194,7 @@ class NotificationBloc extends ChangeNotifier {
           subtitle: Text(
             HtmlUnescape().convert(parse(body).documentElement!.text),
             overflow: TextOverflow.ellipsis,
-            maxLines: 2,
+            maxLines: 3,
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
           ),
         ),
@@ -178,8 +208,19 @@ class NotificationBloc extends ChangeNotifier {
           TextButton(
             child: Text('Open'),
             onPressed: () async {
-              Navigator.of(context).pop();
-              nextScreen(context, ArticleDetails(post_id: int.parse(articleId!),slug: slug,));
+              if (type == 'article') {
+                nextScreen(context, ArticleDetails(post_id: null, slug: slug));
+              }
+              if (type == 'video') {
+                nextScreen(context, VideoArticleDetails(post_id: null, slug: slug!));
+              }
+              if (type == 'live_news') {
+                int id = iptvId!;
+                nextScreen(context, IptvVideo(iptvModel: null, id: id));
+              }
+              // Navigator.of(context).pop();
+              // await Navigator.push(context, MaterialPageRoute(builder: (_) => ArticleDetails(post_id: null, slug: slug)));
+              // nextScreen(context, ArticleDetails(post_id: int.parse(articleId!), slug: slug));
             },
           ),
         ],

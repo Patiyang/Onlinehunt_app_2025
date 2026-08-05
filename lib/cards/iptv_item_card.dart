@@ -78,7 +78,7 @@ class IptvItemCard extends StatelessWidget {
                     height: 240,
                     width: MediaQuery.of(context).size.width - 22,
 
-                    child: CustomCacheImage(  imageUrl: '', radius: 5, contentType: 'video', circularShape: false, mediaType: 'video', videoUrl: item!.url),
+                    child: CustomCacheImage(  imageUrl: '', radius: 5, contentType: 'video', circularShape: false/* , mediaType: 'video' */, videoUrl: item!.url),
                   )
                 : FutureBuilder(
                     future: videoThumbnail(item!.url!),

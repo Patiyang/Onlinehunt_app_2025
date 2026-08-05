@@ -43,7 +43,7 @@ class PostModel {
       title: json['title'] ?? '',
       slug: json['slug'] ?? '',
       summary: json['summary'] ?? '',
-      post_url: json['post_url'],
+      post_url: json['post_url']??'',
       video_url: json['video_url'] ?? '',
       keywords: json['keywords'] != null ? List<String>.from(json['keywords']) : [],
       content: json['content'],
@@ -73,3 +73,6 @@ class PostModel {
     'category': category?.toJson(),
   };
 }
+
+
+

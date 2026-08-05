@@ -25,7 +25,7 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final fb = context.read<FeaturedBloc>();
+    final fb = context.watch<FeaturedBloc>();
     double w = MediaQuery.of(context).size.width;
 
     return Column(

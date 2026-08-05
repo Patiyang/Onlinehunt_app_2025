@@ -24,7 +24,7 @@ void nextScreenPopup(context, page) {
   Navigator.push(context, MaterialPageRoute(fullscreenDialog: true, builder: (context) => page));
 }
 
-void navigateToDetailsScreen(context, PostModel article, String? heroTag, String categoryId) {
+void navigateToDetailsScreen(context, PostModel article, String? heroTag, String catergoryId) {
   if (article.video_url!.isNotEmpty) {
     Navigator.push(
       context,

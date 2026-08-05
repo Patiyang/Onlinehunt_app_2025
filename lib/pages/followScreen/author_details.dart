@@ -205,7 +205,7 @@ class _AuthorDetailsState extends State<AuthorDetails> {
                         itemBuilder: (BuildContext context, int index) {
                           if (loadingArticles == false) {
                             ApiArticle singleArticle = _userArticles[index];
-                            return Card4(apiArticle: singleArticle, heroTag: '${singleArticle.id}', categoryName: 'snapshot.data');
+                            // return Card4(apiArticle: singleArticle, heroTag: '${singleArticle.id}', categoryName: 'snapshot.data');
                           } else {
                             return LoadingCard(height: 100);
                           }

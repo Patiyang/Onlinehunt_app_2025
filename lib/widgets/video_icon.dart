@@ -13,7 +13,7 @@ class VideoIcon extends StatelessWidget {
     else
       return Align(
         child: Icon(Icons.play_circle_fill_outlined,
-            color: Colors.white, size: iconSize),
+            color: Theme.of(context).iconTheme.color, size: iconSize),
       );
   }
 }

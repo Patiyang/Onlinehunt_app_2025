@@ -11,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:online_hunt_news/blocs/ads_bloc.dart';
+import 'package:online_hunt_news/blocs/bookmark_bloc.dart';
 // import 'package:flutter_user_agent/flutter_user_agent.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
@@ -28,6 +29,7 @@ import 'package:online_hunt_news/models/postModel.dart';
 import 'package:online_hunt_news/models/reactionItem.dart';
 import 'package:online_hunt_news/pages/comments.dart';
 import 'package:online_hunt_news/services/app_service.dart';
+import 'package:online_hunt_news/services/bookmark_services.dart';
 import 'package:online_hunt_news/services/follow_service.dart';
 import 'package:online_hunt_news/services/page_view_services.dart';
 import 'package:online_hunt_news/services/post_reaction_service.dart';
@@ -94,6 +96,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
   // bool handle_follo
   FollowService followService = FollowService();
   PostReactionService postReactionService = PostReactionService();
+
   // FaIcon(FontAwesomeIcons.thumbsUp),
 
   List<Reactionitem> reactionItems = [
@@ -102,6 +105,10 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
     Reactionitem(icon: FaIcon(FontAwesomeIcons.faceAngry), reactionName: 'angry', color: Colors.red),
   ];
   Reactionitem? selectedReaction;
+
+  BookmarkServices bookmarkService = BookmarkServices();
+  bool save_status = false;
+  bool loadingBm = true;
   @override
   void initState() {
     initUserAgent();
@@ -206,6 +213,20 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                                   ),
                                                 ),
                                         ),
+
+                                        IconButton(
+                                          onPressed: () {
+                                            if (loadingBm == false) {
+                                              setState(() {});
+                                              save_status == false ? addBookMark() : removeBookMark();
+                                            }
+                                          },
+                                          icon: loadingBm == true
+                                              ? Loading()
+                                              : save_status == true
+                                              ? Icon(Icons.bookmark)
+                                              : Icon(Icons.bookmark_outline),
+                                        ),
                                       ],
                                     ),
 
@@ -305,7 +326,7 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                     // Text(article.description!),
                                     SizedBox(height: 10),
 
-                                    post!.feedModel!.feedurl.isNotEmpty 
+                                    post!.feedModel!.feedurl.isNotEmpty
                                         ? Card(
                                             surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
                                             shape: Border.all(style: BorderStyle.none),
@@ -551,6 +572,7 @@ $deepLink
           // if(user_id!=post)
           checkFollowing();
           checkReaction();
+          checkBookMark();
           // print('''${post!.content}''');
 
           apiCategories = post!.category!;
@@ -643,7 +665,7 @@ $deepLink
 
   checkReaction() async {
     //  is_following = false;
-    final sb = context.read<SignInBloc>();
+    // final sb = context.read<SignInBloc>();
     // if(sb.guestUser){}
     await postReactionService.postReactionValue(post!.id, context).then((val) {
       selectedReaction = reactionItems.where((test) => test.reactionName == val).firstOrNull;
@@ -670,5 +692,44 @@ $deepLink
       }
       setState(() {});
     });
+  }
+
+  checkBookMark() async {
+    await bookmarkService.bookmarkStatus(post!.id, context).then((val) {
+      if (val == true) {
+        save_status = true;
+      }
+    });
+    loadingBm = false;
+    setState(() {});
+  }
+
+  addBookMark() async {
+    // save_status = null;
+    loadingBm = true;
+    await bookmarkService.addToBookmarks(post!.id, context).then((val) {
+      if (val == true) {
+        save_status = true;
+      }
+    });
+    loadingBm = false;
+
+    setState(() {});
+  }
+
+  removeBookMark() async {
+    // save_status = null;
+    final ub = context.read<SignInBloc>();
+
+    loadingBm = true;
+    await bookmarkService.removeBookmark(post!.id, context).then((val) {
+      if (val == true) {
+        save_status = false;
+
+        context.read<BookmarkBloc>().onRefresh(mounted, int.parse(ub.uid!));
+      }
+    });
+    loadingBm = false;
+    setState(() {});
   }
 }

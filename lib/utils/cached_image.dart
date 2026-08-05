@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 // import 'package:flutter_html/shims/dart_ui_real.dart';
 
 class CustomCacheImage extends StatefulWidget {
@@ -10,14 +11,14 @@ class CustomCacheImage extends StatefulWidget {
   final String? contentType;
   final double radius;
   final bool? circularShape;
-  final String? mediaType;
+  // final String? mediaType;
   const CustomCacheImage({
     Key? key,
     required this.imageUrl,
     required this.radius,
     this.circularShape,
     this.contentType,
-    this.mediaType,
+    // this.mediaType,
     this.avatarUrl,
     this.videoUrl,
   }) : super(key: key);
@@ -38,7 +39,7 @@ class _CustomCacheImageState extends State<CustomCacheImage> {
       ),
       child: widget.contentType == 'video' && widget.videoUrl!.contains('youtube')
           ? CachedNetworkImage(
-              imageUrl: getYoutubeThumbnail(widget.videoUrl!),
+              imageUrl: HelperClass().getYoutubeThumbnail(widget.videoUrl!),
               fit: BoxFit.cover,
               height: MediaQuery.of(context).size.height,
               placeholder: (context, url) => Container(color: Colors.grey[300]),
@@ -73,12 +74,12 @@ class _CustomCacheImageState extends State<CustomCacheImage> {
     );
   }
 
-  String getYoutubeThumbnail(String videoUrl) {
-    final Uri? uri = Uri.tryParse(videoUrl);
-    if (uri == null) {
-      return '';
-    }
+  // String getYoutubeThumbnail(String videoUrl) {
+  //   final Uri? uri = Uri.tryParse(videoUrl);
+  //   if (uri == null) {
+  //     return '';
+  //   }
 
-    return 'https://img.youtube.com/vi/${uri.queryParameters['v']}/0.jpg';
-  }
+  //   return 'https://img.youtube.com/vi/${uri.queryParameters['v']}/0.jpg';
+  // }
 }

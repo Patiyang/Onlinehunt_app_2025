@@ -153,7 +153,7 @@ class _AfterSearchUIState extends State<AfterSearchUI> {
                   return FutureBuilder(
                     future: categoriesStream(apiArticle.categoryId),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      return snapshot.hasData ? Card4(apiArticle: apiArticle, heroTag: 'search$index', categoryName: snapshot.data) : SizedBox.shrink();
+                      return /* snapshot.hasData ? Card4(apiArticle: apiArticle, heroTag: 'search$index', categoryName: snapshot.data) : */ SizedBox.shrink();
                     },
                   );
                   // return Card4(

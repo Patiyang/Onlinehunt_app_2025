@@ -143,4 +143,13 @@ $deepLink
       return '${HelperClass.shareIp}live?type=live_news&id=${liveNews!.liveNewsId}';
     }
   }
+
+   String getYoutubeThumbnail(String videoUrl) {
+    final Uri? uri = Uri.tryParse(videoUrl);
+    if (uri == null) {
+      return '';
+    }
+
+    return 'https://img.youtube.com/vi/${uri.queryParameters['v']}/0.jpg';
+  }
 }
