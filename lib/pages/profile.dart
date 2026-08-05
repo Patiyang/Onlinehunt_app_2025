@@ -10,6 +10,7 @@ import 'package:online_hunt_news/models/general_settings_model.dart';
 import 'package:online_hunt_news/pages/aricleUploads/allArticles.dart';
 import 'package:online_hunt_news/pages/bookmarks.dart';
 import 'package:online_hunt_news/pages/edit_profile.dart';
+import 'package:online_hunt_news/pages/my_downloads.dart';
 import 'package:online_hunt_news/pages/welcome.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:provider/provider.dart';
@@ -333,15 +334,17 @@ class UserUI extends StatelessWidget {
         ),
         Divider(height: 3),
         ListTile(
-          title: Text('my uploads').tr(),
+          title: Text('my_downloads').tr(),
           leading: Container(
             height: 30,
             width: 30,
             decoration: BoxDecoration(color: Config().appColor, borderRadius: BorderRadius.circular(5)),
-            child: Icon(Icons.upload, size: 20, color: Colors.white),
+            child: Icon(Icons.download, size: 20, color: Colors.white),
           ),
           trailing: Icon(Icons.chevron_right, size: 20),
-          onTap: () => nextScreen(context, AllArticles()),
+          onTap: () => nextScreen(context, MyDownloads(
+            
+          )),
         ),
         Divider(height: 3),
         ListTile(

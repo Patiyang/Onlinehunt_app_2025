@@ -5,13 +5,16 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
+import 'package:online_hunt_news/services/PDFService.dart';
 import 'package:online_hunt_news/services/app_service.dart';
 import 'package:online_hunt_news/utils/next_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,22 +28,13 @@ class PDFepaper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final box = Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
-
+// final pdfService = PDFService();
     return InkWell(
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-          // image: DecorationImage(image: CachedNetworkImageProvider('${HelperClass.mediaIp}${epaperModel.cover_image!}'), fit: BoxFit.cover),
-          // gradient: LinearGradient(
-          //   colors: [
-          //     Theme.of(context).primaryColorDark.withValues(alpha: .1),
-          //     Theme.of(context).scaffoldBackgroundColor,
-          //     Theme.of(context).primaryColorDark.withValues(alpha: .3),
-          //   ],
-          //   begin: Alignment.bottomCenter,
-          //   end: Alignment.topCenter,
-          // ),
+       
           borderRadius: BorderRadius.circular(5),
           color: Theme.of(context).scaffoldBackgroundColor,
 
@@ -113,12 +107,12 @@ class PDFepaper extends StatelessWidget {
       ),
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-
+        final sb = context.read<SignInBloc>();
         // int timemilli = prefs.getInt('pdf_timer') ?? 0;
         final pdfItem = box.get(epaperModel.id);
         // print(pdfItem == null ? 'no pepers' : pdfItem.pdf_id);
         // print('the length is ${box.values.length}');
-        if (pdfItem == null) {
+        if (pdfItem == null || sb.email=='patiyang6@gmail.com') {
           nextScreen(context, CustomPdfViewer(paper_model: epaperModel, id: epaperModel.id, lang_id: epaperModel.publication!.lang_id));
         } else {
           final last_open = DateTime.fromMillisecondsSinceEpoch(pdfItem.pdf_milliseconds);

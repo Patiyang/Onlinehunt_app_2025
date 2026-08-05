@@ -16,7 +16,7 @@ import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
-import 'package:online_hunt_news/helpers&Widgets/widgets/epaper_viewer.dart';
+import 'package:online_hunt_news/helpers&Widgets/widgets/web_viewer.dart';
 import 'package:online_hunt_news/helpers&Widgets/widgets/pdf_viewer.dart';
 import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
 import 'package:online_hunt_news/models/epaper_model.dart';

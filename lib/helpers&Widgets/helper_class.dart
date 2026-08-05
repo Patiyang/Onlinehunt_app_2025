@@ -19,9 +19,9 @@ class HelperClass {
   static const liveshareIp = 'https://onlinehunt.in/';
   static const testshareIp = 'http://192.168.100.26/';
 
-  static const mainIp = testipAddress;
-  static const avatarIp = publicTestIpAddress;
-  static const mediaIp = testshareIp;
+  static const mainIp = serverpAddress;
+  static const avatarIp = publicMainIpAddress;
+  static const mediaIp = liveshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';

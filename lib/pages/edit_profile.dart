@@ -116,27 +116,29 @@ class _EditProfileState extends State<EditProfile> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: <Widget>[
+            SizedBox(height: 10,),
             InkWell(
               child: CircleAvatar(
                 radius: 70,
                 backgroundColor: Colors.grey[300],
-                child: Container(
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.grey[800]!),
-                    color: Colors.grey[500],
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: (imageFile == null ? CachedNetworkImageProvider(imageUrl!) : FileImage(imageFile!)) as ImageProvider<Object>,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(Icons.edit, size: 30, color: Colors.black),
-                  ),
-                ),
+                backgroundImage: (imageFile == null ? CachedNetworkImageProvider(imageUrl!) : FileImage(imageFile!)) as ImageProvider<Object>,
+                // child: Container(
+                //   height: 120,
+                //   width: 120,
+                //   decoration: BoxDecoration(
+                //     border: Border.all(width: 1, color: Colors.grey[800]!),
+                //     color: Colors.grey[500],
+                //     shape: BoxShape.circle,
+                //     image: DecorationImage(
+                //       image: (imageFile == null ? CachedNetworkImageProvider(imageUrl!) : FileImage(imageFile!)) as ImageProvider<Object>,
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                //   child: Align(
+                //     alignment: Alignment.bottomRight,
+                //     child: Icon(Icons.edit, size: 30, color: Colors.black),
+                //   ),
+                // ),
               ),
               onTap: () {
                 pickImage();
@@ -162,7 +164,7 @@ class _EditProfileState extends State<EditProfile> {
             SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Colors.white),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Theme.of(context).shadowColor),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isExpanded: true,
@@ -184,24 +186,26 @@ class _EditProfileState extends State<EditProfile> {
             selectedDistricts.isEmpty
                 ? Text('no districts specified yet'.tr().toUpperCase())
                 : Container(
-                    height: 40,
-                    child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      scrollDirection: Axis.horizontal,
-                      children: selectedDistricts
-                          .map(
-                            (singleDistrict) => Padding(
+                    // height: 40,
+                    child: 
+                    GridView.builder(physics: NeverScrollableScrollPhysics(),shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,mainAxisExtent: 40,mainAxisSpacing: 10
+                      ),
+                      itemCount: selectedDistricts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Theme.of(context).cardColor),
-                                child: Row(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Theme.of(context).cardColor),
+                                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(singleDistrict, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)).tr(),
+                                    Text(selectedDistricts[index], style: TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.bold)).tr(),
                                     SizedBox(width: 10),
                                     GestureDetector(
                                       onTap: () {
-                                        selectedDistricts.remove(singleDistrict);
+                                        selectedDistricts.remove(selectedDistricts[index]);
                                         setState(() {});
                                       },
                                       child: Icon(Icons.cancel),
@@ -209,10 +213,38 @@ class _EditProfileState extends State<EditProfile> {
                                   ],
                                 ),
                               ),
-                            ),
-                          )
-                          .toList(),
+                        );
+                      },
                     ),
+                    
+                    // ListView(
+                    //   padding: EdgeInsets.symmetric(horizontal: 5),
+                    //   scrollDirection: Axis.horizontal,
+                    //   children: selectedDistricts
+                    //       .map(
+                    //         (singleDistrict) => Padding(
+                    //           padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    //           child: Container(
+                    //             padding: EdgeInsets.symmetric(horizontal: 15),
+                    //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Theme.of(context).cardColor),
+                    //             child: Row(
+                    //               children: [
+                    //                 Text(singleDistrict, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)).tr(),
+                    //                 SizedBox(width: 10),
+                    //                 GestureDetector(
+                    //                   onTap: () {
+                    //                     selectedDistricts.remove(singleDistrict);
+                    //                     setState(() {});
+                    //                   },
+                    //                   child: Icon(Icons.cancel),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //       .toList(),
+                    // ),
                   ),
             SizedBox(height: 10),
             Text('choose district'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -258,12 +290,12 @@ class _EditProfileState extends State<EditProfile> {
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
-                  textStyle: WidgetStateProperty.resolveWith((states) => TextStyle(color: Colors.white)),
+                  // backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
+                  textStyle: WidgetStateProperty.resolveWith((states) => TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color)),
                 ),
                 child: loading == true
                     ? Center(child: CircularProgressIndicator(backgroundColor: Colors.white))
-                    : Text('update profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)).tr(),
+                    : Text('update profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyMedium!.color)).tr(),
                 onPressed: () {
                   handleUpdateData();
                 },
@@ -282,6 +314,7 @@ class _EditProfileState extends State<EditProfile> {
     for (int i = 0; i < jsonResult['states'].length; i++) {
       states.add(jsonResult['states'][i]['state']);
     }
+                          Fluttertoast.showToast(msg: 'Already present $state!');
     selectedState = state!;
     selectedDistricts = district!.cast<String>();
     if (selectedState != '') {

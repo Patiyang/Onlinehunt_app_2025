@@ -19,17 +19,23 @@ class PDFItemModelAdapter extends TypeAdapter<PDFItemModel> {
     return PDFItemModel(
       pdf_id: (fields[0] as num).toInt(),
       pdf_milliseconds: (fields[1] as num).toInt(),
+      file_name: fields[2] as String?,
+      pdf_original_name: fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PDFItemModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.pdf_id)
       ..writeByte(1)
-      ..write(obj.pdf_milliseconds);
+      ..write(obj.pdf_milliseconds)
+      ..writeByte(2)
+      ..write(obj.file_name)
+      ..writeByte(3)
+      ..write(obj.pdf_original_name);
   }
 
   @override
