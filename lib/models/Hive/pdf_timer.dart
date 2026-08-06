@@ -12,13 +12,38 @@ class PDFItemModel extends HiveObject {
   final int pdf_id;
 
   @HiveField(1)
-  final int pdf_milliseconds;
+   int pdf_milliseconds;
 
   @HiveField(2)
   String? file_name;
 
   @HiveField(3)
-  String? pdf_original_name;
+  String? thumbnail_name;
 
-  PDFItemModel({required this.pdf_id, required this.pdf_milliseconds, this.file_name,this.pdf_original_name});
+  @HiveField(4)
+   String? title;
+
+  @HiveField(5)
+   String? publication;
+
+  @HiveField(6)
+   String? issue_date;
+
+  @HiveField(7)
+   String? cover_image;
+
+  @HiveField(8)
+   String? pdf_url;
+
+  PDFItemModel({
+    required this.pdf_id,
+    required this.pdf_milliseconds,
+    required this.title,
+    required this.publication,
+    required this.issue_date,
+    required this.cover_image,
+    required this.pdf_url,
+    this.file_name,
+    this.thumbnail_name,
+  });
 }

@@ -6,6 +6,7 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/theme_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
@@ -49,6 +50,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
   @override
   Widget build(BuildContext context) {
     final tm = context.read<ThemeBloc>();
+    final sb = context.read<SignInBloc>();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: loading == true ? 0 : Theme.of(context).appBarTheme.toolbarHeight,
@@ -69,7 +71,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
           ),
         ],
       ),
-      floatingActionButton: pdf_ready == false && _isDownloading==false
+      floatingActionButton: pdf_ready == false && _isDownloading == false
           ? SizedBox.shrink()
           : TextButton.icon(
               style: ButtonStyle(
@@ -77,7 +79,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
                 iconColor: WidgetStatePropertyAll(Theme.of(context).iconTheme.color),
                 textStyle: WidgetStatePropertyAll(TextStyle(color: Theme.of(context).iconTheme.color)),
               ),
-              onPressed: () => handleDownload(),
+              onPressed: () => sb.guestUser == true ? Fluttertoast.showToast(msg: 'please_login'.tr()) : handleDownload(),
               label: Text(is_downloaded ? "delete" : 'save').tr(),
               icon: Icon(is_downloaded ? Icons.delete : Icons.save, size: 25),
             ),
@@ -129,21 +131,20 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
                         placeholder: (progress) => Center(child: Text('$progress %')),
                         errorWidget: (error) => Center(child: Text(error.toString())),
                       ),
-             pdf_ready == false ? SizedBox.shrink() :         Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 50.0),
-                          child: Card(
-                            // padding: const EdgeInsets.all(18.0),
-                            // margin: EdgeInsets.all(10),
-                            // decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), col),
-                            child: Container(
-                              margin: EdgeInsets.all(10),
-                              child:  Text('${"page".tr()} $currentPage ${"of".tr()} $totalPages'),
+                      pdf_ready == false
+                          ? SizedBox.shrink()
+                          : Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 50.0),
+                                child: Card(
+                                  // padding: const EdgeInsets.all(18.0),
+                                  // margin: EdgeInsets.all(10),
+                                  // decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), col),
+                                  child: Container(margin: EdgeInsets.all(10), child: Text('${"page".tr()} $currentPage ${"of".tr()} $totalPages')),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                       _isDownloading ? LinearProgressIndicator(value: progress, backgroundColor: Config().appColor) : SizedBox.shrink(),
                     ],
                   ),
@@ -178,7 +179,15 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
   void initializeHive() async {
     final box = await Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
     // Hive.openBox(HelperClass.pdfItemBox);
-    final pdfItem = PDFItemModel(pdf_id: epaperModel!.id!, pdf_milliseconds: DateTime.now().millisecondsSinceEpoch, pdf_original_name: epaperModel!.title);
+    final pdfItem = PDFItemModel(
+      pdf_id: epaperModel!.id!,
+      pdf_milliseconds: DateTime.now().millisecondsSinceEpoch,
+      title: '',
+      publication: '',
+      issue_date: '',
+      cover_image: '',
+      pdf_url: '',
+    );
 
     await box.put(pdfItem.pdf_id, pdfItem);
   }
@@ -198,6 +207,7 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
         progress = 0.0;
       });
       final fileName = await pdfService.downloadPDF(
+        epaperModel: epaperModel!,
         pdfId: epaperModel!.id!,
         url: '${HelperClass.mediaIp}${epaperModel!.pdf_file}',
         onProgress: (value) {
@@ -209,14 +219,13 @@ class _CustomPdfViewerState extends State<CustomPdfViewer> {
       setState(() {
         _isDownloading = false;
       });
-      final item = PDFItemModel(
-        pdf_id: epaperModel!.id!,
-        pdf_milliseconds: DateTime.now().millisecondsSinceEpoch,
-        file_name: fileName,
-        pdf_original_name: epaperModel!.title,
-      );
+      // final item = PDFItemModel(
+      //   pdf_id: epaperModel!.id!,
+      //   pdf_milliseconds: DateTime.now().millisecondsSinceEpoch,
+      //   file_name: fileName,
+      // );
 
-      await box.put(epaperModel!.id!, item);
+      // await box.put(epaperModel!.id!, item);
       Fluttertoast.showToast(msg: 'pdf_downloaded'.tr());
     } else {
       final item = box.get(epaperModel!.id!);

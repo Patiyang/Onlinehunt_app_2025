@@ -4,35 +4,26 @@ import 'package:dio/dio.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/Hive/pdf_timer.dart';
+import 'package:online_hunt_news/models/epaper_model.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-
 
 class PDFService {
   final Dio _dio = Dio();
 
-  final Box<PDFItemModel> _box =
-      Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
+  final Box<PDFItemModel> _box = Hive.box<PDFItemModel>(HelperClass.pdfItemBox);
 
   /// Download a PDF and report progress.
   ///
   /// Returns the saved filename when successful.
   /// Returns null when the download fails.
-  Future<String?> downloadPDF({
-    required int pdfId,
-    required String url,
-    Function(double progress)? onProgress,
-  }) async {
+  Future<String?> downloadPDF({required int pdfId, required String url, Function(double progress)? onProgress, required EpaperModel epaperModel}) async {
     try {
-      final directory =
-          await getApplicationDocumentsDirectory();
+      final directory = await getApplicationDocumentsDirectory();
 
       final fileName = 'epaper_$pdfId.pdf';
 
-      final filePath = path.join(
-        directory.path,
-        fileName,
-      );
+      final filePath = path.join(directory.path, fileName);
 
       await _dio.download(
         url,
@@ -50,17 +41,32 @@ class PDFService {
       final existing = _box.get(pdfId);
 
       if (existing != null) {
+        final thumbnail = await downloadCoverImage(pdfId: epaperModel.id!, imageUrl: '${HelperClass.mediaIp}${epaperModel.cover_image!}');
+        
         existing.file_name = fileName;
+        existing.pdf_milliseconds = DateTime.now().millisecondsSinceEpoch;
+        existing.title = epaperModel.title;
+        existing.publication = epaperModel.publication!.title;
+        existing.issue_date = epaperModel.issue_date;
+        existing.cover_image = epaperModel.cover_image;
+        existing.thumbnail_name = thumbnail;
+        existing.pdf_url = '${HelperClass.mediaIp}${epaperModel!.pdf_file}';
 
         await existing.save();
       } else {
+        final thumbnail = await downloadCoverImage(pdfId: epaperModel.id!, imageUrl: '${HelperClass.mediaIp}${epaperModel.cover_image!}');
         await _box.put(
           pdfId,
           PDFItemModel(
             pdf_id: pdfId,
-            pdf_milliseconds:
-                DateTime.now().millisecondsSinceEpoch,
+            pdf_milliseconds: DateTime.now().millisecondsSinceEpoch,
             file_name: fileName,
+            title: epaperModel.title!,
+            publication: epaperModel.publication!.title!,
+            issue_date: epaperModel.issue_date!,
+            cover_image: epaperModel.cover_image!,
+            pdf_url: '${HelperClass.mediaIp}${epaperModel.pdf_file}',
+            thumbnail_name: thumbnail,
           ),
         );
       }
@@ -74,20 +80,14 @@ class PDFService {
   }
 
   /// Get the full path of a downloaded PDF.
-  Future<String?> getPDFPath(
-    String? fileName,
-  ) async {
+  Future<String?> getPDFPath(String? fileName) async {
     if (fileName == null || fileName.isEmpty) {
       return null;
     }
 
-    final directory =
-        await getApplicationDocumentsDirectory();
+    final directory = await getApplicationDocumentsDirectory();
 
-    final filePath = path.join(
-      directory.path,
-      fileName,
-    );
+    final filePath = path.join(directory.path, fileName);
 
     final file = File(filePath);
 
@@ -99,19 +99,14 @@ class PDFService {
   }
 
   /// Check whether a PDF actually exists locally.
-  Future<bool> isPDFDownloaded(
-    int pdfId,
-  ) async {
+  Future<bool> isPDFDownloaded(int pdfId) async {
     final item = _box.get(pdfId);
 
-    if (item == null ||
-        item.file_name == null ||
-        item.file_name!.isEmpty) {
+    if (item == null || item.file_name == null || item.file_name!.isEmpty) {
       return false;
     }
 
-    final filePath =
-        await getPDFPath(item.file_name);
+    final filePath = await getPDFPath(item.file_name);
 
     return filePath != null;
   }
@@ -121,13 +116,11 @@ class PDFService {
     final downloaded = <PDFItemModel>[];
 
     for (final item in _box.values) {
-      if (item.file_name == null ||
-          item.file_name!.isEmpty) {
+      if (item.file_name == null || item.file_name!.isEmpty) {
         continue;
       }
 
-      final filePath =
-          await getPDFPath(item.file_name);
+      final filePath = await getPDFPath(item.file_name);
 
       if (filePath != null) {
         downloaded.add(item);
@@ -138,19 +131,14 @@ class PDFService {
   }
 
   /// Delete a downloaded PDF.
-  Future<bool> deletePDF(
-    int pdfId,
-  ) async {
+  Future<bool> deletePDF(int pdfId) async {
     final item = _box.get(pdfId);
 
-    if (item == null ||
-        item.file_name == null ||
-        item.file_name!.isEmpty) {
+    if (item == null || item.file_name == null || item.file_name!.isEmpty) {
       return false;
     }
 
-    final filePath =
-        await getPDFPath(item.file_name);
+    final filePath = await getPDFPath(item.file_name);
 
     if (filePath != null) {
       final file = File(filePath);
@@ -165,5 +153,31 @@ class PDFService {
     await item.save();
 
     return true;
+  }
+
+  Future<String?> downloadCoverImage({required int pdfId, required String imageUrl}) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+
+      final fileName = 'cover_$pdfId.jpg';
+
+      final filePath = path.join(directory.path, fileName);
+
+      await _dio.download(imageUrl, filePath);
+
+      return fileName;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<String?> getThumbnailPath(String? fileName) async {
+    if (fileName == null) return null;
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final file = File(path.join(directory.path, fileName));
+
+    return await file.exists() ? file.path : null;
   }
 }
