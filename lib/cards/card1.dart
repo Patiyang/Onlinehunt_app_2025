@@ -123,7 +123,7 @@ class Card1 extends StatelessWidget {
                   Row(
                     children: [
                       InkWell(
-                        onTap: () => nextScreen(context, AuthorDetails(apiUserModel: authorModel!)),
+                        // onTap: () => nextScreen(context, AuthorDetails(apiUserModel: authorModel!)),
                         child: Row(
                           children: [
                             GestureDetector(

@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ChangeNotifierProvider<FeaturedBloc>(create: (context) => FeaturedBloc()),
               ChangeNotifierProvider<PopularBloc>(create: (context) => PopularBloc()),
               ChangeNotifierProvider<RecentBloc>(create: (context) => RecentBloc()),
-              ChangeNotifierProvider<AllUserArticlesBloc>(create: (context) => AllUserArticlesBloc()),
+              // ChangeNotifierProvider<AllUserArticlesBloc>(create: (context) => AllUserArticlesBloc()),
               ChangeNotifierProvider<CategoriesBloc>(create: (context) => CategoriesBloc()),
               ChangeNotifierProvider<LiveNewsBloc>(create: (context) => LiveNewsBloc()),
               ChangeNotifierProvider<SingleEpaperBloc>(create: (context) => SingleEpaperBloc()),

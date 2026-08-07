@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_hunt_news/config/config.dart';
@@ -29,11 +30,11 @@ class _MyDownloadsState extends State<MyDownloads> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(downloads == null ? '--' : downloads![0].title!)),
+      appBar: AppBar(title: Text(downloads == null || downloads!.isEmpty ? '' : downloads![0].title!), centerTitle: true,),
       body: downloads == null
           ? Loading()
           : downloads!.isEmpty
-          ? EmptyPage(icon: Icons.download, message: 'no_downloads', message1: '')
+          ? EmptyPage(icon: Icons.download, message: 'no_downloads'.tr(), message1: '')
           : GridView.builder(
               padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
               itemCount: downloads!.length,

@@ -87,7 +87,7 @@ class Card2 extends StatelessWidget {
                   Row(
                     children: [
                       InkWell(
-                        onTap: () => nextScreen(context, AuthorDetails(apiUserModel: postModel!.author!)),
+                        // onTap: () => nextScreen(context, AuthorDetails(apiUserModel: postModel!.author!)),
                         child: Row(
                           children: [
                             GestureDetector(

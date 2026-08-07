@@ -115,7 +115,7 @@
   "technology": "Technology",
   "world": "World",
   "fitness": "Fitness",
-   "kannada": "ಕನ್ನಡ",
+  "kannada": "ಕನ್ನಡ",
   "hindi": "हिन्दी",
   "english": "English",
   "karnataka": "Karnataka",
@@ -137,7 +137,7 @@
   "select district": "Select District",
   "set location": "Set Location Data",
   "set manually": "Set Location Manually",
-  "choose district": "Specify your district(s)",
+  "choose district": "Specify your district",
   "no districts specified yet": "You haven't chosen any districts yet",
   "update location": "Update Location",
   "video thumbnail cannot be empty": "The video thumbnail URL cannot be empty",
@@ -252,7 +252,16 @@
   "minutes": "Minutes",
   "ractionsign": "Sign in first to share your experience",
   "disclaimer": "This content has not been generated, created or edited by Onlinehunt. Publisher:",
-  "save":"Save",
-  "my_downloads":"My Downloads",
-  "please_login":"Please login first"
+  "save": "Save",
+  "my_downloads": "My Downloads",
+  "please_login": "Please login first",
+  "change": "Change selection",
+  "enter fname": "Enter first name",
+  "enter lname": "Enter last name",
+  "bio": "Say something about yourself",
+  "news district:": "Selected District:",
+  "empty lname": "Last name cannot be empty",
+  "empty fname": "First name cannot be empty",
+  "no_downloads":"No downloads present"
+  
 }

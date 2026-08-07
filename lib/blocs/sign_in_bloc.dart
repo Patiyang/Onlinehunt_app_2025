@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:online_hunt_news/helpers&Widgets/helper_class.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
+import 'package:online_hunt_news/models/userModel.dart';
 import 'package:online_hunt_news/services/userServices.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,8 +66,8 @@ class SignInBloc extends ChangeNotifier {
   String? _state;
   String? get state => _state;
 
-  List<String>? _district;
-  List<String>? get district => _district;
+  String? _district;
+  String? get district => _district;
 
   String? _signInProvider;
   String? get signInProvider => _signInProvider;
@@ -78,6 +80,8 @@ class SignInBloc extends ChangeNotifier {
   String _packageName = '';
   String get packageName => _packageName;
 
+  UserModel? _userModel;
+  UserModel get userModel => _userModel!;
   void initPackageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _appVersion = packageInfo.version;
@@ -124,13 +128,13 @@ class SignInBloc extends ChangeNotifier {
       // await user!.getIdToken();
       // final User currentUser = _firebaseAuth.currentUser!;
       UserModel apiUserModel = await UserServices().signInUser(userEmail, userPassword);
-      this._name = apiUserModel.userName;
+      this._name = '${apiUserModel.first_name} ${apiUserModel.last_name}';
       this._uid = apiUserModel.id;
       this._imageUrl = defaultUserImageUrl;
       this._email = apiUserModel.email;
       this._signInProvider = 'email';
-      this._idToken = apiUserModel.token;
-      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
+      this._idToken = apiUserModel.auth_token;
+      this._imageUrl = "${HelperClass.avatarIp}${apiUserModel.image}";
 
       _hasError = false;
       notifyListeners();
@@ -144,13 +148,13 @@ class SignInBloc extends ChangeNotifier {
   Future signUpwithEmailPassword(userName, userEmail, userPassword) async {
     try {
       UserModel apiUserModel = await UserServices().signUpUser(userEmail, userPassword, userName);
-      this._name = apiUserModel.userName;
+      this._name = '${apiUserModel.first_name} ${apiUserModel.last_name}';
       this._uid = apiUserModel.id;
       this._imageUrl = defaultUserImageUrl;
       this._email = apiUserModel.email;
       this._signInProvider = 'email';
-      this._idToken = apiUserModel.token;
-      this._imageUrl = apiUserModel.avatar!.contains('https') ? apiUserModel.avatar : "${HelperClass.avatarIp}${apiUserModel.avatar}";
+      this._idToken = apiUserModel.auth_token;
+      // this._imageUrl = "${HelperClass.avatarIp}${apiUserModel.image}";
 
       this._userType = 'registered';
 
@@ -172,6 +176,81 @@ class SignInBloc extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future getProfile() async {
+    // UserModel? userModel;
+    try {
+      await _userServices.getProfile().then((val) {
+        Map<String, dynamic> res = jsonDecode(val.body);
+        _userModel = UserModel.fromJson(res['data']);
+        // Fluttertoast.showToast(msg: _userModel!.email!);
+        this._uid = _userModel!.id;
+        this._name = '${_userModel!.first_name} ${_userModel!.last_name}';
+        this._email = _userModel!.email;
+        this._signInProvider = 'email';
+        this._imageUrl = "${HelperClass.avatarIp}${_userModel!.image}";
+        notifyListeners();
+      });
+    } catch (e) {
+      print(e.toString());
+      notifyListeners();
+    }
+    // return userModel!;
+  }
+
+  Future updateProfile(String avatar, String firstName, String lastName, String bio, String district) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    // UserModel? userModel;
+    try {
+      await _userServices.updateProfile(avatar: avatar, firstName: firstName, lastName: lastName, bio: bio).then((val) {
+        Map<String, dynamic> res = jsonDecode(val.body);
+        _userModel = UserModel.fromJson(res['data']);
+        // Fluttertoast.showToast(msg: _userModel!.email!);
+        this._uid = _userModel!.id;
+        this._name = '${_userModel!.first_name} ${_userModel!.last_name}';
+        this._email = _userModel!.email;
+        this._signInProvider = 'email';
+        this._imageUrl = "${HelperClass.avatarIp}${_userModel!.image}";
+        this._district = district;
+        sp.setString('district', district);
+        notifyListeners();
+      });
+    } catch (e) {
+      print(e.toString());
+      notifyListeners();
+    }
+    // return userModel!;
+  }
+  // Future getUserFromApi(email) async {
+  //   List response = [];
+  //   List<UserModel> dummyList = [];
+  //   // String userId = '';
+  //   UserModel? apiUserModel;
+  //   try {
+  //     await _userServices
+  //         .getProfile()
+  //         .then((value) {
+  //           response = jsonDecode(utf8.decode(value.bodyBytes));
+  //         })
+  //         .whenComplete(() {
+  //           response.forEach((element) {
+  //             dummyList.add(UserModel.fromJson(element));
+  //           });
+  //         });
+  //     dummyList.forEach((element) {
+  //       if (element.email == email) {
+  //         apiUserModel = element;
+  //       }
+  //     });
+  //     this._uid = apiUserModel!.id;
+  //     this._name = '${apiUserModel!.first_name} ${apiUserModel!.last_name}';
+  //     this._email = apiUserModel!.email;
+  //     this._imageUrl = "${HelperClass.avatarIp}${apiUserModel!.image}";
+  //     // Fluttertoast.showToast(msg: '${this._imageUrl}');
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
   Future signInwithFacebook() async {
     User currentUser;
@@ -342,12 +421,12 @@ class SignInBloc extends ChangeNotifier {
 
     await sp.setString('name', _name!);
     await sp.setString('email', _email!);
-    await sp.setStringList('district', _district ?? []);
+    await sp.setString('district', _district ?? '');
     await sp.setString('state', _state ?? '');
     await sp.setString('uid', _uid ?? '');
     await sp.setString('image_url', _imageUrl!);
-    await sp.setString('uid', _uid!);
     await sp.setString('sign_in_provider', _signInProvider!);
+    await sp.setString('auth_token', _idToken!);
 
     //handle user registration here
   }
@@ -356,8 +435,7 @@ class SignInBloc extends ChangeNotifier {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     _name = sp.getString('name');
     _state = sp.getString('state');
-    _district = sp.getStringList('district');
-
+    _district = sp.getString('district');
     _email = sp.getString('email');
     _imageUrl = sp.getString('image_url');
     _uid = sp.getString('uid');
@@ -379,37 +457,6 @@ class SignInBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getUserFromApi(email) async {
-    List response = [];
-    List<UserModel> dummyList = [];
-    // String userId = '';
-    UserModel? apiUserModel;
-    try {
-      await _userServices
-          .getUsers('users')
-          .then((value) {
-            response = jsonDecode(utf8.decode(value.bodyBytes));
-          })
-          .whenComplete(() {
-            response.forEach((element) {
-              dummyList.add(UserModel.fromJson(element));
-            });
-          });
-      dummyList.forEach((element) {
-        if (element.email == email) {
-          apiUserModel = element;
-        }
-      });
-      this._uid = apiUserModel!.id;
-      this._name = apiUserModel!.userName;
-      this._email = apiUserModel!.email;
-      this._imageUrl = apiUserModel!.avatar!.contains('https') ? apiUserModel!.avatar : "https://onlinehunt.in/news/${apiUserModel!.avatar}";
-      // Fluttertoast.showToast(msg: '${this._imageUrl}');
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   Future setSignIn() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setBool('signed_in', true);
@@ -420,6 +467,9 @@ class SignInBloc extends ChangeNotifier {
   void checkSignIn() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     _isSignedIn = sp.getBool('signed_in') ?? false;
+    if (_isSignedIn == true) {
+      getProfile();
+    }
     notifyListeners();
   }
 
@@ -440,7 +490,7 @@ class SignInBloc extends ChangeNotifier {
   Future afterUserSignOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await userSignout().then((_) async {
-      await clearAllData(preferences.getString('language')!, preferences.getString('state')!, preferences.getStringList('district')!);
+      await clearAllData(preferences.getString('language')!, preferences.getString('state')!, preferences.getString('district')!);
       _isSignedIn = false;
       _guestUser = false;
       notifyListeners();
@@ -460,12 +510,12 @@ class SignInBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future clearAllData(String language, String state, List<String> district) async {
+  Future clearAllData(String language, String state, String district) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     sp.clear().whenComplete(() {
       sp.setString('language', language);
       sp.setString('state', state);
-      sp.setStringList('district', district);
+      sp.setString('district', district);
     });
   }
 
@@ -476,7 +526,7 @@ class SignInBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future updateUserProfile(String newName, String newImageUrl, String state, List<String> districts) async {
+  Future updateUserProfile(String newName, String newImageUrl, String state, String districts) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
 
     FirebaseFirestore.instance.collection('users').doc(_uid).update({'name': newName, 'image url': newImageUrl, 'state': state, 'district': districts});
@@ -485,7 +535,7 @@ class SignInBloc extends ChangeNotifier {
     sp.setString('image_url', newImageUrl);
 
     sp.setString('state', state);
-    sp.setStringList('district', districts);
+    sp.setString('district', districts);
     _name = newName;
     _imageUrl = newImageUrl;
     _state = state;
@@ -493,13 +543,13 @@ class SignInBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future updateUserLocationData(String state, List<String> districts) async {
+  Future updateUserLocationData(String state, String districts) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
 
     FirebaseFirestore.instance.collection('users').doc(_uid).update({'state': state, 'district': districts});
 
     sp.setString('state', state);
-    sp.setStringList('district', districts);
+    sp.setString('district', districts);
     _state = state;
     _district = districts;
     notifyListeners();

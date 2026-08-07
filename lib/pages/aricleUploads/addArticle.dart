@@ -102,7 +102,7 @@ class _AddArticleState extends State<AddArticle> {
   String? videoFileName;
   String? videoUploadUrl;
 
-  UserModel? apiUserModel;
+  // UserModel? apiUserModel;
   bool loadingFutures = true;
   GeneralSettingsServices generalSettingsServices = GeneralSettingsServices();
   @override
@@ -632,7 +632,7 @@ class _AddArticleState extends State<AddArticle> {
           ? '${HelperClass.fileUpload}${path.basename(videoFile!.path)}'
           : videoThumbNailUrl.text,
       "video_embed_code": "",
-      "user_id": apiUserModel!.id,
+      // "user_id": apiUserModel!.id,
       "status": "1",
       "feed_id": "0",
       "post_url": sourceUrl.text,
@@ -802,28 +802,28 @@ class _AddArticleState extends State<AddArticle> {
   // }
 
   Future getUserId() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    List response = [];
-    List<UserModel> dummyList = [];
-    try {
-      await _userServices
-          .getUsers('users')
-          .then((value) {
-            response = jsonDecode(utf8.decode(value.bodyBytes));
-          })
-          .whenComplete(() {
-            response.forEach((element) {
-              dummyList.add(UserModel.fromJson(element));
-            });
-          });
-      dummyList.forEach((element) {
-        if (element.email == sp.getString('email')) {
-          apiUserModel = element;
-        }
-      });
-      // Fluttertoast.showToast(msg: apiUserModel!.id??'');
-    } catch (e) {
-      print(e.toString());
-    }
+    // SharedPreferences sp = await SharedPreferences.getInstance();
+    // List response = [];
+    // List<UserModel> dummyList = [];
+    // try {
+    //   await _userServices
+    //       .getUsers('users')
+    //       .then((value) {
+    //         response = jsonDecode(utf8.decode(value.bodyBytes));
+    //       })
+    //       .whenComplete(() {
+    //         response.forEach((element) {
+    //           dummyList.add(UserModel.fromJson(element));
+    //         });
+    //       });
+    //   dummyList.forEach((element) {
+    //     if (element.email == sp.getString('email')) {
+    //       apiUserModel = element;
+    //     }
+    //   });
+    //   // Fluttertoast.showToast(msg: apiUserModel!.id??'');
+    // } catch (e) {
+    //   print(e.toString());
+    // }
   }
 }

@@ -62,7 +62,7 @@ class _SignInPageState extends State<SignInPage> {
           sb.signInwithEmailPassword(email, pass).then((_) async {
             if (sb.hasError == false) {
               sb
-                  .getUserFromApi(sb.uid)
+                  .getProfile()
                   .then((value) => sb.guestSignout())
                   .then(
                     (value) => sb.saveDataToSP().then(

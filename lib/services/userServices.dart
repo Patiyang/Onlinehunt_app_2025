@@ -8,6 +8,7 @@ import 'package:online_hunt_news/models/apiArticleModel.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
 import 'package:online_hunt_news/models/followingModel.dart';
 import 'package:online_hunt_news/models/like_model.dart';
+import 'package:online_hunt_news/models/userModel.dart';
 import 'package:online_hunt_news/services/token_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,40 @@ class UserServices {
     String url = HelperClass().getBaseUrl(param);
     final res = await TokenService().urlGetAuthentication(url);
     return res;
+  }
+
+  Future<http.Response> getProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${HelperClass.mainIp}user';
+    // final res = await TokenService().urlGetAuthentication(url);
+
+    final result = await http
+        .get(Uri.parse(url), headers: {"Accept": "application/json; charset=UTF-8", "Authorization": "Bearer ${prefs.getString('auth_token')}"})
+        .catchError((e) {
+          print("Error in urlGetAuthentication: $e");
+          return http.Response('{"error": "Failed to fetch data"}', 500);
+        });
+
+    return result;
+  }
+
+  Future<http.Response> updateProfile({required String avatar, required String firstName, required String lastName, required String bio}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${HelperClass.mainIp}user';
+    // final res = await TokenService().urlGetAuthentication(url);
+
+    final result = await http
+        .put(
+          Uri.parse(url),
+          headers: {"Accept": "application/json; charset=UTF-8", "Authorization": "Bearer ${prefs.getString('auth_token')}"},
+          body: jsonEncode({"avatar": avatar, "first_name": firstName, "last_name": lastName, "about_me": bio}),
+        )
+        .catchError((e) {
+          print("Error in urlGetAuthentication: $e");
+          return http.Response('{"error": "Failed to fetch data"}', 500);
+        });
+
+    return result;
   }
 
   Future<UserModel> signInUser(String email, String password) async {
@@ -59,62 +94,62 @@ class UserServices {
     return apiUserModel!;
   }
 
-  Future<UserModel> getUserDetails() async {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
-    List<UserModel> dummyList = [];
-    UserModel apiUser = UserModel();
-    List response = [];
-    String? _email = sp.getString('email');
-    if (sp.getString('uid')!.isEmpty) {
-      try {
-        await getUsers('users')
-            .then((value) {
-              response = jsonDecode(utf8.decode(value.bodyBytes));
-            })
-            .whenComplete(() {
-              response.forEach((element) {
-                dummyList.add(UserModel.fromJson(element));
-              });
-            });
-        dummyList.forEach((element) {
-          if (element.email == _email) {
-            apiUser = element;
-          }
-        });
+  // Future<UserModel> getUserDetails() async {
+  //   final SharedPreferences sp = await SharedPreferences.getInstance();
+  //   List<UserModel> dummyList = [];
+  //   UserModel apiUser = UserModel();
+  //   List response = [];
+  //   String? _email = sp.getString('email');
+  //   if (sp.getString('uid')!.isEmpty) {
+  //     try {
+  //       await getUsers('users')
+  //           .then((value) {
+  //             response = jsonDecode(utf8.decode(value.bodyBytes));
+  //           })
+  //           .whenComplete(() {
+  //             response.forEach((element) {
+  //               dummyList.add(UserModel.fromJson(element));
+  //             });
+  //           });
+  //       dummyList.forEach((element) {
+  //         if (element.email == _email) {
+  //           apiUser = element;
+  //         }
+  //       });
 
-        sp.setString('uid', apiUser.id!);
-      } catch (e) {
-        print(e.toString());
-      }
-    }
+  //       sp.setString('uid', apiUser.id!);
+  //     } catch (e) {
+  //       print(e.toString());
+  //     }
+  //   }
 
-    return apiUser;
-  }
+  //   return apiUser;
+  // }
 
-  Future<UserModel> getUserById(String id) async {
-    List<UserModel> dummyList = [];
-    UserModel apiUser = UserModel();
-    List response = [];
-    try {
-      await getUsers('users')
-          .then((value) {
-            response = jsonDecode(utf8.decode(value.bodyBytes));
-          })
-          .whenComplete(() {
-            response.forEach((element) {
-              dummyList.add(UserModel.fromJson(element));
-            });
-          });
-      dummyList.forEach((element) {
-        if (element.id == id) {
-          apiUser = element;
-        }
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-    return apiUser;
-  }
+  // Future<UserModel> getUserById(String id) async {
+  //   List<UserModel> dummyList = [];
+  //   UserModel apiUser = UserModel();
+  //   List response = [];
+  //   try {
+  //     await getUsers('users')
+  //         .then((value) {
+  //           response = jsonDecode(utf8.decode(value.bodyBytes));
+  //         })
+  //         .whenComplete(() {
+  //           response.forEach((element) {
+  //             dummyList.add(UserModel.fromJson(element));
+  //           });
+  //         });
+  //     dummyList.forEach((element) {
+  //       if (element.id == id) {
+  //         apiUser = element;
+  //       }
+  //     });
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  //   return apiUser;
+  // }
 
   Future<http.Response> getUsersAlt(String id, String param) async {
     String url = 'https://onlinehunt.in/api/$param.php?api_key=$apiKey&id=$id';
@@ -123,22 +158,22 @@ class UserServices {
     return res;
   }
 
-  Future<UserModel> userDetails(String id) async {
-    UserModel apiUser = UserModel();
-    List response = [];
-    try {
-      await getUsersAlt(id, 'single_user')
-          .then((value) {
-            response = jsonDecode(utf8.decode(value.bodyBytes));
-          })
-          .whenComplete(() {
-            apiUser = UserModel.fromJson(response.first);
-          });
-    } catch (e) {
-      print(e.toString());
-    }
-    return apiUser;
-  }
+  // Future<UserModel> userDetails(String id) async {
+  //   UserModel apiUser = UserModel();
+  //   List response = [];
+  //   try {
+  //     await getUsersAlt(id, 'single_user')
+  //         .then((value) {
+  //           response = jsonDecode(utf8.decode(value.bodyBytes));
+  //         })
+  //         .whenComplete(() {
+  //           apiUser = UserModel.fromJson(response.first);
+  //         });
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  //   return apiUser;
+  // }
 
   Future<List<ApiArticle>> userArticles(String? id, {int? currentPage}) async {
     List response = [];

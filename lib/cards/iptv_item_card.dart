@@ -140,11 +140,11 @@ class IptvItemCard extends StatelessWidget {
     return 3; //who is following you
   }
 
-  Future getAuthorProfile(String userId) async {
-    UserModel _userDetails = await UserServices().userDetails(userId);
-    print(_userDetails.email);
-    return _userDetails;
-  }
+  // Future getAuthorProfile(String userId) async {
+  //   UserModel _userDetails = await UserServices().userDetails(userId);
+  //   print(_userDetails.email);
+  //   return _userDetails;
+  // }
 
 
 

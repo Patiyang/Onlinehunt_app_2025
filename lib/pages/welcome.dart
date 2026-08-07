@@ -52,7 +52,7 @@ class _WelcomePageState extends State<WelcomePage> {
             sb.checkApiUserExists().then((value) {
               if (value == true) {
                 sb
-                    .getUserFromApi(sb.email)
+                    .getProfile()
                     .then((value) => sb.guestSignout())
                     .then(
                       (value) => sb.saveDataToSP().then(
@@ -112,7 +112,7 @@ class _WelcomePageState extends State<WelcomePage> {
               sb.checkApiUserExists().then((value) {
                 if (value == true) {
                   sb
-                      .getUserFromApi(sb.uid)
+                      .getProfile()
                       .then((value) => sb.guestSignout())
                       .then(
                         (value) => sb.saveDataToSP().then(

@@ -381,22 +381,22 @@ class _ArticleDetailsState extends State<ArticleDetails> with AutomaticKeepAlive
                                     ),
                                     // context.watch<AdsBloc>().bannerAdEnabled == false ? Container() : BannerAdAdmob(), //admob
                                     // CustomMobileAd.getBannerAd(context, _mobileAdsaModel!),
-                                    Row(
-                                      children: <Widget>[
-                                        TextButton.icon(
-                                          style: ButtonStyle(
-                                            padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
-                                            backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
-                                            shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
-                                          ),
-                                          icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
-                                          label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
-                                          onPressed: () {
-                                            nextScreen(context, CommentsPage(articleId: post!.id.toString()));
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: <Widget>[
+                                    //     TextButton.icon(
+                                    //       style: ButtonStyle(
+                                    //         padding: WidgetStateProperty.resolveWith((states) => EdgeInsets.only(left: 10, right: 10)),
+                                    //         backgroundColor: WidgetStateProperty.resolveWith((states) => Theme.of(context).primaryColor),
+                                    //         shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(3))),
+                                    //       ),
+                                    //       icon: FaIcon(FontAwesomeIcons.comment, color: Colors.white, size: 20),
+                                    //       label: Text('comments', style: TextStyle(color: Colors.white)).tr(),
+                                    //       onPressed: () {
+                                    //         nextScreen(context, CommentsPage(articleId: post!.id.toString()));
+                                    //       },
+                                    //     ),
+                                    //   ],
+                                    // ),
                                   ],
                                 ),
                               ),

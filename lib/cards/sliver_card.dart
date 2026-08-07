@@ -72,7 +72,7 @@ class SliverCard extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                    InkWell(
-                          onTap: () => nextScreen(context, AuthorDetails(apiUserModel: apiArticle!.author!)),
+                          // onTap: () => nextScreen(context, AuthorDetails(apiUserModel: apiArticle!.author!)),
                           child: Row(
                             children: [
                               GestureDetector(

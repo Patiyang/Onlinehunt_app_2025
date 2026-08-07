@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   ];
   List<String> states = [];
   List districts = [];
-  List<String> selectedDistricts = [];
+  String selectedDistricts = '';
   String selectedState = '';
   String selectedDistrict = '';
   bool manualLocation = true;

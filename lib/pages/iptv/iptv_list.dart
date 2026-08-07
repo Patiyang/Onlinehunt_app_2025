@@ -7,6 +7,7 @@ import 'package:online_hunt_news/cards/iptv_item_card.dart';
 import 'package:online_hunt_news/models/apiUserModel.dart';
 import 'package:online_hunt_news/models/live_news.dart';
 import 'package:online_hunt_news/models/iptv_like_model.dart';
+import 'package:online_hunt_news/models/userModel.dart';
 import 'package:provider/provider.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart';
 
