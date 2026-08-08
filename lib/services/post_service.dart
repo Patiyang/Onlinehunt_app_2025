@@ -12,7 +12,8 @@ class PostServices {
   Future<http.Response> getPostsSelection(String param, {int page = 1}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}posts/selection/$param?exclude=keywords&lang_id=$lang_id';
+    String district = prefs.getString('district')??'';
+    String url = '${HelperClass.mainIp}posts/selection/$param?exclude=keywords&lang_id=$lang_id&district=$district';
     // print(url);
     http.Response res = await TokenService().urlGetAuthentication(url);
 
@@ -23,7 +24,8 @@ class PostServices {
   Future<http.Response> getAllPosts(String param, {String exclude = ''}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}posts?exclude=${'keywords,$exclude'}&limit=10&lang_id=$lang_id';
+     String district = prefs.getString('district')??'';
+    String url = '${HelperClass.mainIp}posts?exclude=${'keywords,$exclude'}&limit=10&lang_id=$lang_id&district=$district';
     print(url);
     final res = await TokenService().urlGetAuthentication(url);
     return res;

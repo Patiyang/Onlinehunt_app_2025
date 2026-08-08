@@ -5,15 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token_service.dart';
 
 class EpaperServices {
-  Future<http.Response> getEpapers(String source_type) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}newspapers/$source_type?lang_id=$lang_id';
-    print(url);
-    final res = await http.get(Uri.parse(url));
-    return res;
-  }
-
   Future<http.Response?> getEpaper(int id, int lang_id) async {
     String url = '${HelperClass.mainIp}epapers/$id?lang_id=$lang_id';
     print(url);
@@ -26,10 +17,22 @@ class EpaperServices {
     }
   }
 
-  Future<http.Response> getAllEpapers({int limit = 10, int page = 1, String soure_type='website'}) async {
+  Future<http.Response> getEpapers(String source_type) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}newspapers?lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type';
+    String district = prefs.getString('district') ?? '';
+    String url = '${HelperClass.mainIp}newspapers/$source_type?lang_id=$lang_id&district=$district';
+    print(url);
+    final res = await http.get(Uri.parse(url));
+    return res;
+  }
+
+  Future<http.Response> getAllEpapers({int limit = 10, int page = 1, String soure_type = 'website'}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int lang_id = prefs.getInt('lang_id') ?? 1;
+    String district = prefs.getString('district') ?? '';
+
+    String url = '${HelperClass.mainIp}newspapers?lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type&district=$district';
     print(url);
     final res = await http.get(Uri.parse(url));
     return res;
@@ -38,17 +41,21 @@ class EpaperServices {
   Future<http.Response> getMagazines({int? category_id, int limit = 10, int page = 1}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}magazines?lang_id=$lang_id&category_id=$category_id&limit=$limit&page=$page';
+    String district = prefs.getString('district') ?? '';
+
+    String url = '${HelperClass.mainIp}magazines?lang_id=$lang_id&category_id=$category_id&limit=$limit&page=$page&district=$district';
     print(url);
     final res = await http.get(Uri.parse(url));
     return res;
   }
 
   //http://onlinehunt.in.local/api/periodicals?frequency=weekly&lang_id=2
-  Future<http.Response> getPeriodicals(String period, {int limit = 10, int page = 1, String soure_type='website'}) async {
+  Future<http.Response> getPeriodicals(String period, {int limit = 10, int page = 1, String soure_type = 'website'}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}periodicals?frequency=$period&lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type';
+    String district = prefs.getString('district') ?? '';
+
+    String url = '${HelperClass.mainIp}periodicals?frequency=$period&lang_id=$lang_id&limit=$limit&page=$page&source_type=$soure_type&district=$district';
     print(url);
     final res = await http.get(Uri.parse(url));
     return res;
@@ -57,7 +64,9 @@ class EpaperServices {
   Future<http.Response> getFeatured() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lang_id = prefs.getInt('lang_id') ?? 1;
-    String url = '${HelperClass.mainIp}epapers/featured?lang_id=$lang_id';
+    String district = prefs.getString('district') ?? '';
+
+    String url = '${HelperClass.mainIp}epapers/featured?lang_id=$lang_id&district=$district';
     print('epapers url is: ' + url);
     final res = await http.get(Uri.parse(url));
     return res;

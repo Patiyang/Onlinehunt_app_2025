@@ -69,6 +69,11 @@ class SignInBloc extends ChangeNotifier {
   String? _district;
   String? get district => _district;
 
+  set district(String? district) {
+    _district = district;
+    notifyListeners();
+  }
+
   String? _signInProvider;
   String? get signInProvider => _signInProvider;
 
@@ -439,6 +444,7 @@ class SignInBloc extends ChangeNotifier {
     _email = sp.getString('email');
     _imageUrl = sp.getString('image_url');
     _uid = sp.getString('uid');
+    _idToken = sp.getString('auth_token');
     _signInProvider = sp.getString('sign_in_provider');
     notifyListeners();
   }

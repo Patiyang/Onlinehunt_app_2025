@@ -129,12 +129,14 @@ class _ForYouState extends State<ForYou> with AutomaticKeepAliveClientMixin {
                     animationCurve: Curves.easeIn,
                     animationDuration: Duration(seconds: 1),
                     itemBuilder: (context, index) {
-                      var singlePaper = ep.data[index];
-                      return ep.data.isEmpty
-                          ? LoadingCard(height: 300, width: 210)
-                          : singlePaper.source_type == 'website'
-                          ? URLepaper(epaperModel: singlePaper, showLabel: false, height: 300, width: 210)
-                          : PDFepaper(epaperModel: singlePaper, showLabel: false, height: 300, width: 210);
+                      if (ep.data.isEmpty) {
+                      return  LoadingCard(height: 300, width: 210);
+                      } else {
+                        var singlePaper = ep.data[index];
+                        return singlePaper.source_type == 'website'
+                            ? URLepaper(epaperModel: singlePaper, showLabel: false, height: 300, width: 210)
+                            : PDFepaper(epaperModel: singlePaper, showLabel: false, height: 300, width: 210);
+                      }
 
                       // ClipRRect(
                       //   borderRadius: BorderRadius.circular(10),

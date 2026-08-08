@@ -30,6 +30,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin {
   ScrollController? controller;
   SettingsModel? settingsModel;
+  String oldDistrict = '';
   openAboutDialog() {
     final sb = context.read<SignInBloc>();
     showDialog(
@@ -47,6 +48,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
   @override
   void initState() {
     controller = new ScrollController()..addListener(_scrollListener);
+    getOldDistrict();
     super.initState();
   }
 
@@ -74,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
         controller: controller,
         padding: EdgeInsets.fromLTRB(15, 20, 20, 50),
         children: [
-          sb.guestUser == true ? GuestUserUI() : UserUI(),
+          sb.guestUser == true ? GuestUserUI() : UserUI(oldDistrict: oldDistrict,),
           Text("general settings", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)).tr(),
           SizedBox(height: 15),
           ListTile(
@@ -267,6 +269,11 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
       },
     );
   }
+
+  void getOldDistrict() {
+    final ub = context.read<SignInBloc>();
+    oldDistrict = ub.district ?? '';
+  }
 }
 
 class GuestUserUI extends StatelessWidget {
@@ -294,7 +301,8 @@ class GuestUserUI extends StatelessWidget {
 }
 
 class UserUI extends StatelessWidget {
-  const UserUI({Key? key}) : super(key: key);
+  final String ?oldDistrict;
+  const UserUI({Key? key, required this.oldDistrict}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +338,10 @@ class UserUI extends StatelessWidget {
             child: Icon(Icons.edit, size: 20, color: Colors.white),
           ),
           trailing: Icon(Icons.chevron_right, size: 20),
-          onTap: () => nextScreen(context, EditProfile(name: sb.name, imageUrl: sb.imageUrl, state: sb.state, district: sb.district)),
+          onTap: () async {
+            var value = await nextScreen(context, EditProfile(name: sb.name, imageUrl: sb.imageUrl, state: sb.state, district: sb.district));
+            if (value != oldDistrict) {}
+          },
         ),
         Divider(height: 3),
         ListTile(
@@ -342,9 +353,7 @@ class UserUI extends StatelessWidget {
             child: Icon(Icons.download, size: 20, color: Colors.white),
           ),
           trailing: Icon(Icons.chevron_right, size: 20),
-          onTap: () => nextScreen(context, MyDownloads(
-            
-          )),
+          onTap: () => nextScreen(context, MyDownloads()),
         ),
         Divider(height: 3),
         ListTile(

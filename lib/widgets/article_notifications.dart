@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:online_hunt_news/blocs/article_notification_bloc.dart';
+import 'package:online_hunt_news/cards/card4.dart';
 import 'package:online_hunt_news/utils/empty.dart';
 import 'package:online_hunt_news/utils/loading_cards.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _ArticleNotificationsState extends State<ArticleNotifications> {
               separatorBuilder: (BuildContext context, int index) => SizedBox(height: 15),
               itemBuilder: (_, int index) {
                 if (index < nb.data.length) {
-                  return SizedBox.shrink();
+                  // return SizedBox.shrink();
                   // return Card4(d: nb.data[index], heroTag: 'notification$index');
                 }
                 return Opacity(opacity: nb.isLoading ? 1.0 : 0.0, child: LoadingCard(height: 180));

@@ -42,7 +42,8 @@ class URLepaper extends StatelessWidget {
                 imageUrl: '${HelperClass.mediaIp}${epaperModel.cover_image!}',
                 placeholder: (context, url) => Container(color: Colors.grey[300]),
                 errorWidget: (context, url, error) {
-                  return Image.asset(Config().splashIcon, height: 120, width: 120, fit: BoxFit.cover);
+                  // return Image.asset(Config().splashIcon, height: 120, width: 120, fit: BoxFit.cover);
+                  return Icon(Icons.error);
                 },
               ),
             ),

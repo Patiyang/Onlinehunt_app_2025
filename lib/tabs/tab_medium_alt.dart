@@ -6,11 +6,11 @@ import 'package:online_hunt_news/tabs/tab0.dart';
 
 class TabMediumAlt extends StatefulWidget {
   final List? controllers;
-  final ScrollController? sc;
+  // final ScrollController? sc;
   final TabController? tc;
-  final int? selectedIndex;
+  // final int? selectedIndex;
   final List<Category>? presentCategories;
-  TabMediumAlt({Key? key, this.sc, this.tc, this.selectedIndex, this.presentCategories, this.controllers}) : super(key: key);
+  TabMediumAlt({Key? key,  this.tc, this.presentCategories, this.controllers}) : super(key: key);
 
   @override
   _TabMediumAltState createState() => _TabMediumAltState();

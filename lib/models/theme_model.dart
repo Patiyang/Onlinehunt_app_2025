@@ -58,7 +58,7 @@ class ThemeModel {
     primarySwatch: getMaterialColorFromColor(Config().appColor),
     colorScheme: ColorScheme.dark(surface: Colors.grey[900]!),
     // colorSchemeSeed: Colors.blue, // Generates a cohesive blue color scheme
-    useMaterial3: true,
+    // useMaterial3: true,
     iconTheme: IconThemeData(color: Colors.white),
     fontFamily: _fontFamily,
     scaffoldBackgroundColor: Color(0xff303030),

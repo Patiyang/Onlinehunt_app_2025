@@ -13,6 +13,7 @@ import 'package:online_hunt_news/blocs/featured_bloc.dart';
 import 'package:online_hunt_news/blocs/notification_bloc.dart';
 import 'package:online_hunt_news/blocs/popular_articles_bloc.dart';
 import 'package:online_hunt_news/blocs/recent_articles_bloc.dart';
+import 'package:online_hunt_news/blocs/sign_in_bloc.dart';
 import 'package:online_hunt_news/blocs/tab_index_bloc.dart';
 import 'package:online_hunt_news/config/config.dart';
 import 'package:online_hunt_news/helpers&Widgets/loading.dart';
@@ -44,8 +45,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
   TabController? _tabController;
   List<String> states = [];
   List<dynamic> districts = [];
-  String selectedState = '';
-  List<String> selectedDistricts = [];
+  String selectedState = 'Karnataka';
+  String selectedDistricts = '';
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   String appLanguage = '';
@@ -129,29 +130,48 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.search, size: 22),
-                          onPressed: () {
-                            nextScreen(context, SearchPage());
+                          icon: Icon(Icons.location_pin, size: 22),
+                          onPressed: () async {
+                            // nextScreen(context, SearchPage());
+                            // getDistricts();
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            final sb = context.read<SignInBloc>();
+                            String initialDist = sb.district==null||sb.district!.isEmpty?'all':sb.district!;
+                            var value = await showDistrictSheet(initialDist);
+                            if (value != initialDist && value != null) {
+                              sb.district = value == 'all' ? '' : value;
+                              sb.saveDataToSP();
+                              Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+                              });
+
+                              // print('differebt ' + value);
+                              // print('differeb sp ' + '${prefs.getString('district')}');
+                              // print('differeb sb ' + '${sb.district}');
+                            }
+                            if (value == 'all') {
+                              print(value);
+                            }
                           },
                         ),
-                        badges.Badge(
-                          position: badges.BadgePosition.topEnd(top: 14, end: 15),
-                          badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
-                          badgeAnimation: badges.BadgeAnimation.fade(
-                            animationDuration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                            loopAnimation: false,
-                          ),
-                          showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
-                          badgeContent: Container(),
-                          child: IconButton(
-                            icon: Icon(LineIcons.bell, size: 25),
-                            onPressed: () {
-                              context.read<NotificationBloc>().saveNlengthToSP();
-                              nextScreen(context, NotificationsPage());
-                            },
-                          ),
-                        ),
+                        // badges.Badge(
+                        //   position: badges.BadgePosition.topEnd(top: 14, end: 15),
+                        //   badgeStyle: badges.BadgeStyle(badgeColor: Colors.redAccent, elevation: 0, padding: EdgeInsets.all(5)),
+                        //   badgeAnimation: badges.BadgeAnimation.fade(
+                        //     animationDuration: Duration(milliseconds: 300),
+                        //     curve: Curves.easeInOut,
+                        //     loopAnimation: false,
+                        //   ),
+                        //   showBadge: context.watch<NotificationBloc>().savedNlength < context.watch<NotificationBloc>().notificationLength ? true : false,
+                        //   badgeContent: Container(),
+                        //   child: IconButton(
+                        //     icon: Icon(LineIcons.bell, size: 25),
+                        //     onPressed: () {
+                        //       context.read<NotificationBloc>().saveNlengthToSP();
+                        //       nextScreen(context, NotificationsPage());
+                        //     },
+                        //   ),
+                        // ),
 
                         SizedBox(width: 5),
                       ],
@@ -180,10 +200,10 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
                   builder: (cpntext) {
                     return TabMediumAlt(
                       controllers: controllers,
-                      sc: innerScrollController,
+                      // sc: innerScrollController,
                       tc: _tabController,
                       presentCategories: incomingList,
-                      selectedIndex: _tabController!.index,
+                      // selectedIndex: _tabController!.index,
                     );
                   },
                 ),
@@ -212,6 +232,101 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
               itemBuilder: (BuildContext context, int index) {
                 return _itemList(Config().languages[index], index, context);
               },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  getDistricts() async {
+    final sb = context.read<SignInBloc>();
+
+    districts = [];
+    String data = await DefaultAssetBundle.of(context).loadString(Config.citiesAndDistricts);
+    final jsonResult = jsonDecode(data);
+    // print(jsonResult['states'][0]);
+    for (int i = 0; i < jsonResult['states'].length; i++) {
+      states.add(jsonResult['states'][i]['state']);
+    }
+    if (selectedState.isNotEmpty) {
+      districts = jsonResult['states'][states.indexOf(selectedState)]['districts'];
+      districts.insert(0, 'all');
+      selectedDistricts = sb.district ?? 'all';
+    }
+
+    setState(() {});
+    // print(selectedDistricts);
+  }
+
+  showDistrictSheet(String initialDist) {
+    String tempDistrict = initialDist;
+    return showModalBottomSheet(
+      isScrollControlled: false,
+      enableDrag: false,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(15), topLeft: Radius.circular(15)),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MaterialButton(
+                  color: Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20)),
+                  onPressed: () {
+                    Navigator.pop(context, tempDistrict);
+                  },
+                  child: Text('done'.tr()),
+                ),
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 70),
+                    itemCount: districts.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, index) {
+                      var district = districts[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(9),
+                          splashColor: Config().appColor,
+                          onTap: () {
+                            tempDistrict = district;
+                            print(tempDistrict);
+                            print(district);
+                            setState(() {});
+                            // if (selectedDistricts==district) {
+                            //   Fluttertoast.showToast(msg: 'Already present');
+                            // } else {
+                            //   tempDistrict = district;
+                            //   setState(() {});
+                            // }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(9),
+                              color: tempDistrict == district ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(
+                              child: Text(
+                                district,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: tempDistrict == district ? Colors.white : Config().appColor, fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           },
         );
@@ -287,7 +402,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin, T
     });
     incomingList = await categoriesStream();
     // Fluttertoast.showToast(msg: incomingList!.length.toString());
-
+    getDistricts();
     incomingList?.forEach((element) {
       print(element.name);
       tabsList.add(Tab(text: element.name));
